@@ -1,0 +1,23 @@
+.DS_Store
+*/CACHE/*
+static
+build/*
+*.pyc
+*.pyo
+*.so
+*~
+*.db
+local_settings.py
+*.jpg.*
+*.tmproj
+*.sqlite
+media/*
+env/*
+logs/*
+
+*.sqlite3
+projects/logs/*
+
+# IDE Setting
+.vscode/*
+.idea/*
