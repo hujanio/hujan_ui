@@ -128,6 +128,11 @@ STATICFILES_DIRS = (
 )
 STATIC_ROOT = os.path.join(SETTINGS_DIR, 'static')
 
+
+# Ubuntu MAAS
+MAAS_API_KEY = ""
+MAAS_URL = ""
+
 try:
     from .local_settings import *
 except ImportError:

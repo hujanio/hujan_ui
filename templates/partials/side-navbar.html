@@ -34,32 +34,13 @@
                 </a>
             </li>
 
-            <li class="nav-item {% if menu_active == 'sales' %}has-treeview menu-open{% endif %}">
-                <a href="#" class="nav-link {% if menu_active == 'sales' %}active{% endif %}">
-                    <i class="nav-icon fas fa-dolly"></i>
-                    <p>Sales Order<i class="right fas fa-angle-left"></i></p>
+            <li class="nav-item">
+                <a href="{% url 'maas:machines' %}" class="nav-link {% if menu_active == 'machines' %}active{% endif %}">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>Machines</p>
                 </a>
-                <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="{% url 'website:sales_order' %}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Sales Order</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'website:returns_order' %}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Returns Order</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'website:sales_report' %}" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Reports</p>
-                        </a>
-                    </li>
-                </ul>
             </li>
+
 
             <li class="nav-item">
                 <a href="#" class="nav-link {% if menu_active == 'lain' %}active{% endif %}">

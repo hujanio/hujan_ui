@@ -10,3 +10,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+MAAS_API_KEY = ""
+MAAS_URL = ""

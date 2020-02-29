@@ -19,5 +19,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('hujan_ui.installers.urls')),
+    path('maas/', include('hujan_ui.maas.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
 ]
