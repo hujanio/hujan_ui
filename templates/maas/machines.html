@@ -1,0 +1,66 @@
+{% extends 'master.html' %}
+
+{% block content %}
+
+<!-- Main content -->
+<div class="content">
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header border-transparent">
+                <h3 class="card-title"></h3>
+                <form class="form-inline">
+                    <input type="text" class="form-control mr-sm-2" id="inlineFormInputName2" placeholder="Search machines">
+                </form>
+              </div>
+              <!-- /.card-header -->
+              disin {{ machines.count }}
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table m-0">
+                    <thead>
+                    <tr>
+                      <th>FQDN | MAC</th>
+                      <th>Power</th>
+                      <th>Status</th>
+                      <th>Owner</th>
+                      <th>Cores</th>
+                      <th>RAM (GiB)</th>
+                      <th>Disk</th>
+                      <th>Storage (GB)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                      {% for machine in machines %}
+                        <tr>
+                          <td>{{ machine.fqdn }}</td>
+                          <td>{{ machine.power_state }}</td>
+                          <td>{{ machine.osystem }}</td>
+                          <td>{{ machine.owner }}</td>
+                          <td>{{ machine.cpu_count }}</td>
+                          <td>{{ machine.memory }}</td>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.table-responsive -->
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer clearfix">
+                <a href="javascript:void(0)" class="btn btn-sm btn-info float-left">Place New Order</a>
+                <a href="javascript:void(0)" class="btn btn-sm btn-secondary float-right">View All Orders</a>
+              </div>
+            </div>
+
+        </div>
+        <!-- /.col-md-12 -->
+    </div>
+    <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content -->
+{% endblock %}
