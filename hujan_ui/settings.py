@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'hujan_ui.installers',
+
     'widget_tweaks',
 ]
 
