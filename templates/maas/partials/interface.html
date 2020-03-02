@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header border-transparent">
+                Interface configuration cannot be modified unless the node is New, Ready, Allocated, or Broken.
+            </div>
+          <!-- /.card-header -->
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table m-0">
+                <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>PXE</th>
+                  <th>Type</th>
+                  <th>Fabric</th>
+                  <th>VLAN</th>
+                  <th>Subnet</th>
+                  <th>IP Address</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {{interface_set}}
+                  {% for interface in machine.interface_set %}
+                    <tr>
+                      <td>{{ interface.name }} </a></td>
+                      <td>{{ interface.enabled }}</td>
+                      <td>{{ interface.type }}</td>
+                      <td>{{ interface.vlan.fabric }}</td>
+                      <td>{{ interface.vlan.name }}</td>
+                      <td>{{ interface.links.0.subnet.name }}</td>
+                      <td>{{ interface.links.0.ip_address }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <!-- /.table-responsive -->
+          </div>
+          <!-- /.card-body -->
+          <div class="card-footer clearfix">
+            
+
+          </div>
+        </div>
+
+    </div>
+    <!-- /.col-md-12 -->
+</div>
