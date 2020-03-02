@@ -1,0 +1,86 @@
+{% load utils %}
+<div class="row">
+    <div class="col-lg-4">
+      <!-- small box -->
+      <div class="small-box bg-secondary">
+        <div class="inner">
+          <h3>CPU</h3>
+
+          <p>{{ machine.cpu_count }} cores @ {{ machine.cpu_speed|sizify:"Ghz"}} {{ machine.architecture }}</p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-microchip"></i>
+        </div>
+        <!-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+      </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-4">
+      <!-- small box -->
+      <div class="small-box bg-success">
+        <div class="inner">
+          <h3>Memory</h3>
+
+          <p>{{ machine.memory|sizify:"GiB" }}</p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-memory"></i>
+        </div>
+      </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-4">
+      <!-- small box -->
+      <div class="small-box bg-purple">
+        <div class="inner">
+          <h3>Storage</h3>
+
+          <p>{{ machine.storage|sizify:"GB" }}</p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-hdd"></i>
+        </div>
+      </div>
+    </div>
+    <!-- ./col -->
+  </div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header d-flex">
+                <h3 class="card-title">Hardware Info</h3>
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li>CPU Model: {{ machine.hardware_info.cpu_model }}</li>
+                    <li>Mainboard Firmware Date: {{ machine.hardware_info.mainboard_firmware_date }}</li>
+                    <li>Mainboard Firmware Version: {{ machine.hardware_info.mainboard_version }}</li>
+                    <li>Mainboard Product: {{ machine.hardware_info.mainboard_product }}</li>
+                    <li>Mainboard Vendor: {{ machine.hardware_info.mainboard_vendor }}</li>
+                    <li>System Product: {{ machine.hardware_info.system_product }}</li>
+                    <li>System Serial: {{ machine.hardware_info.system_serial }}</li>
+                    <li>System Vendor: {{ machine.hardware_info.system_vendor }}</li>
+                    <li>System Version: {{ machine.hardware_info.system_version }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header d-flex">
+                <h3 class="card-title">Overview</h3>
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li>Owner: {{ machine.owner }}</li>
+                    <li>Domain: {{ machine.domain.name }}</li>
+                    <li>Zone: {{ machine.zone.name }}</li>
+                    <li>Power type: {{ machine.power_type }}</li>
+                    <li>OS: {{ machine.distro_series }}</li>
+                    <li>Status: {{ machine.status_name }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

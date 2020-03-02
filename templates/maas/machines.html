@@ -12,7 +12,7 @@
                 <form class="form-inline float-left">
                     <input type="text" class="form-control mr-sm-2" id="inlineFormInputName2" placeholder="Search machines">
                 </form>
-                <a href="javascript:void(0)" class="btn btn-sm btn-info float-right">Add Machine</a>
+                <a href="#" class="btn btn-sm btn-info float-right">Add Machine</a>
               </div>
               <!-- /.card-header -->
               <div class="card-body p-0">
@@ -33,7 +33,7 @@
                     <tbody>
                       {% for machine in machines %}
                         <tr>
-                          <td>{{ machine.fqdn }}</td>
+                          <td><a href="{% url 'maas:machine_details' machine.system_id %}"> {{ machine.fqdn }} </a></td>
                           <td>{{ machine.power_state }}</td>
                           <td>{{ machine.osystem }}</td>
                           <td>{{ machine.owner }}</td>
