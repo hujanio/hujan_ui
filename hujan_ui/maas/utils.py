@@ -7,6 +7,10 @@ class MAAS:
 
     def __init__(self):
         self.url = settings.MAAS_URL + "api/2.0/"
+        self.headers = {
+            'content-type': 'application/json',
+            'accept': 'application/json'
+        }
 
     def maas_connect(self):
         consumer_key, token_key, token_secret = settings.MAAS_API_KEY.split(":")
@@ -21,14 +25,11 @@ class MAAS:
 
     def get(self, uri, params=None, headers=None):
         maas = self.maas_connect()
-        default_headers = {
-            'content-type': 'application/json',
-            'accept': 'application/json'
-        }
+        
         if headers:
-            default_headers.update(headers)
+            self.headers.update(headers)
 
-        return maas.get(self.url + uri, headers=default_headers)
+        return maas.get(self.url + uri, headers=self.headers)
 
 
 def maas_connect():
