@@ -1,12 +1,11 @@
 {% load static %}
 
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar elevation-4 sidebar-light-primary">
+<aside class="main-sidebar elevation-4 sidebar-light-info">
     <!-- Brand Logo -->
     <a href="{% url 'website:index' %}" class="brand-link">
         <span class="brand-text font-weight-light">
-        <img src="{% static 'images/logo.png' %}">
-        hujan.io
+        <img src="{% static 'images/logo.svg' %}" width="150px;">
         </span>
     </a>
 
@@ -15,10 +14,10 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-            <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image">
+            <img src="{% static 'images/avatar_placeholder.png' %}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-            <a href="#" class="d-block">{{ user.first_name }} {{ user.last_name }}</a>
+            <a href="#" class="d-block">{{ user.username }}</a>
         </div>
         </div>
 
@@ -35,17 +34,30 @@
             </li>
 
             <li class="nav-item">
-                <a href="{% url 'maas:machines' %}" class="nav-link {% if menu_active == 'machines' %}active{% endif %}">
-                    <i class="nav-icon fas fa-tachometer-alt"></i>
-                    <p>Machines</p>
+                <a href="#" class="nav-link {% if menu_active == 'machines' %}active{% endif %}">
+                    <i class="nav-icon fas fa-microchip"></i>
+                    <p>Machines<i class="right fas fa-angle-left"></i></p>
                 </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{% url 'maas:machines' %}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Data Machines</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Add Machine</p>
+                        </a>
+                    </li>
+                </ul>
             </li>
-
 
             <li class="nav-item">
                 <a href="#" class="nav-link {% if menu_active == 'lain' %}active{% endif %}">
-                    <i class="nav-icon fas fa-boxes"></i>
-                    <p>Inventory<i class="right fas fa-angle-left"></i></p>
+                    <i class="nav-icon fas fa-network-wired"></i>
+                    <p>Subnet<i class="right fas fa-angle-left"></i></p>
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
@@ -75,11 +87,10 @@
                 </ul>
             </li>
 
-            {% comment %} <li class="nav-header">Express Management</li> {% endcomment %}
             <li class="nav-item">
                 <a href="#" class="nav-link {% if menu_active == 'lain' %}active{% endif %}">
-                    <i class="nav-icon fas fa-shipping-fast"></i>
-                    <p>Express<i class="right fas fa-angle-left"></i></p>
+                    <i class="nav-icon fas fa-compact-disc"></i>
+                    <p>Images<i class="right fas fa-angle-left"></i></p>
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
@@ -118,7 +129,7 @@
             <li class="nav-item">
                 <a href="#" class="nav-link {% if menu_active == 'lain' %}active{% endif %}">
                     <i class="nav-icon fas fa-cogs"></i>
-                    <p>System<i class="right fas fa-angle-left"></i></p>
+                    <p>Controller<i class="right fas fa-angle-left"></i></p>
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
@@ -138,8 +149,8 @@
 
             <li class="nav-item">
                 <a href="#" class="nav-link {% if menu_active == 'lain' %}active{% endif %}">
-                    <i class="nav-icon fas fa-database"></i>
-                    <p>Basic Data<i class="right fas fa-angle-left"></i></p>
+                    <i class="nav-icon fas fa-wrench"></i>
+                    <p>Settings<i class="right fas fa-angle-left"></i></p>
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">

@@ -1,0 +1,58 @@
+{% load utils %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header border-transparent">
+                <h3>Disks and partitions</h3>
+            </div>
+          <!-- /.card-header -->
+          <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table m-0">
+                  <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Boot</th>
+                    <th>Size</th>
+                    <th>Type</th>
+                    <th>Used For</th>
+                    <th>Tags</th>
+                    <th>Partitions</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    {% for blockdevice in machine.blockdevice_set %}
+                      <tr>
+                        <td>{{ blockdevice.name }} </a></td>
+                        <td>
+                            {% if blockdevice.used_for == 'Unused'%}
+                                <i class='fa fa-times-circle text-danger'></i>
+                            {% else %}
+                                <i class='fa fa-check-circle text-success'></i>
+                            {% endif %}
+                        </td>
+                        <td>{{ blockdevice.size|sizify:"GB" }}</td>
+                        <td>{{ blockdevice.type }}</td>
+                        <td>{{ blockdevice.used_for }}</td>
+                        <td>{{ blockdevice.tags|join:" " }}</td>
+                        <td>
+                            <a href="#">
+                                {{ blockdevice.partitions|length }}
+                            </a>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+          </div>
+          <!-- /.card-body -->
+          <div class="card-footer clearfix">
+            
+
+          </div>
+        </div>
+
+    </div>
+    <!-- /.col-md-12 -->
+</div>
