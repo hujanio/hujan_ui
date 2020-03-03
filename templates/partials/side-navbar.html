@@ -34,13 +34,13 @@
             </li>
 
             <li class="nav-item">
-                <a href="{% url 'maas:machines' %}" class="nav-link {% if menu_active == 'machines' %}active{% endif %}">
+                <a href="#" class="nav-link {% if menu_active == 'machines' %}active{% endif %}">
                     <i class="nav-icon fas fa-microchip"></i>
                     <p>Machines<i class="right fas fa-angle-left"></i></p>
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{% url 'maas:machines' %}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Data Machines</p>
                         </a>
