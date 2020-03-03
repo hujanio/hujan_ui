@@ -26,7 +26,6 @@
                       <th>Owner</th>
                       <th>Cores</th>
                       <th>RAM (GiB)</th>
-                      <th>Disk</th>
                       <th>Storage (GB)</th>
                     </tr>
                     </thead>
@@ -39,8 +38,7 @@
                           <td>{{ machine.owner }}</td>
                           <td>{{ machine.cpu_count }}</td>
                           <td>{{ machine.memory|sizify }}</td>
-                          <td></td>
-                          <td></td>
+                          <td>{{ machine.storage|sizify }}</td>
                         </tr>
                       {% endfor %}
                     </tbody>
