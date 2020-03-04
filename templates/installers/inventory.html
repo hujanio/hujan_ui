@@ -1,0 +1,110 @@
+{% extends 'master-installer.html' %}
+{% load static %}
+
+{% block content %}
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><strong>GROUP: CONTROLLER</strong></h3>
+            <div class="float-right">
+              <button class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add Controller</button>
+            </div>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <table class="table table-bordered">
+              <thead>                  
+                <tr>
+                  <th>Name</th>
+                  <th>IP Address</th>
+                  <th style="width:150px;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Node-0</td>
+                  <td>192.168.0.1</td>
+                  <td>
+                    <button class="btn btn-sm btn-info">Check</button>
+                    <button class="btn btn-sm btn-danger">Delete</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Node-1</td>
+                  <td>192.168.0.2</td>
+                  <td>
+                    <button class="btn btn-sm btn-info">Check</button>
+                    <button class="btn btn-sm btn-danger">Delete</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Node-2</td>
+                  <td>192.168.0.3</td>
+                  <td>
+                    <button class="btn btn-sm btn-info">Check</button>
+                    <button class="btn btn-sm btn-danger">Delete</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><strong>GROUP: COMPUTE</strong></h3>
+            <div class="float-right">
+              <button class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add Compute</button>
+            </div>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <table class="table table-bordered">
+              <thead>                  
+                <tr>
+                  <th>Name</th>
+                  <th>IP Address</th>
+                  <th style="width:150px;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Node-0</td>
+                  <td>192.168.0.1</td>
+                  <td>
+                    <button class="btn btn-sm btn-info">Check</button>
+                    <button class="btn btn-sm btn-danger">Delete</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Node-1</td>
+                  <td>192.168.0.2</td>
+                  <td>
+                    <button class="btn btn-sm btn-info">Check</button>
+                    <button class="btn btn-sm btn-danger">Delete</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Node-2</td>
+                  <td>192.168.0.3</td>
+                  <td>
+                    <button class="btn btn-sm btn-info">Check</button>
+                    <button class="btn btn-sm btn-danger">Delete</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer">
+            <div class="float-right">
+              <a href="{% url 'installer:server' %}" class="btn bg-navy"><i class="fas fa-arrow-circle-left"></i>&nbsp;&nbsp;&nbsp;Back</a>
+              <a href="{% url 'installer:global_config' %}" class="btn bg-navy">Next&nbsp;&nbsp;&nbsp;<i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+
+{% endblock %}

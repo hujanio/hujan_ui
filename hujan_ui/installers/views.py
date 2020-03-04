@@ -4,66 +4,47 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 
-from .forms import SignupForm
+
+@login_required
+def server(request):
+    context = {
+        'title': 'Servers',
+        'menu_active': 'add-server'
+    }
+    return render(request, 'installers/server.html', context)
 
 
 @login_required
-def index(request):
+def inventory(request):
     context = {
-        'title': 'Dashboard',
-        'menu_active': 'dashboard',
+        'title': 'Inventory',
+        'menu_active': 'inventory'
     }
-    return render(request, 'installers/dashboard.html', context)
+    return render(request, 'installers/inventory.html', context)
 
 
 @login_required
-def sales_order(request):
+def global_config(request):
     context = {
-        'title': 'Sales Order',
-        'menu_active': 'sales',
+        'title': 'Global Configuration',
+        'menu_active': 'global-config'
     }
-    return render(request, 'installers/sales_order.html', context)
+    return render(request, 'installers/global_config.html', context)
 
 
 @login_required
-def returns_order(request):
+def advanced_config(request):
     context = {
-        'title': 'Returns Order',
-        'menu_active': 'sales',
+        'title': 'Advanced Configuration',
+        'menu_active': 'advanced-config'
     }
-    return render(request, 'installers/sales_order.html', context)
+    return render(request, 'installers/advanced_config.html', context)
 
 
 @login_required
-def reports(request):
+def deploy(request):
     context = {
-        'title': 'Reports',
-        'menu_active': 'sales',
+        'title': 'Deploy',
+        'menu_active': 'deploy'
     }
-    return render(request, 'installers/report.html', context)
-
-
-@login_required
-def invoice(request):
-    context = {
-        'title': 'Invoice',
-        'menu_active': 'sales',
-    }
-    return render(request, 'installers/invoice.html', context)
-
-
-def signup(request):
-    form = SignupForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        username = form.cleaned_data.get('username')
-        raw_password = form.cleaned_data.get('password1')
-        user = authenticate(username=username, password=raw_password)
-        login(request, user)
-        return redirect('home')
-
-    context = {
-        'title': 'Register',
-        'form': form
-    }
-    return render(request, 'registration/signup.html', context)
+    return render(request, 'installers/deploy.html', context)

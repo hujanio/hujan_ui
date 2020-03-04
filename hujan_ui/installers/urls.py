@@ -2,12 +2,11 @@ from django.urls import path, include
 
 from . import views
 
-app_name = 'website'
+app_name = 'installer'
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('sales-order', views.sales_order, name='sales_order'),
-    path('returns-order', views.returns_order, name='returns_order'),
-    path('sales-report', views.reports, name='sales_report'),
-    path('invoice', views.invoice, name='invoice'),
-    path('signup', views.signup, name='signup')
+    path('server', views.server, name='server'),
+    path('inventory', views.inventory, name='inventory'),
+    path('global-config', views.global_config, name='global_config'),
+    path('advanced-config', views.advanced_config, name='advanced_config'),
+    path('deploy', views.deploy, name='deploy')
 ]
