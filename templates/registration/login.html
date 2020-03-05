@@ -21,9 +21,9 @@
   <div class="card">
     <div class="card-body login-card-body">
         <div class="login-logo">
-            <img src="{% static 'images/logo.png' %}">
+            <img src="{% static 'images/logo.png' %}" width="100%;">
         </div>
-      <p class="login-box-msg">hujan installer ui</p>
+      <p class="login-box-msg">Tagline in here</p>
 
       <form method="post">
         {% csrf_token %}
@@ -36,33 +36,17 @@
         {% endfor %}
         <div class="row">
           <div class="col-8">
-
+            <p class="mb-1">
+              <a href="{% url 'password_reset' %}">I forgot my password</a>
+            </p>
           </div>
           <!-- /.col -->
           <div class="col-4">
-            <button type="submit" class="btn btn-danger btn-block btn-flat">Sign In</button>
+            <button type="submit" class="btn btn-info btn-block btn-flat">Sign In</button>
           </div>
           <!-- /.col -->
         </div>
       </form>
-
-      {% comment %} <div class="social-auth-links text-center mb-3">
-        <p>- OR -</p>
-        <a href="#" class="btn btn-block btn-primary">
-          <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
-        </a>
-        <a href="#" class="btn btn-block btn-danger">
-          <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-        </a>
-      </div>
-      <!-- /.social-auth-links --> {% endcomment %}
-
-      <p class="mb-1">
-        <a href="{% url 'password_reset' %}">I forgot my password</a>
-      </p>
-      <p class="mb-0">
-        <a href="{% url 'website:signup' %}" class="text-center">Register a new membership</a>
-      </p>
     </div>
     <!-- /.login-card-body -->
   </div>

@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    path('', include('hujan_ui.website.urls')),
     path('admin/', admin.site.urls),
     path('installer/', include('hujan_ui.installers.urls')),
     path('maas/', include('hujan_ui.maas.urls')),
