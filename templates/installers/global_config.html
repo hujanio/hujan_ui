@@ -1,0 +1,210 @@
+{% extends 'master-installer.html' %}
+{% load static %}
+
+{% block content %}
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Global Configuration Form</h3>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <form class="form-horizontal">
+              <div class="row">
+                <div class="col-md-3 mr-5">
+                  <div class="form-group row">
+                    <label class="col-sm-7 col-form-label">Installation Type</label>
+                    <div class="col-sm-5">
+                      <select class="form-control">
+                        <option>Source</option>
+                        <option>option 2</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-7 col-form-label">Openstack Release</label>
+                    <div class="col-sm-5">
+                      <select class="form-control">
+                        <option>Train</option>
+                        <option>option 2</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-7 col-form-label">Internal VIP Address</label>
+                    <div class="col-sm-5">
+                      <input type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-7 col-form-label">External VIP Address</label>
+                    <div class="col-sm-5">
+                      <input type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-7 col-form-label">Enable TLS on External API</label>
+                    <div class="col-sm-5 pt-2">
+                      <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch1" checked>
+                        <label class="custom-control-label" for="customSwitch1"></label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-2 ml-5 mr-5">
+                  <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-9 col-form-label">Enable Ceph Service</label>
+                    <div class="col-sm-3 pt-2">
+                      <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch2" checked>
+                        <label class="custom-control-label" for="customSwitch2"></label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-9 col-form-label">Enable Cinder Service</label>
+                    <div class="col-sm-3 pt-2">
+                      <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch3" checked>
+                        <label class="custom-control-label" for="customSwitch3"></label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-9 col-form-label">Enable Magnum Service</label>
+                    <div class="col-sm-3 pt-2">
+                      <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch4" checked>
+                        <label class="custom-control-label" for="customSwitch4"></label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-9 col-form-label">Enable VPNaaS</label>
+                    <div class="col-sm-3 pt-2">
+                      <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch5" checked>
+                        <label class="custom-control-label" for="customSwitch5"></label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-9 col-form-label">Enable FWaaS</label>
+                    <div class="col-sm-3 pt-2">
+                      <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch6" checked>
+                        <label class="custom-control-label" for="customSwitch6"></label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-2 ml-4 mr-5">
+                  <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-9 col-form-label">Enable QoS</label>
+                    <div class="col-sm-3 pt-2">
+                      <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch7" checked>
+                        <label class="custom-control-label" for="customSwitch7"></label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-9 col-form-label">Enable HA Agent</label>
+                    <div class="col-sm-3 pt-2">
+                      <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch8" checked>
+                        <label class="custom-control-label" for="customSwitch8"></label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-9 col-form-label">Enable Provider Networks</label>
+                    <div class="col-sm-3 pt-2">
+                      <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch9" checked>
+                        <label class="custom-control-label" for="customSwitch9"></label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-9 col-form-label">Enable Port Forwarding</label>
+                    <div class="col-sm-3 pt-2">
+                      <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch10" checked>
+                        <label class="custom-control-label" for="customSwitch10"></label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-9 col-form-label">Enable Octavia Service</label>
+                    <div class="col-sm-3 pt-2">
+                      <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch11" checked>
+                        <label class="custom-control-label" for="customSwitch11"></label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-3 ml-4">
+                  <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-9 col-form-label">Enable Prometheus Service</label>
+                    <div class="col-sm-3 pt-2">
+                      <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch12" checked>
+                        <label class="custom-control-label" for="customSwitch12"></label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-9 col-form-label">Ceph Pool - pg_num</label>
+                    <div class="col-sm-3">
+                      <input type="text" class="form-control" value="30">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-9 col-form-label">Ceph Pool - pgp_num</label>
+                    <div class="col-sm-3">
+                      <input type="text" class="form-control" value="30">
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-9 col-form-label">Glance Backend using Ceph</label>
+                    <div class="col-sm-3 pt-2">
+                      <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch13" checked>
+                        <label class="custom-control-label" for="customSwitch13"></label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-9 col-form-label">Glance Backend File</label>
+                    <div class="col-sm-3 pt-2">
+                      <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch14">
+                        <label class="custom-control-label" for="customSwitch14"></label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="card-footer">
+            <button type="submit" class="btn btn-info">Save</button>
+            <div class="float-right">
+              <a href="{% url 'installer:inventory' %}" class="btn bg-navy"><i class="fas fa-arrow-circle-left"></i>&nbsp;&nbsp;&nbsp;Back</a>
+              <a href="{% url 'installer:advanced_config' %}" class="btn bg-navy">Next&nbsp;&nbsp;&nbsp;<i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+
+{% endblock %}
