@@ -34,7 +34,7 @@
                         <tr>
                           <td><a href="{% url 'maas:machine_details' machine.system_id %}"> {{ machine.fqdn }} </a></td>
                           <td>{{ machine.power_state }}</td>
-                          <td>{{ machine.osystem }}</td>
+                          <td>{{ machine.status_name }}</td>
                           <td>{{ machine.owner }}</td>
                           <td>{{ machine.cpu_count }}</td>
                           <td>{{ machine.memory|sizify }}</td>

@@ -16,6 +16,9 @@ def machines(request):
     else:
         maas = MAAS()
         machines = maas.get("machines/").json()
+        machine_file = open("hujan_ui/maas/ex_response/machines.json", "w")
+        json.dump(machines, machine_file)
+        machine_file.close()
 
     context = {
         'title': 'Machines',
