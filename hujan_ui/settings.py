@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'hujan_ui.installers',
 
     'widget_tweaks',
+    'django_pam',
 ]
 
 MIDDLEWARE = [
@@ -101,6 +102,11 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+]
+
+AUTHENTICATION_BACKENDS = [
+    'django_pam.auth.backends.PAMBackend',
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 
