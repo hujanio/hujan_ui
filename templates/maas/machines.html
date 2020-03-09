@@ -32,7 +32,7 @@
                     <tbody>
                       {% for machine in machines %}
                         <tr>
-                          <td><a href="{% url 'maas:machine_details' machine.system_id %}"> {{ machine.fqdn }} </a></td>
+                          <td><a href="{% url 'maas:machines:details' machine.system_id %}"> {{ machine.fqdn }} </a></td>
                           <td>{{ machine.power_state }}</td>
                           <td>{{ machine.status_name }}</td>
                           <td>{{ machine.owner }}</td>
