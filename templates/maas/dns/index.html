@@ -21,6 +21,7 @@
                       <th>Authoritative</th>
                       <th>Hosts</th>
                       <th>Total Records</th>
+                      <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -28,8 +29,12 @@
                         <tr>
                           <td><a href=""> {{ domain.name }} </a></td>
                           <td>{{ domain.authoritative|bool_icon|safe }}</td>
-                          <td>{{ domain.ttl|default_if_none:"-" }}</td>
                           <td>{{ domain.resource_record_count }}</td>
+                          <td>{{ domain.resource_record_count }}</td>
+                          <td>
+                            <a href="{% url 'maas:dns:edit' domain.id %}" class="btn btn-xs btn-primary"><i class="fa fa-pen"></i></a>
+                            <button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#confirmDeleteModal" data-delete-url="{% url 'maas:dns:delete' domain.id %}" data-name="{{ domain.name }}" ><i class="fa fa-trash"></i></button>
+                          </td>
                         </tr>
                       {% endfor %}
                     </tbody>
@@ -51,4 +56,40 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
+
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to delete <strong id="confirmDeleteName"></strong>?
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+              <a id="confirmDeleteButton" class="btn btn-success" >Yes</a>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#confirmDeleteModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var url = button.data('delete-url');
+            var name = button.data('name');
+
+            var modal = $(this);
+            modal.find('#confirmDeleteButton').attr("href", url);
+            modal.find('#confirmDeleteName').html(name);
+        })
+    })
+</script>
 {% endblock %}

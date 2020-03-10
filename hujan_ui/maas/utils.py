@@ -39,6 +39,24 @@ class MAAS:
 
         return maas.post(self.url + uri, json=data, params=params, headers=self.headers)
 
+    
+    def put(self, uri, data, params=None, headers=None):
+        maas = self.maas_connect()
+        
+        if headers:
+            self.headers.update(headers)
+
+        return maas.put(self.url + uri, json=data, params=params, headers=self.headers)
+
+    
+    def delete(self, uri, params=None, headers=None):
+        maas = self.maas_connect()
+        
+        if headers:
+            self.headers.update(headers)
+
+        return maas.delete(self.url + uri, params=params, headers=self.headers)
+
 
 def maas_connect():
     consumer_key, token_key, token_secret = settings.MAAS_API_KEY.split(":")
