@@ -43,8 +43,7 @@ def index(request):
 def add(request):
     form = AddDomainForm(request.POST or None)
     if form.is_valid():
-        a = form.save()
-        print(a.json())
+        form.save()
         sweetify.success(request, _('Successfully added domain'), button='Ok', timer=2000)
         return redirect("maas:dns:index")
 
