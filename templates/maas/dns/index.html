@@ -9,20 +9,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header border-transparent">
-                <a href="#" class="btn btn-sm btn-info float-right">Add Domain</a>
-
-                <form class="form-inline float-left" method="POST">
-                  {% csrf_token %}
-                  {{ form.non_field_errors }}
-                  {% for field in form %}
-                    
-                    <div class="form-group mb-2">
-                      <label>{{ field.label }}</label>
-                      {% render_field field|add_class:"form-control mr-sm-2" %}
-                    </div>
-                  {% endfor %}
-                  <button type="submit" class="btn btn-primary mb-2">Save Domain</button>
-                </form>
+                <a href="{% url 'maas:dns:add' %}" class="btn btn-sm btn-info float-right">Add Domain</a>
               </div>
               <!-- /.card-header -->
               <div class="card-body p-0">
@@ -40,8 +27,8 @@
                       {% for domain in domains %}
                         <tr>
                           <td><a href=""> {{ domain.name }} </a></td>
-                          <td>{{ domain.authoritative }}</td>
-                          <td>{{ domain.ttl }}</td>
+                          <td>{{ domain.authoritative|bool_icon|safe }}</td>
+                          <td>{{ domain.ttl|default_if_none:"-" }}</td>
                           <td>{{ domain.resource_record_count }}</td>
                         </tr>
                       {% endfor %}

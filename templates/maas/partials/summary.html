@@ -73,7 +73,7 @@
             </div>
             <div class="card-body">
                 <ul>
-                    <li>Owner: {{ machine.owner }}</li>
+                    <li>Owner: {{ machine.owner|default_if_none:"-" }}</li>
                     <li>Domain: {{ machine.domain.name }}</li>
                     <li>Zone: {{ machine.zone.name }}</li>
                     <li>Power type: {{ machine.power_type }}</li>

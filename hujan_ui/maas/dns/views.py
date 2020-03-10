@@ -37,3 +37,21 @@ def index(request):
         'form': form
     }
     return render(request, 'maas/dns/index.html', context)
+
+
+@login_required
+def add(request):
+    form = AddDomainForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        sweetify.success(request, _('Successfully added domain'), button='Ok', timer=2000)
+        return redirect("maas:dns:index")
+
+    context = {
+        'title': 'Add Domain',
+        'menu_active': 'domains',
+        'form': form,
+        'title_submit': 'Save Domain',
+        'col_size': '4'
+    }
+    return render(request, 'maas/form.html', context)
