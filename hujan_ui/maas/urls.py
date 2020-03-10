@@ -5,4 +5,5 @@ from . import views
 app_name = 'maas'
 urlpatterns = [
     path('machines/', include('hujan_ui.maas.machines.urls')),
+    path('dns/', include('hujan_ui.maas.dns.urls')),
 ]

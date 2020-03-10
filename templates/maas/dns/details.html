@@ -1,0 +1,56 @@
+{% extends 'master.html' %}
+{% load utils %}
+{% block content %}
+
+<!-- Main content -->
+<div class="content">
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header d-flex p-0">
+                    <h3 class="card-title p-3">{{ machine.fqdn }}</h3>
+                    <ul class="nav nav-pills ml-auto p-2">
+                        <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Summary</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Interface</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Storage</a></li>
+                        <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+                            More <span class="caret"></span>
+                        </a>
+                        </li>
+                    </ul>
+                </div>
+              <!-- /.card-header -->
+              <div class="card-body p-0">
+                
+              </div>
+            </div>
+
+            
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_1">
+                    {% include 'maas/partials/summary.html' %}
+                </div>
+                <!-- /.tab-pane -->
+                <div class="tab-pane" id="tab_2">
+                    {% include 'maas/partials/interface.html' %}
+                </div>
+                <!-- /.tab-pane -->
+                <div class="tab-pane" id="tab_3">
+                    {% include 'maas/partials/storage.html' %}
+                </div>
+                <!-- /.tab-pane -->
+            </div>
+            <!-- /.tab-content -->
+                
+            
+              
+        </div>
+        <!-- /.col-md-12 -->
+    </div>
+    <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content -->
+{% endblock %}

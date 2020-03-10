@@ -1,0 +1,67 @@
+{% extends 'master.html' %}
+{% load utils widget_tweaks %}
+{% block content %}
+
+<!-- Main content -->
+<div class="content">
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header border-transparent">
+                <a href="#" class="btn btn-sm btn-info float-right">Add Domain</a>
+
+                <form class="form-inline float-left" method="POST">
+                  {% csrf_token %}
+                  {{ form.non_field_errors }}
+                  {% for field in form %}
+                    
+                    <div class="form-group mb-2">
+                      <label>{{ field.label }}</label>
+                      {% render_field field|add_class:"form-control mr-sm-2" %}
+                    </div>
+                  {% endfor %}
+                  <button type="submit" class="btn btn-primary mb-2">Save Domain</button>
+                </form>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table m-0">
+                    <thead>
+                    <tr>
+                      <th>Domain</th>
+                      <th>Authoritative</th>
+                      <th>Hosts</th>
+                      <th>Total Records</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                      {% for domain in domains %}
+                        <tr>
+                          <td><a href=""> {{ domain.name }} </a></td>
+                          <td>{{ domain.authoritative }}</td>
+                          <td>{{ domain.ttl }}</td>
+                          <td>{{ domain.resource_record_count }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.table-responsive -->
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer clearfix">
+                
+
+              </div>
+            </div>
+
+        </div>
+        <!-- /.col-md-12 -->
+    </div>
+    <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content -->
+{% endblock %}

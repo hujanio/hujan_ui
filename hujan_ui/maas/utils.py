@@ -29,7 +29,15 @@ class MAAS:
         if headers:
             self.headers.update(headers)
 
-        return maas.get(self.url + uri, headers=self.headers)
+        return maas.get(self.url + uri, params=params, headers=self.headers)
+    
+    def post(self, uri, data, params=None, headers=None):
+        maas = self.maas_connect()
+        
+        if headers:
+            self.headers.update(headers)
+
+        return maas.post(self.url + uri, json=data, params=params, headers=self.headers)
 
 
 def maas_connect():
