@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from hujan_ui.maas.utils import MAAS
+from .forms import AddMachineForm
 
 
 @login_required
@@ -25,7 +26,7 @@ def index(request):
         'machines': machines,
         'menu_active': 'machines',
     }
-    return render(request, 'maas/machines.html', context)
+    return render(request, 'maas/machines/index.html', context)
 
 
 @login_required
@@ -42,4 +43,14 @@ def details(request, system_id):
         'machine': machine,
         'menu_active': 'machines',
     }
-    return render(request, 'maas/machine_details.html', context)
+    return render(request, 'maas/machines/details.html', context)
+
+
+@login_required
+def add(requests):
+    form = AddMachineForm(requests.POST or None)
+    context = {
+        'title': 'Add Machine',
+        'form': form
+    }
+    return render(requests, "maas/machines/add-form.html", context)
