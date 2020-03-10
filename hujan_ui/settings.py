@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     'widget_tweaks',
     'django_pam',
+    'sweetify'
 ]
 
 MIDDLEWARE = [
@@ -142,6 +143,8 @@ MAAS_API_KEY = ""
 MAAS_URL = ""
 WITH_EX_RESPONSE = False
 DIR_EX_RESPONSE = "hujan_ui/maas/ex_response/"
+
+SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 
 try:
     from .local_settings import *
