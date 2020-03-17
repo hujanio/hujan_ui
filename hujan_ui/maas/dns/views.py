@@ -24,17 +24,10 @@ def index(request):
         json.dump(domains, machine_file)
         machine_file.close()
 
-    form = AddDomainForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        sweetify.success(request, _('Successfully added domain'), button='Ok', timer=2000)
-        return redirect("maas:dns:index")
-
     context = {
         'title': 'DNS',
         'domains': domains,
         'menu_active': 'domains',
-        'form': form
     }
     return render(request, 'maas/dns/index.html', context)
 
@@ -43,9 +36,11 @@ def index(request):
 def add(request):
     form = AddDomainForm(request.POST or None)
     if form.is_valid():
-        form.save()
-        sweetify.success(request, _('Successfully added domain'), button='Ok', timer=2000)
-        return redirect("maas:dns:index")
+        resp = form.save()
+        if resp.status_code == requests.codes.ok:
+            sweetify.success(request, _('Successfully added domain'), button='Ok', timer=2000)
+            return redirect("maas:dns:index")
+        sweetify.warning(request, _('Terjadi suatu kesalahan'), button='Ok', timer=2000)
 
     context = {
         'title': 'Add Domain',
@@ -64,9 +59,12 @@ def edit(request, id):
 
     form = EditDomainForm(request.POST or None, initial=domain)
     if form.is_valid():
-        form.save(domain['id'])
-        sweetify.success(request, _('Successfully edited domain'), button='Ok', timer=2000)
-        return redirect("maas:dns:index")
+        resp = form.save(domain['id'])
+        if resp.status_code == requests.codes.ok:
+            sweetify.success(request, _('Successfully added domain'), button='Ok', timer=2000)
+            return redirect("maas:dns:index")
+
+        sweetify.warning(request, _(resp.text), button='Ok', timer=2000)
 
     context = {
         'title': 'Edit Domain',
@@ -81,6 +79,9 @@ def edit(request, id):
 @login_required
 def delete(request, id):
     maas = MAAS()
-    maas.delete(f"domains/{id}/")
-    sweetify.success(request, _('Successfully deleted domain'), button='Ok', timer=2000)
+    resp = maas.delete(f"domains/{id}/")
+    if resp.status_code == requests.codes.ok:
+        sweetify.success(request, _('Successfully deleted domain'), button='Ok', timer=2000)
+    else:
+        sweetify.warning(request, _(resp.text), button='Ok', timer=2000)
     return redirect("maas:dns:index")
