@@ -13,12 +13,12 @@
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-            <img src="{% static 'images/avatar_placeholder.png' %}" class="img-circle elevation-2" alt="User Image">
-        </div>
-        <div class="info">
-            <a href="#" class="d-block">{{ user.username }}</a>
-        </div>
+            <div class="image">
+                <img src="{% static 'images/avatar_placeholder.png' %}" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="#" class="d-block">{{ user.username }}</a>
+            </div>
         </div>
 
         <!-- Sidebar Menu -->
@@ -33,6 +33,13 @@
                 </a>
             </li>
 
+            <li class="nav-item">
+                <a href="{% url 'installer:server' %}" class="nav-link">
+                    <i class="nav-icon fas fa-window-maximize"></i>
+                    <p>Installer</p>
+                </a>
+            </li>
+            <hr>
             <li class="nav-item">
                 <a href="#" class="nav-link {% if menu_active == 'machines' %}active{% endif %}">
                     <i class="nav-icon fas fa-microchip"></i>
@@ -63,67 +70,35 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Make a Reservation</p>
+                            <p>Add Fabric</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Query Inventory</p>
+                            <p>Add VLAN</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Finance</p>
+                            <p>Add Space</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Reports</p>
+                            <p>Add Subnet</p>
                         </a>
                     </li>
                 </ul>
             </li>
 
             <li class="nav-item">
-                <a href="#" class="nav-link {% if menu_active == 'lain' %}active{% endif %}">
+                <a href="#" class="nav-link {% if menu_active == 'images' %}active{% endif %}">
                     <i class="nav-icon fas fa-compact-disc"></i>
-                    <p>Images<i class="right fas fa-angle-left"></i></p>
+                    <p>Images</p>
                 </a>
-                <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Express Order</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Generate Shipment</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Track Waybill</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Bill Management</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Request Pickup</p>
-                        </a>
-                    </li>
-                </ul>
             </li>
 
             <li class="nav-item">
@@ -135,20 +110,20 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>User Management</p>
+                            <p>Data Controllers</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Set Authorization</p>
+                            <p>Add Rack Controller</p>
                         </a>
                     </li>
                 </ul>
             </li>
 
             <li class="nav-item">
-            <a href="{% url 'maas:dns:index' %}" class="nav-link {% if menu_active == 'domains' %}active{% endif %}">
+                <a href="{% url 'maas:dns:index' %}" class="nav-link {% if menu_active == 'domains' %}active{% endif %}">
                     <i class="nav-icon fas fa-globe-asia"></i>
                     <p>DNS</p>
                 </a>
@@ -163,31 +138,13 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>User Data</p>
+                            <p>User</p>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Sales Platform</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Shop Data</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Warehouse Data</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Goods Data</p>
+                            <p>General</p>
                         </a>
                     </li>
                 </ul>
