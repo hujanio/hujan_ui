@@ -3,7 +3,7 @@ from hujan_ui.maas.utils import MAAS
 
 
 class AddMachineForm(forms.Form):
-    machine_name = forms.CharField()
+    hostname = forms.CharField(label='Machine name')
     domain = forms.ChoiceField()
     ARCHITECTURE = [
         ('amd64/generic', 'amd64/generic'),
@@ -12,7 +12,7 @@ class AddMachineForm(forms.Form):
     # minimum_kernel = forms.CharField()
     zone = forms.ChoiceField()
     resouce_pool = forms.ChoiceField()
-    mac_addresses = forms.CharField()
+    mac_addresses = forms.CharField(label='MAC Address')
     POWER_TYPE = [
         ('amt', 'Intel AMT'),
         ('apc', 'American Power Conversion (APC) PDU'),
