@@ -9,15 +9,14 @@ class AddMachineForm(forms.Form):
         ('amd64/generic', 'amd64/generic'),
     ]
     architecture = forms.ChoiceField(choices=ARCHITECTURE)
-    minimum_kernel = forms.CharField()
+    # minimum_kernel = forms.CharField()
     zone = forms.ChoiceField()
     resouce_pool = forms.ChoiceField()
-    mac_address = forms.CharField()
+    mac_addresses = forms.CharField()
     POWER_TYPE = [
         ('amt', 'Intel AMT'),
         ('apc', 'American Power Conversion (APC) PDU'),
         ('dli', 'Digital Loggers, Inc. PDU'),
-        ('fence_cdu', 'Sentry Switch CDU'),
         ('fence_cdu', 'Sentry Switch CDU'),
         ('hmc', 'IBM Hardware Management Console (HMC)'),
         ('ipmi', 'IPMI'),
@@ -37,7 +36,7 @@ class AddMachineForm(forms.Form):
         ("rsd", "Rack Scale Design"),
         ('vmware', 'VMware'),
     ]
-    power_type = forms.ChoiceField(choices=POWER_TYPE)
+    power_type = forms.ChoiceField(choices=POWER_TYPE, initial=POWER_TYPE[5][0])
 
     def __init__(self, *args, **kwargs):
         self.maas = MAAS()
@@ -63,4 +62,21 @@ class AddMachineForm(forms.Form):
         return [
             (resource['name'], resource['name']) for resource in resp
         ]
-    
+
+
+class PowerTypeIPMIForm(forms.Form):
+    DRIVER = [
+        ('LAN_2_0', 'LAN_2_0 [IPMI 2.0]'),
+        ('LAN', 'LAN [IPMI 1.5]'),
+    ]
+    power_driver = forms.ChoiceField(choices=DRIVER)
+    BOOT_TYPE = [
+        ('auto', 'Automatic'),
+        ('legacy', 'Legacy boot'),
+        ('efu', 'EFI boot'),
+    ]
+    power_boot_type = forms.ChoiceField(choices=BOOT_TYPE)
+    power_address = forms.CharField()
+    power_user = forms.CharField()
+    power_pass = forms.CharField()
+    mac_address = forms.CharField()

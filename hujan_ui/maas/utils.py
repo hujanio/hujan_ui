@@ -4,6 +4,8 @@ from requests_oauthlib import OAuth1Session, OAuth1
 
 
 class MAAS:
+    ok = list(range(200, 205))
+    fail = list(range(400, 500))
 
     def __init__(self):
         self.url = settings.MAAS_URL + "api/2.0/"
@@ -11,7 +13,7 @@ class MAAS:
             'content-type': 'application/json',
             'accept': 'application/json'
         }
-
+    
     def maas_connect(self):
         consumer_key, token_key, token_secret = settings.MAAS_API_KEY.split(":")
         return OAuth1Session(
@@ -38,7 +40,6 @@ class MAAS:
             self.headers.update(headers)
 
         return maas.post(self.url + uri, json=data, params=params, headers=self.headers)
-
     
     def put(self, uri, data, params=None, headers=None):
         maas = self.maas_connect()
@@ -48,7 +49,6 @@ class MAAS:
 
         return maas.put(self.url + uri, json=data, params=params, headers=self.headers)
 
-    
     def delete(self, uri, params=None, headers=None):
         maas = self.maas_connect()
         

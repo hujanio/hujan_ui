@@ -35,8 +35,19 @@
                                 {% endfor %}
                             </div>
 
+                            {{ form_ipmi.media }}
+                            {{ form_ipmi.non_field_errors }}
                             <div class="col-md-6">
-                                
+                                {% for field in form_ipmi %}
+                                    <div class="form-group">
+                                        <label class="col-md-12"> {{ field.label }} </label>
+                                        <div class="col-md-12">
+                                            {% render_field field|add_class:"form-control"%}
+                                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                                            <small class="form-text text-danger">{{ field.errors }}</small>
+                                        </div>
+                                    </div>
+                                {% endfor %}
                             </div>
                             
                             <div class="col-md-2">

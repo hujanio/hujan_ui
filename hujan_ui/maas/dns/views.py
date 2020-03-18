@@ -6,7 +6,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 
 from hujan_ui.maas.utils import MAAS
 from .forms import AddDomainForm, EditDomainForm
@@ -56,12 +55,11 @@ def add(request):
 def edit(request, id):
     maas = MAAS()
     domain = maas.get(f"domains/{id}/").json()
-
     form = EditDomainForm(request.POST or None, initial=domain)
     if form.is_valid():
         resp = form.save(domain['id'])
-        if resp.status_code == requests.codes.ok:
-            sweetify.success(request, _('Successfully added domain'), button='Ok', timer=2000)
+        if resp.status_code in maas.ok:
+            sweetify.success(request, _('Successfully edited domain'), button='Ok', timer=2000)
             return redirect("maas:dns:index")
 
         sweetify.warning(request, _(resp.text), button='Ok', timer=2000)
@@ -80,7 +78,7 @@ def edit(request, id):
 def delete(request, id):
     maas = MAAS()
     resp = maas.delete(f"domains/{id}/")
-    if resp.status_code == requests.codes.ok:
+    if resp.status_code in maas.ok:
         sweetify.success(request, _('Successfully deleted domain'), button='Ok', timer=2000)
     else:
         sweetify.warning(request, _(resp.text), button='Ok', timer=2000)
