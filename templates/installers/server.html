@@ -9,13 +9,13 @@
           <div class="card-header">
             <h3 class="card-title">Server List</h3>
             <div class="float-right">
-              <button class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add Server</button>
+              <a href="{% url 'installer:servers:add' %}" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add Server<a>
             </div>
           </div>
           <!-- /.card-header -->
           <div class="card-body">
             <table class="table table-bordered">
-              <thead>                  
+              <thead>
                 <tr>
                   <th>Name</th>
                   <th>Description</th>

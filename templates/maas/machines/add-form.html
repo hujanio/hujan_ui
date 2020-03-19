@@ -23,7 +23,7 @@
                             {{ form.media }}
                             {{ form.non_field_errors }}
                             <div class="col-md-6">
-                                {% for field in form %}
+                                {% for field in form.visible_fields %}
                                     <div class="form-group">
                                         <label class="col-md-12"> {{ field.label }} </label>
                                         <div class="col-md-12">
@@ -38,7 +38,7 @@
                             {{ form_ipmi.media }}
                             {{ form_ipmi.non_field_errors }}
                             <div class="col-md-6">
-                                {% for field in form_ipmi %}
+                                {% for field in form_ipmi.visible_fields %}
                                     <div class="form-group">
                                         <label class="col-md-12"> {{ field.label }} </label>
                                         <div class="col-md-12">
@@ -49,13 +49,13 @@
                                     </div>
                                 {% endfor %}
                             </div>
-                            
+
                             <div class="col-md-2">
                                 <button type="submit" class="ml-2 btn btn-success btn-user btn-block">
                                     Save Machine
-                                </button>    
+                                </button>
                             </div>
-                            
+
                         </form>
                     </div>
                 </div>
