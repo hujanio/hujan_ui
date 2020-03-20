@@ -33,7 +33,15 @@
                       {% for machine in machines %}
                         <tr>
                           <td><a href="{% url 'maas:machines:details' machine.system_id %}"> {{ machine.fqdn }} </a></td>
-                          <td>{{ machine.power_state }}</td>
+                          <td>
+                            {% if machine.power_state.lower == "on" %}
+                              <i class='text-success fas fa-power-off'></i> <small>ON</small>
+                            {% elif machine.power_state.lower == "off" %}
+                              <i class='text-secondary fas fa-power-off'></i> <small>OFF</small>
+                            {% else %}
+                              <i class='text-warning fas fa-question-circle' title='Unknown'></i>
+                            {% endif %}
+                          </td>
                           <td>{{ machine.status_name }}</td>
                           <td>{{ machine.owner|default_if_none:"-" }}</td>
                           <td>{{ machine.cpu_count }}</td>
@@ -48,7 +56,7 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer clearfix">
-                
+
 
               </div>
             </div>

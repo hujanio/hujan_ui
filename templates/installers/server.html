@@ -25,16 +25,13 @@
                 </tr>
               </thead>
               <tbody>
-                {% for server in servers%}
+                {% for server in servers %}
                 <tr>
                   <td>{{ server.name }}</td>
                   <td>{{ server.description }}</td>
                   <td>{{ server.ip_address }}</td>
-                  <td style="color:#3d9970">
-                    <i class="fas fa-arrow-alt-circle-up fa-2x" title="UP"></i>
-                  </td>
+                  <td id="{{ server.system_id }}"></td>
                   <td>
-                    <button class="btn btn-sm btn-info">Check</button>
                     <button class="btn btn-sm btn-danger">Delete</button>
                   </td>
                 </tr>
@@ -52,4 +49,34 @@
     </section>
     <!-- /.content -->
 
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        var systemidArr = "{{ system_ids }}".split(',')
+        console.log(systemidArr)
+        $.each(systemidArr, function(index, value) {
+          getStatus(value)
+        })
+    })
+
+    function getStatus(systemID) {
+      var url = $(location).attr('origin') + "/maas/machines/" + systemID + "/details/"
+      var $rowServer = $("#"+systemID)
+      console.log(url)
+      $.get(url, function(data, status) {
+        var powerState = data.machine.power_state.toLowerCase()
+        if (powerState == "on") {
+          $rowServer.html("<i class='text-success fas fa-power-off'></i> <small>ON</small>")
+        }
+        else if (powerState == "on") {
+          $rowServer.html("<i class='text-secondary fas fa-power-off'></i> <small>OFF</small>")
+        }
+        else {
+          $rowServer.html("<i class='text-warning fas fa-question-circle' title='Unknown'></i>")
+        }
+      })
+    }
+</script>
 {% endblock %}

@@ -12,9 +12,11 @@ from .forms import AddServerForm
 
 @login_required
 def index(request):
+    servers = Server.objects.all()
     context = {
         'title': 'Servers',
-        'servers': Server.objects.all(),
+        'servers': servers,
+        'system_ids': ",".join([s.system_id for s in servers]),
         'menu_active': 'add-server'
     }
     return render(request, 'installers/server.html', context)

@@ -2,11 +2,9 @@
 
 {% block extra_js %}
 <script>
-    console.log(document.location.host)
-
     $("#id_machine").on("change", function() {
         var systemID = $(this).val();
-        var url = $(location).attr('protocol') + "/maas/machines/" + systemID + "/details/"
+        var url = $(location).attr('origin') + "/maas/machines/" + systemID + "/details/"
         $.get(url, function(data, status) {
 
             // fill data
