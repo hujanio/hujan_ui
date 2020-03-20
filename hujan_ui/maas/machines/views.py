@@ -1,4 +1,3 @@
-import requests
 import json
 import sweetify
 
@@ -6,26 +5,21 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 from hujan_ui.maas.utils import MAAS
+from hujan_ui import maas
 from .forms import AddMachineForm, PowerTypeIPMIForm
 
 
 @login_required
 def index(request):
-    if settings.WITH_EX_RESPONSE:
-        with open(settings.DIR_EX_RESPONSE + "machines.json") as readfile:
-            machines = json.load(readfile)
-    else:
-        maas = MAAS()
-        machines = maas.get("machines/").json()
-        machine_file = open("hujan_ui/maas/ex_response/machines.json", "w")
-        json.dump(machines, machine_file)
-        machine_file.close()
+    if request.is_ajax():
+        return JsonResponse({'machines': maas.get_machines()})
 
     context = {
         'title': 'Machines',
-        'machines': machines,
+        'machines': maas.get_machines(),
         'menu_active': 'machines',
     }
     return render(request, 'maas/machines/index.html', context)
@@ -39,6 +33,9 @@ def details(request, system_id):
     else:
         maas = MAAS()
         machine = maas.get(f"machines/{system_id}/").json()
+
+    if request.is_ajax():
+        return JsonResponse({'machine': machine})
 
     context = {
         'title': f"Machines - {machine['fqdn']}",
@@ -62,7 +59,6 @@ def add(request):
         )
         maas = MAAS()
         resp = maas.post("machines/", data=data)
-        print(resp.text)
         if resp.status_code in maas.ok:
             sweetify.success(request, _('Successfully added domain'), button='Ok', timer=2000)
             return redirect("maas:machines:index")

@@ -13,7 +13,7 @@ class MAAS:
             'content-type': 'application/json',
             'accept': 'application/json'
         }
-    
+
     def maas_connect(self):
         consumer_key, token_key, token_secret = settings.MAAS_API_KEY.split(":")
         return OAuth1Session(
@@ -27,23 +27,23 @@ class MAAS:
 
     def get(self, uri, params=None, headers=None):
         maas = self.maas_connect()
-        
+
         if headers:
             self.headers.update(headers)
 
         return maas.get(self.url + uri, params=params, headers=self.headers)
-    
+
     def post(self, uri, data, params=None, headers=None):
         maas = self.maas_connect()
-        
+
         if headers:
             self.headers.update(headers)
 
         return maas.post(self.url + uri, json=data, params=params, headers=self.headers)
-    
+
     def put(self, uri, data, params=None, headers=None):
         maas = self.maas_connect()
-        
+
         if headers:
             self.headers.update(headers)
 
@@ -51,7 +51,7 @@ class MAAS:
 
     def delete(self, uri, params=None, headers=None):
         maas = self.maas_connect()
-        
+
         if headers:
             self.headers.update(headers)
 

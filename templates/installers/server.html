@@ -9,13 +9,13 @@
           <div class="card-header">
             <h3 class="card-title">Server List</h3>
             <div class="float-right">
-              <button class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add Server</button>
+              <a href="{% url 'installer:servers:add' %}" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add Server<a>
             </div>
           </div>
           <!-- /.card-header -->
           <div class="card-body">
             <table class="table table-bordered">
-              <thead>                  
+              <thead>
                 <tr>
                   <th>Name</th>
                   <th>Description</th>
@@ -25,10 +25,11 @@
                 </tr>
               </thead>
               <tbody>
+                {% for server in servers%}
                 <tr>
-                  <td>Node-0</td>
-                  <td>Contoh desc</td>
-                  <td>192.168.0.1</td>
+                  <td>{{ server.name }}</td>
+                  <td>{{ server.description }}</td>
+                  <td>{{ server.ip_address }}</td>
                   <td style="color:#3d9970">
                     <i class="fas fa-arrow-alt-circle-up fa-2x" title="UP"></i>
                   </td>
@@ -37,30 +38,7 @@
                     <button class="btn btn-sm btn-danger">Delete</button>
                   </td>
                 </tr>
-                <tr>
-                  <td>Node-1</td>
-                  <td>Contoh desc</td>
-                  <td>192.168.0.2</td>
-                  <td style="color:#ff851b;">
-                    <i class="fas fa-question-circle fa-2x" title="Unknown"></i>
-                  </td>
-                  <td>
-                    <button class="btn btn-sm btn-info">Check</button>
-                    <button class="btn btn-sm btn-danger">Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Node-2</td>
-                  <td>Contoh desc</td>
-                  <td>192.168.0.3</td>
-                  <td style="color:#d81b60;">
-                    <i class="fas fa-arrow-alt-circle-down fa-2x" title="DOWN"></i>
-                  </td>
-                  <td>
-                    <button class="btn btn-sm btn-info">Check</button>
-                    <button class="btn btn-sm btn-danger">Delete</button>
-                  </td>
-                </tr>
+                {% endfor %}
               </tbody>
             </table>
           </div>

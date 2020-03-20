@@ -1,13 +1,11 @@
-{% extends 'master.html' %}
+{% extends 'master-installer.html' %}
 {% load static widget_tweaks %}
 
 {% block content %}
 <div class="col-md-12">
     <div class="card">
         <div class="card-header">
-            <h4 class="pull-left">
-                {{ title }}
-            </h4>
+
         </div>
         <div class="card-body">
             <div class="row-fluid">
@@ -24,10 +22,12 @@
                                 {{ form.media }}
                                 {{ form.non_field_errors }}
 
-                                {% for field in form.hidden_fields %}
-                                    {{ field }}
+                                {# Include the hidden fields #}
+                                {% for hidden in form.hidden_fields %}
+                                    {{ hidden }}
                                 {% endfor %}
 
+                                {# Include the visible fields #}
                                 {% for field in form.visible_fields %}
                                     <div class="form-group col-md-{{col_size}}">
                                         <div class="col-md-12">
@@ -46,7 +46,7 @@
                                     </div>
                                 {% endfor %}
                                 <div class="form-group col-md-2">
-                                    <button type="submit" class="m-2 btn btn-success btn-user btn-block">
+                                    <button type="submit" class="m-2 btn btn-info btn-user btn-block">
                                         {% if title_submit %} {{ title_submit }} {% else %} Submit {% endif %}
                                     </button>
                                 </div>
