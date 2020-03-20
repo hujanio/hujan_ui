@@ -5,22 +5,23 @@ from hujan_ui.installers.models import Server
 
 
 class AddServerForm(forms.Form):
-    name = forms.ChoiceField()
-    ip_address = forms.CharField()
+    machine = forms.ChoiceField(label='Name')
+    ip_address = forms.CharField(widget=forms.Select)
     description = forms.CharField(required=False, help_text="Short description from this server")
     system_id = forms.CharField()
+    name = forms.CharField()
 
     def __init__(self, *args, **kwargs):
+        self.machines = self.get_choices_machines()
         super().__init__(*args, **kwargs)
-        self.fields['name'].choices = self.get_choices_machines()
-        self.fields['ip_address'].widget.attrs['readonly'] = True
-        self.fields['ip_address'].widget.attrs['placeholder'] = "IP Address"
+        self.fields['machine'].choices = self.machines
         self.fields['system_id'].widget = forms.HiddenInput()
+        self.fields['name'].widget = forms.HiddenInput()
 
     def get_choices_machines(self):
         resp = maas.get_machines()
         return [
-            (machine['fqdn'], machine['fqdn']) for machine in resp
+            (machine['system_id'], machine['fqdn']) for machine in resp
         ]
 
     def save(self):
@@ -29,5 +30,5 @@ class AddServerForm(forms.Form):
             name=clean_data['name'],
             ip_address=clean_data['ip_address'],
             description=clean_data['description'],
-            mechine=clean_data['system_id']
+            system_id=clean_data['system_id']
         )

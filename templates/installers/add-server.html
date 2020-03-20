@@ -1,0 +1,33 @@
+{% include 'installers/form.html' with form=form %}
+
+{% block extra_js %}
+<script>
+    console.log(document.location.host)
+
+    $("#id_machine").on("change", function() {
+        var systemID = $(this).val();
+        var url = $(location).attr('protocol') + "/maas/machines/" + systemID + "/details/"
+        $.get(url, function(data, status) {
+
+            // fill data
+            $("#id_name").val(data.machine.fqdn)
+            $("#id_system_id").val(data.machine.system_id)
+
+            // check ip address
+            var ipAddresses = data.machine.ip_addresses
+            if (ipAddresses.length == 0 ) {
+                alert("This server does not have an ip address")
+                $("#id_ip_address").html("")
+                return
+            }
+
+            // add option ip addresses
+            var htmlOption = []
+            $.each(ipAddresses, function(index, value) {
+                htmlOption.push("<option value='"+ value +"'>"+ value +"</option>")
+            })
+            $("#id_ip_address").html(htmlOption.join())
+        })
+    })
+</script>
+{% endblock %}

@@ -1,3 +1,5 @@
 from django.contrib import admin
+from hujan_ui.installers.models import Server
 
-# Register your models here.
+
+admin.site.register(Server)

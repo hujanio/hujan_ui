@@ -23,14 +23,15 @@ def add(request):
     form = AddServerForm(request.POST or None)
 
     if form.is_valid():
-        form.clean()
-        sweetify.warning(request, _("test"), button='Ok', timer=5000)
+        form.save()
+        sweetify.success(request, _(f"Successfully added server"), button='Ok', timer=2000)
+        return redirect("installer:servers:index")
 
     context = {
         'title': 'Add Server',
         'form': form,
         'menu_active': 'add-server',
         'title_submit': 'Save Server',
-        'col_size': '12'
+        'col_size': '12',
     }
-    return render(request, "installers/form.html", context)
+    return render(request, "installers/add-server.html", context)

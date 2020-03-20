@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 from hujan_ui.maas.utils import MAAS
 from hujan_ui import maas
@@ -13,6 +14,9 @@ from .forms import AddMachineForm, PowerTypeIPMIForm
 
 @login_required
 def index(request):
+    if request.is_ajax():
+        return JsonResponse({'machines': maas.get_machines()})
+
     context = {
         'title': 'Machines',
         'machines': maas.get_machines(),
@@ -29,6 +33,9 @@ def details(request, system_id):
     else:
         maas = MAAS()
         machine = maas.get(f"machines/{system_id}/").json()
+
+    if request.is_ajax():
+        return JsonResponse({'machine': machine})
 
     context = {
         'title': f"Machines - {machine['fqdn']}",
