@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
+from hujan_ui.installers.models import Server
 from .forms import AddServerForm
 
 
@@ -13,6 +14,7 @@ from .forms import AddServerForm
 def index(request):
     context = {
         'title': 'Servers',
+        'servers': Server.objects.all(),
         'menu_active': 'add-server'
     }
     return render(request, 'installers/server.html', context)
