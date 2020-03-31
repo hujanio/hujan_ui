@@ -9,3 +9,22 @@ class Server(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Inventory(models.Model):
+    server = models.ForeignKey(Server, on_delete=models.CASCADE)
+    GROUP = (
+        ('control', 'Controller'),
+        ('network', 'Network'),
+        ('compute', 'Compute'),
+        ('monitoring', 'Monitoring'),
+        ('storage', 'storage'),
+    )
+    group = models.CharField(max_length=50, choices=GROUP)
+
+    class Meta:
+        verbose_name = "inventory"
+        verbose_name_plural = "inventories"
+
+    def __str__(self):
+        return f"{self.server} - {self.group}"
