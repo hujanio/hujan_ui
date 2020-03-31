@@ -58,3 +58,11 @@ def edit(request, id):
         'col_size': '12',
     }
     return render(request, "installers/form.html", context)
+
+
+@login_required
+def delete(request, id):
+    inventory = get_object_or_404(Inventory, id=id)
+    inventory.delete()
+    sweetify.success(request, _(f"Successfully deleted inventory"), button='Ok', timer=2000)
+    return redirect("installer:inventories:index")

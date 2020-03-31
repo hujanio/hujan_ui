@@ -36,7 +36,7 @@
                     <td>{{ inventory.server.ip_address }}</td>
                     <td>
                       <a href="{% url 'installer:inventories:edit' inventory.id %}" class="btn btn-sm btn-info">Edit</a>
-                      <button class="btn btn-sm btn-danger">Delete</button>
+                      <button class="btn btn-sm btn-danger delete" data-url="{% url 'installer:inventories:delete' inventory.id %}" data-name="{{ inventory }}">Delete</button>
                     </td>
                   </tr>
                   {% endif %}
@@ -59,4 +59,28 @@
     </section>
     <!-- /.content -->
 
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  $(".delete").on("click", function() {
+    var button = $(this);
+    var url = button.data('url');
+    var name = button.data('name');
+
+    Swal.fire({
+      title: 'Are you sure to delete '+ name +'?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.value) {
+        window.location = url;
+      }
+    });
+  });
+</script>
 {% endblock %}
