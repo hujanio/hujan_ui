@@ -35,7 +35,7 @@
                     <td>{{ inventory.server.name }}</td>
                     <td>{{ inventory.server.ip_address }}</td>
                     <td>
-                      <button class="btn btn-sm btn-info">Edit</button>
+                      <a href="{% url 'installer:inventories:edit' inventory.id %}" class="btn btn-sm btn-info">Edit</a>
                       <button class="btn btn-sm btn-danger">Delete</button>
                     </td>
                   </tr>

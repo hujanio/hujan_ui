@@ -3,7 +3,7 @@ import json
 import sweetify
 
 from django.utils.translation import ugettext_lazy as _
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from hujan_ui.installers.models import Inventory
@@ -36,6 +36,25 @@ def add(request):
         'form': form,
         'menu_active': 'inventories',
         'title_submit': 'Save Inventory',
+        'col_size': '12',
+    }
+    return render(request, "installers/form.html", context)
+
+
+@login_required
+def edit(request, id):
+    inventory = get_object_or_404(Inventory, id=id)
+    form = InventoryForm(data=request.POST or None, instance=inventory)
+    if form.is_valid():
+        form.save()
+        sweetify.success(request, _(f"Successfully edited inventory"), button='Ok', timer=2000)
+        return redirect("installer:inventories:index")
+
+    context = {
+        'title': 'Edit Inventory',
+        'form': form,
+        'menu_active': 'inventories',
+        'title_submit': 'Edit Inventory',
         'col_size': '12',
     }
     return render(request, "installers/form.html", context)
