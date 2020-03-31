@@ -28,7 +28,7 @@ def add(request):
 
     if form.is_valid():
         form.save()
-        sweetify.success(request, _(f"Successfully added inventory"), button='Ok', timer=2000)
+        sweetify.success(request, _(f"Successfully added inventory"), button='OK', icon='success')
         return redirect("installer:inventories:index")
 
     context = {
@@ -47,7 +47,7 @@ def edit(request, id):
     form = InventoryForm(data=request.POST or None, instance=inventory)
     if form.is_valid():
         form.save()
-        sweetify.success(request, _(f"Successfully edited inventory"), button='Ok', timer=2000)
+        sweetify.success(request, _(f"Successfully edited inventory"), button='OK', icon='success')
         return redirect("installer:inventories:index")
 
     context = {
@@ -64,5 +64,5 @@ def edit(request, id):
 def delete(request, id):
     inventory = get_object_or_404(Inventory, id=id)
     inventory.delete()
-    sweetify.success(request, _(f"Successfully deleted inventory"), button='Ok', timer=2000)
+    sweetify.success(request, _(f"Successfully deleted inventory"), icon='success', button='OK')
     return redirect("installer:inventories:index")
