@@ -28,7 +28,7 @@ def add(request):
 
     if form.is_valid():
         form.save()
-        sweetify.success(request, _(f"Successfully added server"), button='Ok', timer=2000)
+        sweetify.success(request, _(f"Successfully added server"), button='OK', icon='success')
         return redirect("installer:servers:index")
 
     context = {

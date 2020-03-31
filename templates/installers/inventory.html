@@ -7,10 +7,16 @@
       <div class="container-fluid">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title"><strong>GROUP: CONTROLLER</strong></h3>
             <div class="float-right">
-              <button class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add Controller</button>
+              <a href="{% url 'installer:inventories:add' %}" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add Inventory</a>
             </div>
+          </div>
+        </div>
+
+        {% for group in inventory_groups %}
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title"><strong>GROUP: {{ group.1 }}</strong></h3>
           </div>
           <!-- /.card-header -->
           <div class="card-body">
@@ -23,79 +29,25 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Node-0</td>
-                  <td>192.168.0.1</td>
-                  <td>
-                    <button class="btn btn-sm btn-info">Check</button>
-                    <button class="btn btn-sm btn-danger">Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Node-1</td>
-                  <td>192.168.0.2</td>
-                  <td>
-                    <button class="btn btn-sm btn-info">Check</button>
-                    <button class="btn btn-sm btn-danger">Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Node-2</td>
-                  <td>192.168.0.3</td>
-                  <td>
-                    <button class="btn btn-sm btn-info">Check</button>
-                    <button class="btn btn-sm btn-danger">Delete</button>
-                  </td>
-                </tr>
+                {% for inventory in inventories %}
+                  {% if inventory.group == group.0 %}
+                  <tr>
+                    <td>{{ inventory.server.name }}</td>
+                    <td>{{ inventory.server.ip_address }}</td>
+                    <td>
+                      <a href="{% url 'installer:inventories:edit' inventory.id %}" class="btn btn-sm btn-info">Edit</a>
+                      <button class="btn btn-sm btn-danger delete" data-url="{% url 'installer:inventories:delete' inventory.id %}" data-name="{{ inventory }}">Delete</button>
+                    </td>
+                  </tr>
+                  {% endif %}
+                {% endfor %}
               </tbody>
             </table>
           </div>
         </div>
+        {% endfor %}
+        
         <div class="card">
-          <div class="card-header">
-            <h3 class="card-title"><strong>GROUP: COMPUTE</strong></h3>
-            <div class="float-right">
-              <button class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add Compute</button>
-            </div>
-          </div>
-          <!-- /.card-header -->
-          <div class="card-body">
-            <table class="table table-bordered">
-              <thead>                  
-                <tr>
-                  <th>Name</th>
-                  <th>IP Address</th>
-                  <th style="width:150px;">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Node-0</td>
-                  <td>192.168.0.1</td>
-                  <td>
-                    <button class="btn btn-sm btn-info">Check</button>
-                    <button class="btn btn-sm btn-danger">Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Node-1</td>
-                  <td>192.168.0.2</td>
-                  <td>
-                    <button class="btn btn-sm btn-info">Check</button>
-                    <button class="btn btn-sm btn-danger">Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Node-2</td>
-                  <td>192.168.0.3</td>
-                  <td>
-                    <button class="btn btn-sm btn-info">Check</button>
-                    <button class="btn btn-sm btn-danger">Delete</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
           <div class="card-footer">
             <div class="float-right">
               <a href="{% url 'installer:servers:index' %}" class="btn bg-navy"><i class="fas fa-arrow-circle-left"></i>&nbsp;&nbsp;&nbsp;Back</a>
@@ -107,4 +59,28 @@
     </section>
     <!-- /.content -->
 
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  $(".delete").on("click", function() {
+    var button = $(this);
+    var url = button.data('url');
+    var name = button.data('name');
+
+    Swal.fire({
+      title: 'Are you sure to delete '+ name +'?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.value) {
+        window.location = url;
+      }
+    });
+  });
+</script>
 {% endblock %}
