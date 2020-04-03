@@ -59,8 +59,7 @@ class HostEditor:
 
     def save(self):
         with open(self.file_name, 'w') as f:
-            for l in self.default_lines:
-                f.writelines(l)
+            f.writelines(self.default_lines)
 
             # Write hujan host config
             f.write(self.start_block_msg)
