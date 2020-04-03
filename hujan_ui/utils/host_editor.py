@@ -44,7 +44,6 @@ class HostEditor:
             else:
                 default_lines.append(l)
 
-
         return default_lines, hujan_lines
 
     def _parse_host_entries(self, hujan_lines) -> list:
@@ -67,4 +66,3 @@ class HostEditor:
             for l in self.host_entries:
                 f.write("%s\n" % " ".join(l))
             f.write(self.end_block_msg)
-
