@@ -19,9 +19,9 @@
                 <tr>
                   <th>Name</th>
                   <th>Description</th>
-                  <th>IP Address</th>
-                  <th style="width:50px;">Status</th>
-                  <th style="width:150px;">Action</th>
+                  <th style="width:15%;">IP Address</th>
+                  <th style="width:10%;">Status</th>
+                  <th style="width:15%;">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -32,7 +32,8 @@
                   <td>{{ server.ip_address }}</td>
                   <td id="{{ server.system_id }}"></td>
                   <td>
-                    <button class="btn btn-sm btn-danger">Delete</button>
+                    <a href="{% url 'installer:servers:edit' server.id %}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i> Edit</a>
+                    <button class="btn btn-sm btn-danger delete-swal" data-url="{% url 'installer:servers:delete' server.id %}" data-name="{{ server }}"><i class="fas fa-trash-alt"></i> Delete</button>
                   </td>
                 </tr>
                 {% endfor %}

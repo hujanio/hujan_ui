@@ -2,11 +2,19 @@
 
 {% block extra_js %}
 <script>
+    $( document ).ready(function() {
+        {% if old_ip_address %}
+            ajax_machine($("#id_machine").val());
+        {% endif %}
+    });
+
     $("#id_machine").on("change", function() {
-        var systemID = $(this).val();
+        ajax_machine($(this).val());
+    })
+
+    function ajax_machine(systemID, ipAddress){
         var url = $(location).attr('origin') + "/maas/machines/" + systemID + "/details/"
         $.get(url, function(data, status) {
-
             // fill data
             $("#id_name").val(data.machine.fqdn)
             $("#id_system_id").val(data.machine.system_id)
@@ -22,10 +30,14 @@
             // add option ip addresses
             var htmlOption = []
             $.each(ipAddresses, function(index, value) {
-                htmlOption.push("<option value='"+ value +"'>"+ value +"</option>")
+                if("{{ old_ip_address }}" == value){
+                    htmlOption.push("<option value='"+ value +"' selected>"+ value +"</option>")
+                }else{
+                    htmlOption.push("<option value='"+ value +"'>"+ value +"</option>")
+                }
             })
             $("#id_ip_address").html(htmlOption.join())
         })
-    })
+    }
 </script>
 {% endblock %}

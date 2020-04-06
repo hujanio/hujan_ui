@@ -5,8 +5,9 @@
 <div class="col-md-12">
     <div class="card">
         <div class="card-header">
-
+            Form {{ title }}
         </div>
+        <form action="" method="post" enctype="multipart/form-data">
         <div class="card-body">
             <div class="row-fluid">
                 <div class="row">
@@ -15,50 +16,47 @@
                     </div>
                     <div class=" col-md-12 col-lg-12 ">
                         <div class="tab-content">
+                            {% csrf_token %}
 
-                            <form action="" method="post" enctype="multipart/form-data">
-                                {% csrf_token %}
+                            {{ form.media }}
+                            {{ form.non_field_errors }}
 
-                                {{ form.media }}
-                                {{ form.non_field_errors }}
+                            {# Include the hidden fields #}
+                            {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
 
-                                {# Include the hidden fields #}
-                                {% for hidden in form.hidden_fields %}
-                                    {{ hidden }}
-                                {% endfor %}
-
-                                {# Include the visible fields #}
-                                {% for field in form.visible_fields %}
-                                    <div class="form-group col-md-{{col_size}}">
-                                        <div class="col-md-12">
-                                            {% if field.field.widget.input_type == 'checkbox' %}
-                                                <div class="form-check">
-                                                    {% render_field field|add_class:"form-check-input"%}
-                                                    <label class="form-check-label">{{ field.label }}</label>
-                                                </div>
-                                            {% else %}
-                                                <label class="col-md-12"> {{ field.label }} </label>
-                                                {% render_field field|add_class:"form-control"%}
-                                            {% endif %}
-                                            <small class="form-text text-muted">{{ field.help_text }}</small>
-                                            <small class="form-text text-danger">{{ field.errors }}</small>
-                                        </div>
+                            {# Include the visible fields #}
+                            {% for field in form.visible_fields %}
+                                <div class="form-group col-md-{{col_size}}">
+                                    <div class="col-md-12">
+                                        {% if field.field.widget.input_type == 'checkbox' %}
+                                            <div class="form-check">
+                                                {% render_field field|add_class:"form-check-input"%}
+                                                <label class="form-check-label">{{ field.label }}</label>
+                                            </div>
+                                        {% else %}
+                                            <label class="col-md-12"> {{ field.label }} </label>
+                                            {% render_field field|add_class:"form-control"%}
+                                        {% endif %}
+                                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                                        <small class="form-text text-danger">{{ field.errors }}</small>
                                     </div>
-                                {% endfor %}
-                                <div class="form-group col-md-2">
-                                    <button type="submit" class="m-2 btn btn-info btn-user btn-block">
-                                        {% if title_submit %} {{ title_submit }} {% else %} Submit {% endif %}
-                                    </button>
                                 </div>
-
-                            </form>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card-footer"></div>
-
+        <div class="card-footer">
+            <div class="form-group col-md-2">
+                <button type="submit" class="m-2 btn btn-info btn-user btn-block">
+                    {% if title_submit %} {{ title_submit }} {% else %} Submit {% endif %}
+                </button>
+            </div>
+        </div>
+        </form>
     </div>
 </div>
 {% endblock %}
