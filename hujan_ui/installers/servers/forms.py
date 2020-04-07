@@ -24,35 +24,11 @@ class AddServerForm(forms.ModelForm):
         self.machines = self.get_choices_machines()
         super().__init__(*args, **kwargs)
         self.fields['machine'].choices = self.machines
+        if kwargs['instance']:
+            self.fields['machine'].initial = kwargs['instance'].system_id
 
     def get_choices_machines(self):
         resp = maas.get_machines()
         return [
             (machine['system_id'], machine['fqdn']) for machine in resp
         ]
-
-    def save(self):
-        clean_data = super().clean()
-        return Server.objects.create(
-            name=clean_data['name'],
-            ip_address=clean_data['ip_address'],
-            description=clean_data['description'],
-            system_id=clean_data['system_id']
-        )
-
-
-class EditServerForm(AddServerForm):
-    def __init__(self, *args, **kwargs):
-        self.id = kwargs['instance'].id
-        super().__init__(*args, **kwargs)
-        self.fields['machine'].initial = kwargs['instance'].system_id
-        
-    def save(self):
-        clean_data = super().clean()
-        server = Server.objects.get(id=self.id)
-        server.name = clean_data['name']
-        server.ip_address = clean_data['ip_address']
-        server.description = clean_data['description']
-        server.system_id = clean_data['system_id']
-        return server.save()
-        
