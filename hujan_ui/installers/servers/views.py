@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 from hujan_ui.installers.models import Server
 from .forms import AddServerForm
+from .utils import save_server_to_hosts
 
 
 @login_required
@@ -28,6 +29,7 @@ def add(request):
 
     if form.is_valid():
         form.save()
+        save_server_to_hosts()
         sweetify.success(request, _(f"Successfully added server"), button='OK', icon='success')
         return redirect("installer:servers:index")
 
@@ -47,6 +49,7 @@ def edit(request, id):
     form = AddServerForm(data=request.POST or None, instance=server)
     if form.is_valid():
         form.save()
+        save_server_to_hosts()
         sweetify.success(request, _(f"Successfully edited server"), button='OK', icon='success')
         return redirect("installer:servers:index")
 
@@ -65,5 +68,6 @@ def edit(request, id):
 def delete(request, id):
     server = get_object_or_404(Server, id=id)
     server.delete()
+    save_server_to_hosts()
     sweetify.success(request, _(f"Successfully deleted server"), icon='success', button='OK')
     return redirect("installer:servers:index")
