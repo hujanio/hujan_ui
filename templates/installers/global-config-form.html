@@ -1,0 +1,68 @@
+{% extends 'master-installer.html' %}
+{% load static widget_tweaks %}
+
+{% block content %}
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            Form {{ title }}
+        </div>
+        <form action="" method="post" enctype="multipart/form-data">
+        <div class="card-body">
+            <div class="row-fluid">
+                <div class="row">
+                    <div class=" col-md-12 col-lg-12 ">
+                        <h5>{{ title_extra }}</h5>
+                    </div>
+                    <div class=" col-md-12 col-lg-12 ">
+                        <div class="row tab-content">
+                            {% csrf_token %}
+
+                            {{ form.media }}
+                            {{ form.non_field_errors }}
+
+                            {# Include the hidden fields #}
+                            {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+
+                            {# Include the visible fields #}
+                            {% for field in form.visible_fields %}
+                                <div class="col-md-5">
+                                    <div class="form-group row">
+                                        {% if field.field.widget.input_type == 'checkbox' %}
+                                            <label for="inputEmail3" class="col-sm-7 col-form-label">{{ field.label }}</label>
+                                            <div class="col-sm-5 pt-2">
+                                                <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                                    {% render_field field|add_class:"custom-control-input"%}
+                                                    <label class="custom-control-label" for="id_{{ field.name }}"></label>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <label class="col-sm-7 col-form-label"> {{ field.label }} </label>
+                                            <div class="col-sm-5">
+                                                {% render_field field|add_class:"form-control"%}
+                                            </div>
+                                        {% endif %}
+                                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                                        <small class="form-text text-danger">{{ field.errors }}</small>
+                                    </div>
+                                </div>
+                                <div class="offset-md-1"></div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">            
+            <button type="submit" class="btn btn-info">Save</button>
+            <div class="float-right">
+              <a href="{% url 'installer:inventories:index' %}" class="btn bg-navy"><i class="fas fa-arrow-circle-left"></i>&nbsp;&nbsp;&nbsp;Back</a>
+              <a href="{% url 'installer:advanced_config' %}" class="btn bg-navy">Next&nbsp;&nbsp;&nbsp;<i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
