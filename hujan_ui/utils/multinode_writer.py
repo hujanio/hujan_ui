@@ -24,3 +24,4 @@ class MultiNodeWriter:
                 f.write("[%s]\n" % k)
                 for x in v:
                     f.write("%s ansible_user=centos\n" % x)
+                f.write("\n")
