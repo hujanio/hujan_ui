@@ -60,3 +60,18 @@ class GlobalConfig(models.Model):
 
     def __str__(self):
         return self.installation_type
+
+
+class AdvancedConfig(models.Model):
+    SERVICE_TYPE = (
+        ('octavia_service', 'Octavia Service'),
+        ('neutron_service', 'Neutron Service'),
+        ('ml2_plugin', 'ML2 Plugin'),
+        ('heat_service', 'Heat Service'),
+        ('magnum_service', 'Magnum Service'),
+    )
+    service_type = models.CharField(max_length=50, choices=SERVICE_TYPE)
+    configuration = models.TextField()
+
+    def __str__(self):
+        return self.service_type
