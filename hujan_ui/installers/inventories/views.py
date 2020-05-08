@@ -15,7 +15,6 @@ def index(request):
         'title': 'Inventories',
         'inventories': inventories,
         'menu_active': 'inventories',
-        'inventory_groups': Inventory.GROUP
     }
     return render(request, 'installers/inventory.html', context)
 
