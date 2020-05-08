@@ -1,0 +1,52 @@
+{% extends 'master-installer.html' %}
+{% load static %}
+
+{% block content %}
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Service List</span>
+            <div class="float-right">
+              <a href="{% url 'installer:configurations:add_advanced_config' %}" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add Configuration<a>
+            </div>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            {% if advanced_config %}
+              {% for config in advanced_config %}
+                <div class="card">
+                  <div class="card-header">
+                    <a href="#" class="card-title text-info" data-card-widget="collapse"><h4>{{ config.get_service_type_display }}</h4></a>
+                    <div class="card-tools">
+                      <!-- Collapse Button -->
+                      <a href="{% url 'installer:configurations:edit_advanced_config' config.id %}" class="btn btn-info"><i class="fas fa-edit"></i>&nbsp;&nbsp;Edit<a>
+                        <button class="btn btn-danger delete-swal" data-url="{% url 'installer:configurations:delete_advanced_config' config.id %}" data-name="{{ config }}"><i class="fas fa-trash-alt"></i> Delete</button>
+                    </div>
+                    <!-- /.card-tools -->
+                  </div>
+                  <!-- /.card-header -->
+                  <div class="card-body">
+                    <pre>{{ config.configuration|safe }}</pre>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+              {% endfor %}
+            {% else %}
+              <h3>No Configurations</h3>
+            {% endif %}
+          </div>
+          <div class="card-footer">
+            <div class="float-right">
+              <a href="{% url 'installer:configurations:global_config' %}" class="btn bg-navy"><i class="fas fa-arrow-circle-left"></i>&nbsp;&nbsp;&nbsp;Back</a>
+              <a href="{% url 'installer:deploy' %}" class="btn bg-navy">Next&nbsp;&nbsp;&nbsp;<i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+
+{% endblock %}

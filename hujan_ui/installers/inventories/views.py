@@ -26,7 +26,7 @@ def add(request):
     if form.is_valid():
         form.save()
         save_inventory_multi_node()
-        sweetify.success(request, _(f"Successfully added inventory"), button='OK', icon='success')
+        sweetify.success(request, _("Successfully added inventory"), button='OK', icon='success')
         return redirect("installer:inventories:index")
 
     context = {

@@ -25,7 +25,7 @@ def index(request):
 
 @login_required
 def add(request):
-    form = AddServerForm(request.POST or None, instance=None)
+    form = AddServerForm(request.POST or None)
 
     if form.is_valid():
         form.save()
