@@ -7,7 +7,7 @@
         <div class="card-header">
             Form {{ title }}
         </div>
-        <form action="" method="post" enctype="multipart/form-data">
+        <form action="" method="post" enctype="multipart/form-data" id="form-global-config">
         <div class="card-body">
             <div class="row-fluid">
                 <div class="row">
@@ -34,14 +34,14 @@
                                             <label for="inputEmail3" class="col-sm-7 col-form-label">{{ field.label }}</label>
                                             <div class="col-sm-5 pt-2">
                                                 <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                                    {% render_field field|add_class:"custom-control-input"%}
+                                                    {% render_field field|add_class:"custom-control-input field-input"%}
                                                     <label class="custom-control-label" for="id_{{ field.name }}"></label>
                                                 </div>
                                             </div>
                                         {% else %}
                                             <label class="col-sm-7 col-form-label"> {{ field.label }} </label>
                                             <div class="col-sm-5">
-                                                {% render_field field|add_class:"form-control"%}
+                                                {% render_field field|add_class:"form-control field-input"%}
                                             </div>
                                         {% endif %}
                                         <small class="form-text text-muted">{{ field.help_text }}</small>
@@ -59,10 +59,41 @@
             <button type="submit" class="btn btn-info">Save</button>
             <div class="float-right">
               <a href="{% url 'installer:inventories:index' %}" class="btn bg-navy"><i class="fas fa-arrow-circle-left"></i>&nbsp;&nbsp;&nbsp;Back</a>
-              <a href="{% url 'installer:advanced_config' %}" class="btn bg-navy">Next&nbsp;&nbsp;&nbsp;<i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{% url 'installer:advanced_config' %}" class="btn bg-navy" onclick="return checkNext()">Next&nbsp;&nbsp;&nbsp;<i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         </form>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    var needSave = false;
+    $(".field-input").change(function(){
+        needSave = true;
+    });
+    function checkNext(){
+        var isAlert = false;
+        var textAlert = "\nPlease fill out fields below and save\n";
+        if($("#id_internal_vip_address").val().trim() == ""){
+            textAlert += "• Internal VIP Address\n";
+            isAlert = true;
+        }
+        if($("#id_external_vip_address").val().trim() == ""){
+            textAlert += "• External VIP Address\n";
+            isAlert = true;
+        }
+        if(isAlert == true){
+            alert(textAlert);
+            return false;
+        }else{
+            if(needSave == true){
+                $("#form-global-config").submit();
+                return false;
+            }
+        }
+        return true;
+    }
+</script>
 {% endblock %}
