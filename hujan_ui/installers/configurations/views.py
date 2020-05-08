@@ -16,11 +16,11 @@ def global_config(request):
     form = GlobalConfigForm(request.POST or None, instance=global_config)
     if form.is_valid():
         form.save()
-        sweetify.success(request, _(f"Successfully update global config"), button='OK', icon='success')
+        sweetify.success(request, _("Successfully update global config"), button='OK', icon='success')
         return redirect("installer:configurations:global_config")
 
     context = {
-        'title': 'Global Configuration',
+        'title': _('Global Configuration'),
         'menu_active': 'global-configuration',
         'form': form
     }
@@ -32,7 +32,7 @@ def advanced_config(request):
     advanced_config = AdvancedConfig.objects.all()
 
     context = {
-        'title': 'Advanced Configuration',
+        'title': _('Advanced Configuration'),
         'menu_active': 'advanced-configuration',
         'advanced_config': advanced_config
     }
@@ -41,18 +41,18 @@ def advanced_config(request):
 
 @login_required
 def add_advanced_config(request):
-    form = AdvancedConfigForm(request.POST or None, instance=None)
+    form = AdvancedConfigForm(request.POST or None)
 
     if form.is_valid():
         form.save()
-        sweetify.success(request, _(f"Successfully added advanced configuration"), button='OK', icon='success')
+        sweetify.success(request, _("Successfully added advanced configuration"), button='OK', icon='success')
         return redirect("installer:configurations:advanced_config")
 
     context = {
-        'title': 'Add Advanced Configuration',
+        'title': _('Add Advanced Configuration'),
         'form': form,
         'menu_active': 'advanced-configuration',
-        'title_submit': 'Save Advanced Configuration',
+        'title_submit': _('Save Advanced Configuration'),
         'col_size': '12',
     }
     return render(request, "installers/form.html", context)
@@ -64,14 +64,14 @@ def edit_advanced_config(request, id):
     form = AdvancedConfigForm(data=request.POST or None, instance=advanced_config)
     if form.is_valid():
         form.save()
-        sweetify.success(request, _(f"Successfully edited advanced configuration"), button='OK', icon='success')
+        sweetify.success(request, _("Successfully edited advanced configuration"), button='OK', icon='success')
         return redirect("installer:configurations:advanced_config")
 
     context = {
-        'title': 'Edit Advanced Configuration',
+        'title': _('Edit Advanced Configuration'),
         'form': form,
         'menu_active': 'advanced-configuration',
-        'title_submit': 'Edit Advanced Configuration',
+        'title_submit': _('Edit Advanced Configuration'),
         'col_size': '12',
     }
     return render(request, "installers/form.html", context)
@@ -81,5 +81,5 @@ def edit_advanced_config(request, id):
 def delete_advanced_config(request, id):
     advanced_config = get_object_or_404(AdvancedConfig, id=id)
     advanced_config.delete()
-    sweetify.success(request, _(f"Successfully deleted advanced configuration"), icon='success', button='OK')
+    sweetify.success(request, _("Successfully deleted advanced configuration"), icon='success', button='OK')
     return redirect("installer:configurations:advanced_config")
