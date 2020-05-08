@@ -15,7 +15,7 @@ from .utils import save_server_to_hosts
 def index(request):
     servers = Server.objects.all()
     context = {
-        'title': 'Servers',
+        'title': _('Servers'),
         'servers': servers,
         'system_ids': ",".join([s.system_id for s in servers]),
         'menu_active': 'add-server'
@@ -30,14 +30,14 @@ def add(request):
     if form.is_valid():
         form.save()
         save_server_to_hosts()
-        sweetify.success(request, _(f"Successfully added server"), button='OK', icon='success')
+        sweetify.success(request, _("Successfully added server"), button='OK', icon='success')
         return redirect("installer:servers:index")
 
     context = {
-        'title': 'Add Server',
+        'title': _('Add Server'),
         'form': form,
         'menu_active': 'add-server',
-        'title_submit': 'Save Server',
+        'title_submit': _('Save Server'),
         'col_size': '12',
     }
     return render(request, "installers/add-server.html", context)
@@ -50,14 +50,14 @@ def edit(request, id):
     if form.is_valid():
         form.save()
         save_server_to_hosts()
-        sweetify.success(request, _(f"Successfully edited server"), button='OK', icon='success')
+        sweetify.success(request, _("Successfully edited server"), button='OK', icon='success')
         return redirect("installer:servers:index")
 
     context = {
-        'title': 'Edit Server',
+        'title': _('Edit Server'),
         'form': form,
         'menu_active': 'servers',
-        'title_submit': 'Edit Server',
+        'title_submit': _('Edit Server'),
         'col_size': '12',
         'old_ip_address': server.ip_address
     }
@@ -69,5 +69,5 @@ def delete(request, id):
     server = get_object_or_404(Server, id=id)
     server.delete()
     save_server_to_hosts()
-    sweetify.success(request, _(f"Successfully deleted server"), icon='success', button='OK')
+    sweetify.success(request, _("Successfully deleted server"), icon='success', button='OK')
     return redirect("installer:servers:index")

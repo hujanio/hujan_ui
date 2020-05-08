@@ -12,7 +12,7 @@ from .utils import save_inventory_multi_node
 def index(request):
     inventories = Inventory.objects.select_related('server').all()
     context = {
-        'title': 'Inventories',
+        'title': _('Inventories'),
         'inventories': inventories,
         'menu_active': 'inventories',
     }
@@ -30,10 +30,10 @@ def add(request):
         return redirect("installer:inventories:index")
 
     context = {
-        'title': 'Add Inventory',
+        'title': _('Add Inventory'),
         'form': form,
         'menu_active': 'inventories',
-        'title_submit': 'Save Inventory',
+        'title_submit': _('Save Inventory'),
         'col_size': '12',
     }
     return render(request, "installers/form.html", context)
@@ -46,14 +46,14 @@ def edit(request, id):
     if form.is_valid():
         form.save()
         save_inventory_multi_node()
-        sweetify.success(request, _(f"Successfully edited inventory"), button='OK', icon='success')
+        sweetify.success(request, _("Successfully edited inventory"), button='OK', icon='success')
         return redirect("installer:inventories:index")
 
     context = {
-        'title': 'Edit Inventory',
+        'title': _('Edit Inventory'),
         'form': form,
         'menu_active': 'inventories',
-        'title_submit': 'Edit Inventory',
+        'title_submit': _('Edit Inventory'),
         'col_size': '12',
     }
     return render(request, "installers/form.html", context)
@@ -64,5 +64,5 @@ def delete(request, id):
     inventory = get_object_or_404(Inventory, id=id)
     inventory.delete()
     save_inventory_multi_node()
-    sweetify.success(request, _(f"Successfully deleted inventory"), icon='success', button='OK')
+    sweetify.success(request, _("Successfully deleted inventory"), icon='success', button='OK')
     return redirect("installer:inventories:index")
