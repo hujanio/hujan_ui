@@ -24,8 +24,8 @@ class AddServerForm(forms.ModelForm):
         self.machines = self.get_choices_machines()
         super().__init__(*args, **kwargs)
         self.fields['machine'].choices = self.machines
-        if hasattr(self, 'instance'):
-            self.fields['machine'].initial = kwargs['instance'].system_id
+        if self.instance.system_id:
+            self.fields['machine'].initial = self.instance.system_id
 
     def get_choices_machines(self):
         resp = maas.get_machines()
