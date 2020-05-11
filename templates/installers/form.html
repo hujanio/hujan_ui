@@ -49,14 +49,21 @@
                 </div>
             </div>
         </div>
-        <div class="card-footer">
-            <div class="form-group col-md-2">
-                <button type="submit" class="m-2 btn btn-info btn-user btn-block">
-                    {% if title_submit %} {{ title_submit }} {% else %} Submit {% endif %}
-                </button>
+        <div class="card-footer">  
+            <button type="submit" class="btn btn-info btn-user">{% if title_submit %} {{ title_submit }} {% else %} Submit {% endif %}</button>
+            <div class="float-right">              
+                <button class="btn btn-danger float-right" onclick="goBack()">Cancel</button>
             </div>
         </div>
         </form>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function goBack() {
+      window.history.back();
+    }
+</script>
 {% endblock %}
