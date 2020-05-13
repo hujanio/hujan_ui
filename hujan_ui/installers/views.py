@@ -4,6 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 
+from hujan_ui.installers.models import (
+    Server, Inventory, GlobalConfig, AdvancedConfig
+)
+
 
 @login_required
 def server(request):
@@ -45,6 +49,10 @@ def advanced_config(request):
 def deploy(request):
     context = {
         'title': 'Deploy',
-        'menu_active': 'deploy'
+        'menu_active': 'deploy',
+        'servers': Server.objects.all(),
+        'inventories': Inventory.objects.select_related('server').all(),
+        'advanced_config': AdvancedConfig.objects.all(),
+        'global_config': GlobalConfig.objects.first()
     }
     return render(request, 'installers/deploy.html', context)

@@ -7,13 +7,216 @@
       <div class="container-fluid">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title"></h3>
-            <div class="float-right">
-              <button class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add</button>
-            </div>
+            <h3 class="card-title">Deploy Summary</h3>
           </div>
           <!-- /.card-header -->
           <div class="card-body">
+            <div class="card card-secondary">
+              <div class="card-header">
+                <h3 class="card-title">Servers</h3>
+                <div class="card-tools">
+                  <!-- Collapse Button -->
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                </div>
+                <!-- /.card-tools -->
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th style="width:20%;">Description</th>
+                      <th style="width:20%;">IP Address</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for server in servers %}
+                    <tr>
+                      <td>{{ server.name }}</td>
+                      <td>{{ server.description }}</td>
+                      <td>{{ server.ip_address }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+            <div class="card card-secondary">
+              <div class="card-header">
+                <h3 class="card-title">Inventory</h3>
+                <div class="card-tools">
+                  <!-- Collapse Button -->
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                </div>
+                <!-- /.card-tools -->
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table class="table table-bordered">
+                  <thead>                  
+                    <tr>
+                      <th>Name</th>
+                      <th style="width:20%;">IP Address</th>
+                      <th style="width:20%;">Group</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for inventory in inventories %}
+                      <tr>
+                        <td>{{ inventory.server.name }}</td>
+                        <td>{{ inventory.server.ip_address }}</td>
+                        <td>{{ inventory.get_group_display }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+            <div class="card card-secondary">
+              <div class="card-header">
+                <h3 class="card-title">Global Configuration</h3>
+                <div class="card-tools">
+                  <!-- Collapse Button -->
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                </div>
+                <!-- /.card-tools -->
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-5 mr-5">
+                    <table class="table table-bordered">
+                      <tr>
+                        <th>Installation Type</th>
+                        <td>{{ global_config.installation_type }}</td>
+                      </tr>
+                      <tr>
+                        <th>Openstack Release</th>
+                        <td>{{ global_config.openstack_release }}</td>
+                      </tr>
+                      <tr>
+                        <th>Internal VIP Address</th>
+                        <td>{{ global_config.internal_vip_address }}</td>
+                      </tr>
+                      <tr>
+                        <th>External VIP Address</th>
+                        <td>{{ global_config.external_vip_address }}</td>
+                      </tr>
+                      <tr>
+                        <th>Enable TLS on External API</th>
+                        <td>{{ global_config.enable_tls_on_external_api|yesno:"Yes,No" }}</td>
+                      </tr>
+                      <tr>
+                        <th>Enable Ceph Service</th>
+                        <td>{{ global_config.enable_ceph_service|yesno:"Yes,No" }}</td>
+                      </tr>
+                      <tr>
+                        <th>Enable Cinder Service</th>
+                        <td>{{ global_config.enable_cinder_service|yesno:"Yes,No" }}</td>
+                      </tr>
+                      <tr>
+                        <th>Enable Magnum Service</th>
+                        <td>{{ global_config.enable_magnum_service|yesno:"Yes,No" }}</td>
+                      </tr>
+                      <tr>
+                        <th>Enable VPNaaS</th>
+                        <td>{{ global_config.enable_vpnaas|yesno:"Yes,No" }}</td>
+                      </tr>
+                      <tr>
+                        <th>Enable FWaaS</th>
+                        <td>{{ global_config.enable_fwaas|yesno:"Yes,No" }}</td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="col-md-5">
+                    <table class="table table-bordered">
+                      <tr>
+                        <th>Enable QoS</th>
+                        <td>{{ global_config.enable_qos|yesno:"Yes,No" }}</td>
+                      </tr>
+                      <tr>
+                        <th>Enable HA Agent</th>
+                        <td>{{ global_config.enable_ha_agent|yesno:"Yes,No" }}</td>
+                      </tr>
+                      <tr>
+                        <th>Enable Provider Networks</th>
+                        <td>{{ global_config.enable_provider_networks|yesno:"Yes,No" }}</td>
+                      </tr>
+                      <tr>
+                        <th>Enable Port Forwarding</th>
+                        <td>{{ global_config.enable_port_forwading|yesno:"Yes,No" }}</td>
+                      </tr>
+                      <tr>
+                        <th>Enable Octavia Service</th>
+                        <td>{{ global_config.enable_octavia_service|yesno:"Yes,No" }}</td>
+                      </tr>
+                      <tr>
+                        <th>Enable Prometheus Service</th>
+                        <td>{{ global_config.enable_promotheus_service|yesno:"Yes,No" }}</td>
+                      </tr>
+                      <tr>
+                        <th>Ceph Pool - pg_num</th>
+                        <td>{{ global_config.ceph_pool_pg_num }}</td>
+                      </tr>
+                      <tr>
+                        <th>Ceph Pool - pgp_num</th>
+                        <td>{{ global_config.ceph_pool_pgp_num }}</td>
+                      </tr>
+                      <tr>
+                        <th>Glance Backend using Ceph</th>
+                        <td>{{ global_config.glance_backend_using_ceph|yesno:"Yes,No" }}</td>
+                      </tr>
+                      <tr>
+                        <th>Glance Backend File</th>
+                        <td>{{ global_config.glance_backend_file|yesno:"Yes,No" }}</td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+            <div class="card card-secondary">
+              <div class="card-header">
+                <h3 class="card-title">Advanced Configuration</h3>
+                <div class="card-tools">
+                  <!-- Collapse Button -->
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                </div>
+                <!-- /.card-tools -->
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                {% if advanced_config %}
+                  {% for config in advanced_config %}
+                    <div class="card">
+                      <div class="card-header">
+                        <div class="card-title text-info"><h4>{{ config.get_service_type_display }}</h4></div>
+                      </div>
+                      <!-- /.card-header -->
+                      <div class="card-body">
+                        <pre>{{ config.configuration|safe }}</pre>
+                      </div>
+                      <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                  {% endfor %}
+                {% else %}
+                  <h3>No Configurations</h3>
+                {% endif %}
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
           </div>
           <div class="card-footer">
             <div class="float-right">

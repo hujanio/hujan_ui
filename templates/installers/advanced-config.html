@@ -18,10 +18,10 @@
               {% for config in advanced_config %}
                 <div class="card">
                   <div class="card-header">
-                    <a href="#" class="card-title text-info" data-card-widget="collapse"><h4>{{ config.get_service_type_display }}</h4></a>
+                    <div class="card-title text-info"><h4>{{ config.get_service_type_display }}</h4></div>
                     <div class="card-tools">
                       <!-- Collapse Button -->
-                      <a href="{% url 'installer:configurations:edit_advanced_config' config.id %}" class="btn btn-info"><i class="fas fa-edit"></i>&nbsp;&nbsp;Edit<a>
+                        <a href="{% url 'installer:configurations:edit_advanced_config' config.id %}" class="btn btn-info"><i class="fas fa-edit"></i>&nbsp;&nbsp;Edit<a>
                         <button class="btn btn-danger delete-swal" data-url="{% url 'installer:configurations:delete_advanced_config' config.id %}" data-name="{{ config }}"><i class="fas fa-trash-alt"></i> Delete</button>
                     </div>
                     <!-- /.card-tools -->
