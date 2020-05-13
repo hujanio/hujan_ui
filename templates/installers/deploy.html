@@ -111,27 +111,27 @@
                       </tr>
                       <tr>
                         <th>Enable TLS on External API</th>
-                        <td>{{ global_config.enable_tls_on_external_api }}</td>
+                        <td>{{ global_config.enable_tls_on_external_api|yesno:"Yes,No" }}</td>
                       </tr>
                       <tr>
                         <th>Enable Ceph Service</th>
-                        <td>{{ global_config.enable_ceph_service }}</td>
+                        <td>{{ global_config.enable_ceph_service|yesno:"Yes,No" }}</td>
                       </tr>
                       <tr>
                         <th>Enable Cinder Service</th>
-                        <td>{{ global_config.enable_cinder_service }}</td>
+                        <td>{{ global_config.enable_cinder_service|yesno:"Yes,No" }}</td>
                       </tr>
                       <tr>
                         <th>Enable Magnum Service</th>
-                        <td>{{ global_config.enable_magnum_service }}</td>
+                        <td>{{ global_config.enable_magnum_service|yesno:"Yes,No" }}</td>
                       </tr>
                       <tr>
                         <th>Enable VPNaaS</th>
-                        <td>{{ global_config.enable_vpnaas }}</td>
+                        <td>{{ global_config.enable_vpnaas|yesno:"Yes,No" }}</td>
                       </tr>
                       <tr>
                         <th>Enable FWaaS</th>
-                        <td>{{ global_config.enable_fwaas }}</td>
+                        <td>{{ global_config.enable_fwaas|yesno:"Yes,No" }}</td>
                       </tr>
                     </table>
                   </div>
@@ -139,27 +139,27 @@
                     <table class="table table-bordered">
                       <tr>
                         <th>Enable QoS</th>
-                        <td>{{ global_config.enable_qos }}</td>
+                        <td>{{ global_config.enable_qos|yesno:"Yes,No" }}</td>
                       </tr>
                       <tr>
                         <th>Enable HA Agent</th>
-                        <td>{{ global_config.enable_ha_agent }}</td>
+                        <td>{{ global_config.enable_ha_agent|yesno:"Yes,No" }}</td>
                       </tr>
                       <tr>
                         <th>Enable Provider Networks</th>
-                        <td>{{ global_config.enable_provider_networks }}</td>
+                        <td>{{ global_config.enable_provider_networks|yesno:"Yes,No" }}</td>
                       </tr>
                       <tr>
                         <th>Enable Port Forwarding</th>
-                        <td>{{ global_config.enable_port_forwading }}</td>
+                        <td>{{ global_config.enable_port_forwading|yesno:"Yes,No" }}</td>
                       </tr>
                       <tr>
                         <th>Enable Octavia Service</th>
-                        <td>{{ global_config.enable_octavia_service }}</td>
+                        <td>{{ global_config.enable_octavia_service|yesno:"Yes,No" }}</td>
                       </tr>
                       <tr>
                         <th>Enable Prometheus Service</th>
-                        <td>{{ global_config.enable_promotheus_service }}</td>
+                        <td>{{ global_config.enable_promotheus_service|yesno:"Yes,No" }}</td>
                       </tr>
                       <tr>
                         <th>Ceph Pool - pg_num</th>
@@ -171,11 +171,11 @@
                       </tr>
                       <tr>
                         <th>Glance Backend using Ceph</th>
-                        <td>{{ global_config.glance_backend_using_ceph }}</td>
+                        <td>{{ global_config.glance_backend_using_ceph|yesno:"Yes,No" }}</td>
                       </tr>
                       <tr>
                         <th>Glance Backend File</th>
-                        <td>{{ global_config.glance_backend_file }}</td>
+                        <td>{{ global_config.glance_backend_file|yesno:"Yes,No" }}</td>
                       </tr>
                     </table>
                   </div>
