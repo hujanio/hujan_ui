@@ -7,6 +7,7 @@ from django.contrib.auth import login, authenticate
 from hujan_ui.installers.models import (
     Server, Inventory, GlobalConfig, AdvancedConfig
 )
+from hujan_ui.utils.deployer import Deployer
 
 
 @login_required
@@ -55,4 +56,14 @@ def deploy(request):
         'advanced_config': AdvancedConfig.objects.all(),
         'global_config': GlobalConfig.objects.first()
     }
+    return render(request, 'installers/deploy.html', context)
+
+
+@login_required
+def do_deploy(request):
+    deployer = Deployer()
+    deployer.deploy()
+
+    # TODO: Handle Deploy Progress Template
+    context = {}
     return render(request, 'installers/deploy.html', context)
