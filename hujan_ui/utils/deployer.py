@@ -12,7 +12,7 @@ from hujan_ui.utils.multinode_writer import MultiNodeWriter
 
 
 class Deployer:
-    log_path = settings.DEPLOYMENT_LOG_DIR
+    log_dir = settings.DEPLOYMENT_LOG_DIR
     deploy_command = ['bash', '/Users/setyongr/tes.sh']
 
     def __init__(self, deployment_model=None):
@@ -48,8 +48,11 @@ class Deployer:
             return []
 
     def _prepare_log_dir(self):
-        if not os.path.exists(self.log_path):
-            os.mkdir(self.log_path)
+        """
+        Create log dir if not exist
+        """
+        if not os.path.exists(self.log_dir):
+            os.mkdir(self.log_dir)
 
     def _write_log(self, line):
         """
@@ -59,7 +62,10 @@ class Deployer:
             f.write(line)
 
     def _log_file_path(self):
-        return os.path.join(self.log_path, self.deployment_model.log_name)
+        """
+        Return absolute log file path of current deployment model
+        """
+        return os.path.join(self.log_dir, self.deployment_model.log_name)
 
     def _output_reader(self, proc):
         """
@@ -96,6 +102,9 @@ class Deployer:
         return t
 
     def _create_deployment(self):
+        """
+        Create deployment model
+        """
         timestamp = datetime.now().strftime("%d%m%Y-%H%M%S")
         self.deployment_model = Deployment(log_name=f"deploy-log-{timestamp}.log", status=Deployment.DEPLOY_IN_PROGRESS)
         self.deployment_model.save()
