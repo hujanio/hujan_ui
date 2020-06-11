@@ -110,7 +110,7 @@ class Deployer:
 
     def deploy(self):
         print("Deploying")
-        # self._prepare_files()
+        # self._prepare_files() # TODO: Uncomment kalau mau save file host, multinode, dan global config
         self._prepare_log_dir()
         self._create_deployment()
         self._start_process()
