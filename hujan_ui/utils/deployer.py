@@ -1,15 +1,116 @@
-from hujan_ui.installers.models import Server, Inventory, GlobalConfig
+import os
+import subprocess
+import threading
+
+from django.conf import settings
+from django.utils.datetime_safe import datetime
+
+from hujan_ui.installers.models import Server, Inventory, GlobalConfig, Deployment
 from hujan_ui.utils.global_config_writer import GlobalConfigWriter
 from hujan_ui.utils.host_editor import HostEditor
 from hujan_ui.utils.multinode_writer import MultiNodeWriter
 
 
 class Deployer:
-    def prepare_files(self):
+    log_path = settings.DEPLOYMENT_LOG_DIR
+    deploy_command = ['bash', '/Users/setyongr/tes.sh']
+
+    def __init__(self, deployment_model=None):
+        if not deployment_model:
+            self.deployment_model = self.current_deployment()
+        else:
+            self.deployment_model = deployment_model
+
+    def current_deployment(self):
+        """
+        Get currently running deployment model
+        """
+        return Deployment.objects.filter(status=Deployment.DEPLOY_IN_PROGRESS).first()
+
+    def is_deploying(self):
+        """
+        Check if deploying in progress
+        """
+        return self.deployment_model is not None and self.deployment_model.status == Deployment.DEPLOY_IN_PROGRESS
+
+    def get_log(self, from_line=0):
+        """
+        Get log lines from current deployment
+        """
+        assert self.deployment_model is not None
+
+        if os.path.exists(self._log_file_path()):
+            with open(self._log_file_path(), 'r') as f:
+                lines = f.readlines()
+
+            return lines[from_line:]
+        else:
+            return []
+
+    def _prepare_log_dir(self):
+        if not os.path.exists(self.log_path):
+            os.mkdir(self.log_path)
+
+    def _write_log(self, line):
+        """
+        Write line to log file of deployment_model
+        """
+        with open(self._log_file_path(), 'a+') as f:
+            f.write(line)
+
+    def _log_file_path(self):
+        return os.path.join(self.log_path, self.deployment_model.log_name)
+
+    def _output_reader(self, proc):
+        """
+        Read process output
+        """
+        self._write_log("Process Started\n")
+        for line in iter(proc.stdout.readline, b''):
+            line_str = line.decode('utf-8')
+            self._write_log(line_str)
+
+        proc.wait()
+        return_code = proc.returncode
+
+        self._write_log(f"Process exited with return code: {return_code}\n")
+
+        if return_code == 0:
+            self.deployment_model.status = Deployment.DEPLOY_SUCCESS
+            self.deployment_model.save()
+        else:
+            self.deployment_model.status = Deployment.DEPLOY_FAILED
+            self.deployment_model.save()
+
+    def _start_process(self):
+        """
+        Start Process
+        """
+        proc = subprocess.Popen(self.deploy_command,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.STDOUT)
+
+        t = threading.Thread(target=self._output_reader, args=(proc,))
+        t.start()
+
+        return t
+
+    def _create_deployment(self):
+        timestamp = datetime.now().strftime("%d%m%Y-%H%M%S")
+        self.deployment_model = Deployment(log_name=f"deploy-log-{timestamp}", status=Deployment.DEPLOY_IN_PROGRESS)
+        self.deployment_model.save()
+
+    def _prepare_files(self):
+        """
+        Prepare file berfore deployment
+        """
         HostEditor.save_from_model(Server.objects.all())
         MultiNodeWriter.save_from_model(Inventory.objects.all())
         GlobalConfigWriter.save_from_model(GlobalConfig.objects.first())
 
     def deploy(self):
-        self.prepare_files()
-        # TODO Execute kolla-ansible
+        print("Deploying")
+        # self._prepare_files()
+        self._prepare_log_dir()
+        self._create_deployment()
+        self._start_process()

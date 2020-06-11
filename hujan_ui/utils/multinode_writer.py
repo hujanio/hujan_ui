@@ -25,3 +25,11 @@ class MultiNodeWriter:
                 for x in v:
                     f.write("%s ansible_user=centos\n" % x)
                 f.write("\n")
+
+    @staticmethod
+    def save_from_model(inventories):
+        writer = MultiNodeWriter()
+        for inv in inventories:
+            writer.add_entry(inv.group, inv.server.name)
+
+        writer.save()

@@ -21,3 +21,5 @@ projects/logs/*
 # IDE Setting
 .vscode/*
 .idea/*
+
+deploy_log/*
