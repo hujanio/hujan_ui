@@ -97,7 +97,7 @@ class Deployer:
 
     def _create_deployment(self):
         timestamp = datetime.now().strftime("%d%m%Y-%H%M%S")
-        self.deployment_model = Deployment(log_name=f"deploy-log-{timestamp}", status=Deployment.DEPLOY_IN_PROGRESS)
+        self.deployment_model = Deployment(log_name=f"deploy-log-{timestamp}.log", status=Deployment.DEPLOY_IN_PROGRESS)
         self.deployment_model.save()
 
     def _prepare_files(self):
