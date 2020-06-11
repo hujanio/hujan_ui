@@ -111,7 +111,7 @@ class Deployer:
 
     def _prepare_files(self):
         """
-        Prepare file berfore deployment
+        Prepare file before deployment
         """
         HostEditor.save_from_model(Server.objects.all())
         MultiNodeWriter.save_from_model(Inventory.objects.all())
