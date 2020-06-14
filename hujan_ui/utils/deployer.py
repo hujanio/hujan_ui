@@ -13,7 +13,7 @@ from hujan_ui.utils.multinode_writer import MultiNodeWriter
 
 class Deployer:
     log_dir = settings.DEPLOYMENT_LOG_DIR
-    deploy_command = ['bash', '/Users/setyongr/tes.sh']
+    deploy_command = settings.DEPLOYMENT_COMMAND
 
     def __init__(self, deployment_model=None):
         if not deployment_model:
