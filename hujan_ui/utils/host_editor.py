@@ -21,7 +21,6 @@ class HostEditor:
         self._read_content()
 
     def _read_content(self):
-        lines = []
         with open(self.file_name, 'r') as f:
             lines = f.readlines()
 
@@ -66,3 +65,12 @@ class HostEditor:
             for l in self.host_entries:
                 f.write("%s\n" % " ".join(l))
             f.write(self.end_block_msg)
+
+    @staticmethod
+    def save_from_model(servers):
+        editor = HostEditor()
+        editor.clear()
+        for s in servers:
+            editor.add(address=s.ip_address, names=[s.name])
+
+        editor.save()

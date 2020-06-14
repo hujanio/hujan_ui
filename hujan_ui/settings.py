@@ -146,6 +146,9 @@ DIR_EX_RESPONSE = "hujan_ui/maas/ex_response/"
 
 SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 
+DEPLOYMENT_LOG_DIR = os.path.join(BASE_DIR, 'deploy_log')
+DEPLOYMENT_COMMAND = ["ls", "/"]
+
 try:
     from .local_settings import *
 except ImportError:

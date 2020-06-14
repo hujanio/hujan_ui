@@ -10,5 +10,6 @@ urlpatterns = [
     path('global-config', views.global_config, name='global_config'),
     path('advanced-config', views.advanced_config, name='advanced_config'),
     path('deploy', views.deploy, name='deploy'),
-    path('do_deploy', views.do_deploy, name='do_deploy')
+    path('do_deploy', views.do_deploy, name='do_deploy'),
+    path('deploy_log/<int:id>', views.deploy_log, name='deploy_log')
 ]

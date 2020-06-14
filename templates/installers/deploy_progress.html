@@ -1,0 +1,64 @@
+{% extends 'master-installer.html' %}
+{% load static %}
+
+{% block content %}
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Deploy Summary</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+                        ID: {{ deployment.id }} <br>
+                        Status: <span id="deployment_status">-</span>
+                    </div>
+                    <div class="row" id="log-stream">
+
+                    </div>
+                </div>
+                <div class="card-footer">
+
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+
+{% endblock %}
+{% block extra_js %}
+    <script type="text/javascript">
+        var last_line = 0;
+        var log_content = [];
+        var deploy_status = "";
+
+        function updateView() {
+            $("#deployment_status").html(deploy_status);
+            var stream_html = "";
+            for (var i = 0; i < log_content.length; i++) {
+                stream_html += log_content[i] + "<br>"
+            }
+
+            $("#log-stream").html(stream_html);
+        }
+
+        function doPoll() {
+            $.get("{% url 'installer:deploy_log' deployment.id %}?from_line=" + last_line, function (data) {
+                deploy_status = data.deployment.status;
+                log_content = log_content.concat(data.log);
+                last_line = last_line + data.log.length;
+
+                updateView();
+                if (deploy_status !== "success") {
+                    setTimeout(doPoll, 1000);
+                }
+            });
+        }
+
+        $("document").ready(function () {
+            doPoll()
+        })
+    </script>
+{% endblock %}

@@ -75,3 +75,18 @@ class AdvancedConfig(models.Model):
 
     def __str__(self):
         return self.service_type
+
+
+class Deployment(models.Model):
+    DEPLOY_IN_PROGRESS = "in_progress"
+    DEPLOY_SUCCESS = "success"
+    DEPLOY_FAILED = "failed"
+
+    DEPLOY_STATUS = (
+        (DEPLOY_IN_PROGRESS, "In Progress"),
+        (DEPLOY_SUCCESS, "Success"),
+        (DEPLOY_FAILED, "Failed")
+    )
+
+    log_name = models.CharField(max_length=255)
+    status = models.CharField(max_length=255, choices=DEPLOY_STATUS)

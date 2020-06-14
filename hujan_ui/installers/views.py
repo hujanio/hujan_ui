@@ -1,12 +1,10 @@
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, authenticate
+from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
 
 from hujan_ui.installers.models import (
-    Server, Inventory, GlobalConfig, AdvancedConfig
-)
+    Server, Inventory, GlobalConfig, AdvancedConfig,
+    Deployment)
 from hujan_ui.utils.deployer import Deployer
 
 
@@ -62,8 +60,23 @@ def deploy(request):
 @login_required
 def do_deploy(request):
     deployer = Deployer()
-    deployer.deploy()
+    if not deployer.is_deploying():
+        deployer.deploy()
 
-    # TODO: Handle Deploy Progress Template
-    context = {}
-    return render(request, 'installers/deploy.html', context)
+    context = {
+        "deployment": deployer.deployment_model
+    }
+    return render(request, 'installers/deploy_progress.html', context)
+
+
+def deploy_log(request, id):
+    from_line = request.GET.get("from_line", 0)
+    deployment_model = get_object_or_404(Deployment, id=id)
+    deployer = Deployer(deployment_model=deployment_model)
+    return JsonResponse(data={
+        "deployment": {
+            "id": deployer.deployment_model.id,
+            "status": deployer.deployment_model.status
+        },
+        "log": deployer.get_log(int(from_line))
+    })
