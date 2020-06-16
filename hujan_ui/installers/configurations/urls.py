@@ -9,4 +9,6 @@ urlpatterns = [
     path('add/', views.add_advanced_config, name='add_advanced_config'),
     path('edit/<int:id>', views.edit_advanced_config, name='edit_advanced_config'),
     path('delete/<int:id>', views.delete_advanced_config, name='delete_advanced_config'),
+    path('reset-global-config', views.reset_global_config, name='reset_global_config'),
+    path('reset-advanced-config', views.reset_advanced_config, name='reset_advanced_config'),
 ]
