@@ -3,6 +3,7 @@ import sweetify
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.db.models.fields import NOT_PROVIDED
 
 from hujan_ui.installers.models import GlobalConfig, AdvancedConfig
 from .forms import GlobalConfigForm, AdvancedConfigForm
@@ -25,6 +26,22 @@ def global_config(request):
         'form': form
     }
     return render(request, 'installers/global-config-form.html', context)
+
+
+@login_required
+def reset_global_config(request):
+    global_config = GlobalConfig.objects.first()
+    for f in global_config._meta.fields:
+        if f.default:
+            if f.default != NOT_PROVIDED:
+                setattr(global_config, f.name, f.default)
+            else:
+                if f.name != "id":
+                    setattr(global_config, f.name, "")
+    global_config.save()
+    sweetify.success(request, _("Successfully reset global configuration"), button='OK', icon='success')
+    
+    return redirect("installer:configurations:global_config")
 
 
 @login_required
@@ -82,4 +99,12 @@ def delete_advanced_config(request, id):
     advanced_config = get_object_or_404(AdvancedConfig, id=id)
     advanced_config.delete()
     sweetify.success(request, _("Successfully deleted advanced configuration"), icon='success', button='OK')
+    return redirect("installer:configurations:advanced_config")
+
+
+@login_required
+def reset_advanced_config(request):
+    AdvancedConfig.objects.all().delete()
+    sweetify.success(request, _("Successfully reset advanced configuration"), button='OK', icon='success')
+    
     return redirect("installer:configurations:advanced_config")

@@ -9,6 +9,7 @@
           <div class="card-header">
             <span class="card-title">Service List</span>
             <div class="float-right">
+              <button class="btn btn-warning" data-toggle="modal" data-target="#modal-reset">Reset Configuration</button>
               <a href="{% url 'installer:configurations:add_advanced_config' %}" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add Configuration<a>
             </div>
           </div>
@@ -49,4 +50,26 @@
     </section>
     <!-- /.content -->
 
+    <div class="modal fade" id="modal-reset">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Confirmation</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>This action will delete all service advanced configurations. Are you sure ?</p>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <a href="{% url 'installer:configurations:reset_advanced_config' %}" type="button" class="btn btn-primary">Yes</a>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 {% endblock %}
