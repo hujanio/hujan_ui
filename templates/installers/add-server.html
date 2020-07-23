@@ -3,9 +3,9 @@
 {% block extra_js %}
 <script>
     $( document ).ready(function() {
-        {% if old_ip_address %}
+        if($("#id_machine").val()){
             ajax_machine($("#id_machine").val());
-        {% endif %}
+        }
     });
 
     $("#id_machine").on("change", function() {
