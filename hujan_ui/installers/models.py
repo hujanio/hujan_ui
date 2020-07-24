@@ -102,6 +102,11 @@ class Deployment(models.Model):
     log_name = models.CharField(max_length=255)
     status = models.CharField(max_length=255, choices=DEPLOY_STATUS)
 
+    @classmethod
+    def get_status(cls):
+        deployment = cls.objects.first()
+        return deployment.status
+
 
 class Installer(models.Model):
     STEPS = Choices(

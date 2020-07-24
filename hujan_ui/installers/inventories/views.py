@@ -4,10 +4,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
 from hujan_ui.installers.models import Inventory, Installer
+from hujan_ui.installers.decorators import deployment_checked
 from .forms import InventoryForm
 
 
 @login_required
+@deployment_checked
 def index(request):
     inventories = Inventory.objects.select_related('server').all()
     context = {
@@ -20,6 +22,7 @@ def index(request):
 
 
 @login_required
+@deployment_checked
 def add(request):
     form = InventoryForm(request.POST or None)
 
@@ -40,6 +43,7 @@ def add(request):
 
 
 @login_required
+@deployment_checked
 def edit(request, id):
     inventory = get_object_or_404(Inventory, id=id)
     form = InventoryForm(data=request.POST or None, instance=inventory)

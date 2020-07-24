@@ -6,12 +6,15 @@ from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from hujan_ui.installers.models import Server, Installer
+from hujan_ui.utils.deployer import Deployer
+from hujan_ui.installers.models import Server, Installer, Deployment
+from hujan_ui.installers.decorators import deployment_checked
 from .forms import AddServerForm
 
 
 @login_required
-def index(request):
+@deployment_checked
+def index(request):        
     servers = Server.objects.all()
     context = {
         'title': _('Servers'),
@@ -24,6 +27,7 @@ def index(request):
 
 
 @login_required
+@deployment_checked
 def add(request):
     form = AddServerForm(request.POST or None)
 
@@ -44,6 +48,7 @@ def add(request):
 
 
 @login_required
+@deployment_checked
 def edit(request, id):
     server = get_object_or_404(Server, id=id)
     form = AddServerForm(data=request.POST or None, instance=server)

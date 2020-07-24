@@ -38,126 +38,161 @@
                     <!-- The time line -->
                     <div class="timeline" style="margin-left:-12px; white-space:''">
                         <!-- timeline item -->
-                        <div>                
-                            {% if 'server' in steps %}            
-                                <i class="{% if menu_active == 'server' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
-                                <div class="timeline-item">
-                                    <a href="{% url 'installer:servers:index' %}" class="nav-link {% if menu_active == 'server' %}bg-info{% else %}bg-olive{% endif %}">
-                                        <p>Server</p>
-                                    </a>
-                                </div>
-                            {% elif menu_active == 'server' %}
-                                <i class="{% if menu_active == 'server' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
-                                <div class="timeline-item">
-                                    <a href="{% url 'installer:servers:index' %}" class="nav-link {% if menu_active == 'server' %}bg-info{% else %}bg-olive{% endif %}">
-                                        <p>Server</p>
-                                    </a>
-                                </div>
-                            {% else %}
-                                <i class="fas fa-angle-down bg-default"></i>
-                                <div class="timeline-item">
+                        {% if steps == 'deploying' %}
+                            <div>
+                                <i class="fas fa-angle-down bg-olive"></i>
+                                <div class="timeline-item bg-secondary">
                                     <button class="btn nav-link" disabled>
-                                        <p>Server</p>
+                                        <p class="text-white">Server</p>
                                     </button>
                                 </div>
-                            {% endif %}
-                        </div>
-                        <div>
-                            {% if 'inventory' in steps %}            
-                                <i class="{% if menu_active == 'inventory' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
-                                <div class="timeline-item">
-                                    <a href="{% url 'installer:inventories:index' %}" class="nav-link {% if menu_active == 'inventory' %}bg-info{% else %}bg-olive{% endif %}">
-                                        <p>Inventory</p>
-                                    </a>
-                                </div>
-                            {% elif menu_active == 'inventory' %}
-                                <i class="{% if menu_active == 'inventory' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
-                                <div class="timeline-item">
-                                    <a href="{% url 'installer:inventories:index' %}" class="nav-link {% if menu_active == 'inventory' %}bg-info{% else %}bg-olive{% endif %}">
-                                        <p>Inventory</p>
-                                    </a>
-                                </div>
-                            {% else %}
-                                <i class="fas fa-angle-down bg-default"></i>
-                                <div class="timeline-item">
+                            </div>
+                            <div>
+                                <i class="fas fa-angle-down bg-olive"></i>
+                                <div class="timeline-item bg-secondary">
                                     <button class="btn nav-link" disabled>
-                                        <p>Inventory</p>
+                                        <p class="text-white">Inventory</p>
                                     </button>
                                 </div>
-                            {% endif %}
-                        </div>
-                        <div>
-                            {% if 'global_configuration' in steps %}            
-                                <i class="{% if menu_active == 'global_configuration' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
-                                <div class="timeline-item">
-                                    <a href="{% url 'installer:configurations:global_config' %}" class="nav-link {% if menu_active == 'global_configuration' %}bg-info{% else %}bg-olive{% endif %}">
-                                        <p>Global Config</p>
-                                    </a>
-                                </div>
-                            {% elif menu_active == 'global_configuration' %}
-                                <i class="{% if menu_active == 'global_configuration' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
-                                <div class="timeline-item">
-                                    <a href="{% url 'installer:configurations:global_config' %}" class="nav-link {% if menu_active == 'global_configuration' %}bg-info{% else %}bg-olive{% endif %}">
-                                        <p>Global Config</p>
-                                    </a>
-                                </div>
-                            {% else %}
-                                <i class="fas fa-angle-down bg-default"></i>
-                                <div class="timeline-item">
+                            </div>
+                            <div>
+                                <i class="fas fa-angle-down bg-olive"></i>
+                                <div class="timeline-item bg-secondary">
                                     <button class="btn nav-link" disabled>
-                                        <p>Global Config</p>
+                                        <p class="text-white">Global Config</p>
                                     </button>
                                 </div>
-                            {% endif %}
-                        </div>
-                        <div>                            
-                            {% if 'advanced_configuration' in steps %}            
-                                <i class="{% if menu_active == 'advanced_configuration' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
-                                <div class="timeline-item">
-                                    <a href="{% url 'installer:configurations:advanced_config' %}" class="nav-link {% if menu_active == 'advanced_configuration' %}bg-info{% else %}bg-olive{% endif %}">
-                                        <p>Advanced Config</p>
-                                    </a>
-                                </div>
-                            {% elif menu_active == 'advanced_configuration' %}
-                                <i class="{% if menu_active == 'advanced_configuration' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
-                                <div class="timeline-item">
-                                    <a href="{% url 'installer:configurations:advanced_config' %}" class="nav-link {% if menu_active == 'advanced_configuration' %}bg-info{% else %}bg-olive{% endif %}">
-                                        <p>Advanced Config</p>
-                                    </a>
-                                </div>
-                            {% else %}
-                                <i class="fas fa-angle-down bg-default"></i>
-                                <div class="timeline-item">
+                            </div>
+                            <div>
+                                <i class="fas fa-angle-down bg-olive"></i>
+                                <div class="timeline-item bg-secondary">
                                     <button class="btn nav-link" disabled>
-                                        <p>Advanced Config</p>
+                                        <p class="text-white">Advanced Config</p>
                                     </button>
                                 </div>
-                            {% endif %}
-                        </div>
-                        <div>                            
-                            {% if 'deployment' in steps %}            
-                                <i class="{% if menu_active == 'deployment' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
-                                <div class="timeline-item">
-                                    <a href="{% url 'installer:deploy' %}" class="nav-link {% if menu_active == 'deployment' %}bg-info{% else %}bg-olive{% endif %}">
-                                        <p>Deployment</p>
-                                    </a>
-                                </div>
-                            {% elif menu_active == 'deployment' %}
-                                <i class="{% if menu_active == 'deployment' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
-                                <div class="timeline-item">
-                                    <a href="{% url 'installer:deploy' %}" class="nav-link {% if menu_active == 'deployment' %}bg-info{% else %}bg-olive{% endif %}">
-                                        <p>Deployment</p>
-                                    </a>
-                                </div>
-                            {% else %}
-                                <i class="fas fa-angle-down bg-default"></i>
-                                <div class="timeline-item">
-                                    <button class="btn nav-link" disabled>
-                                        <p>Deployment</p>
-                                    </button>
-                                </div>
-                            {% endif %}
-                        </div>
+                            </div>
+                        {% else %}
+                            <div>                
+                                {% if 'server' in steps %}            
+                                    <i class="{% if menu_active == 'server' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
+                                    <div class="timeline-item">
+                                        <a href="{% url 'installer:servers:index' %}" class="nav-link {% if menu_active == 'server' %}bg-info{% else %}bg-olive{% endif %}">
+                                            <p>Server</p>
+                                        </a>
+                                    </div>
+                                {% elif menu_active == 'server' %}
+                                    <i class="{% if menu_active == 'server' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
+                                    <div class="timeline-item">
+                                        <a href="{% url 'installer:servers:index' %}" class="nav-link {% if menu_active == 'server' %}bg-info{% else %}bg-olive{% endif %}">
+                                            <p>Server</p>
+                                        </a>
+                                    </div>
+                                {% else %}
+                                    <i class="fas fa-angle-down bg-default"></i>
+                                    <div class="timeline-item">
+                                        <button class="btn nav-link" disabled>
+                                            <p>Server</p>
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% if 'inventory' in steps %}            
+                                    <i class="{% if menu_active == 'inventory' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
+                                    <div class="timeline-item">
+                                        <a href="{% url 'installer:inventories:index' %}" class="nav-link {% if menu_active == 'inventory' %}bg-info{% else %}bg-olive{% endif %}">
+                                            <p>Inventory</p>
+                                        </a>
+                                    </div>
+                                {% elif menu_active == 'inventory' %}
+                                    <i class="{% if menu_active == 'inventory' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
+                                    <div class="timeline-item">
+                                        <a href="{% url 'installer:inventories:index' %}" class="nav-link {% if menu_active == 'inventory' %}bg-info{% else %}bg-olive{% endif %}">
+                                            <p>Inventory</p>
+                                        </a>
+                                    </div>
+                                {% else %}
+                                    <i class="fas fa-angle-down bg-default"></i>
+                                    <div class="timeline-item">
+                                        <button class="btn nav-link" disabled>
+                                            <p>Inventory</p>
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% if 'global_configuration' in steps %}            
+                                    <i class="{% if menu_active == 'global_configuration' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
+                                    <div class="timeline-item">
+                                        <a href="{% url 'installer:configurations:global_config' %}" class="nav-link {% if menu_active == 'global_configuration' %}bg-info{% else %}bg-olive{% endif %}">
+                                            <p>Global Config</p>
+                                        </a>
+                                    </div>
+                                {% elif menu_active == 'global_configuration' %}
+                                    <i class="{% if menu_active == 'global_configuration' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
+                                    <div class="timeline-item">
+                                        <a href="{% url 'installer:configurations:global_config' %}" class="nav-link {% if menu_active == 'global_configuration' %}bg-info{% else %}bg-olive{% endif %}">
+                                            <p>Global Config</p>
+                                        </a>
+                                    </div>
+                                {% else %}
+                                    <i class="fas fa-angle-down bg-default"></i>
+                                    <div class="timeline-item">
+                                        <button class="btn nav-link" disabled>
+                                            <p>Global Config</p>
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div>                            
+                                {% if 'advanced_configuration' in steps %}            
+                                    <i class="{% if menu_active == 'advanced_configuration' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
+                                    <div class="timeline-item">
+                                        <a href="{% url 'installer:configurations:advanced_config' %}" class="nav-link {% if menu_active == 'advanced_configuration' %}bg-info{% else %}bg-olive{% endif %}">
+                                            <p>Advanced Config</p>
+                                        </a>
+                                    </div>
+                                {% elif menu_active == 'advanced_configuration' %}
+                                    <i class="{% if menu_active == 'advanced_configuration' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
+                                    <div class="timeline-item">
+                                        <a href="{% url 'installer:configurations:advanced_config' %}" class="nav-link {% if menu_active == 'advanced_configuration' %}bg-info{% else %}bg-olive{% endif %}">
+                                            <p>Advanced Config</p>
+                                        </a>
+                                    </div>
+                                {% else %}
+                                    <i class="fas fa-angle-down bg-default"></i>
+                                    <div class="timeline-item">
+                                        <button class="btn nav-link" disabled>
+                                            <p>Advanced Config</p>
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                            <div>                            
+                                {% if 'deployment' in steps %}            
+                                    <i class="{% if menu_active == 'deployment' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
+                                    <div class="timeline-item">
+                                        <a href="{% url 'installer:deploy' %}" class="nav-link {% if menu_active == 'deployment' %}bg-info{% else %}bg-olive{% endif %}">
+                                            <p>Deployment</p>
+                                        </a>
+                                    </div>
+                                {% elif menu_active == 'deployment' %}
+                                    <i class="{% if menu_active == 'deployment' %}far fa-circle bg-info{% else %}fas fa-angle-down bg-olive{% endif %}"></i>
+                                    <div class="timeline-item bg-info">
+                                        <button class="btn nav-link" disabled>
+                                            <p class="text-white">Deployment</p>
+                                        </button>
+                                    </div>
+                                {% else %}
+                                    <i class="fas fa-angle-down bg-default"></i>
+                                    <div class="timeline-item">
+                                        <button class="btn nav-link" disabled>
+                                            <p>Deployment</p>
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            </div>
                         <div>
                             <i class="fas fa-check bg-default"></i>
                         </div>

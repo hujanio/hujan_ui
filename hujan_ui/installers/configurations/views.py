@@ -6,10 +6,12 @@ from django.contrib.auth.decorators import login_required
 from django.db.models.fields import NOT_PROVIDED
 
 from hujan_ui.installers.models import GlobalConfig, AdvancedConfig, Installer
+from hujan_ui.installers.decorators import deployment_checked
 from .forms import GlobalConfigForm, AdvancedConfigForm
 
 
 @login_required
+@deployment_checked
 def global_config(request):
     global_config = GlobalConfig.objects.first()
     if not global_config:
@@ -46,6 +48,7 @@ def reset_global_config(request):
 
 
 @login_required
+@deployment_checked
 def advanced_config(request):
     advanced_config = AdvancedConfig.objects.all()
     Installer.set_step_advanced_config()
@@ -60,6 +63,7 @@ def advanced_config(request):
 
 
 @login_required
+@deployment_checked
 def add_advanced_config(request):
     form = AdvancedConfigForm(request.POST or None)
 
@@ -80,6 +84,7 @@ def add_advanced_config(request):
 
 
 @login_required
+@deployment_checked
 def edit_advanced_config(request, id):
     advanced_config = get_object_or_404(AdvancedConfig, id=id)
     form = AdvancedConfigForm(data=request.POST or None, instance=advanced_config)
