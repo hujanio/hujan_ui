@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
-from hujan_ui.installers.models import Inventory
+from hujan_ui.installers.models import Inventory, Installer
 from .forms import InventoryForm
 
 
@@ -13,7 +13,8 @@ def index(request):
     context = {
         'title': _('Inventories'),
         'inventories': inventories,
-        'menu_active': 'inventories',
+        'steps': Installer.get_steps,
+        'menu_active': 'inventory',
     }
     return render(request, 'installers/inventory.html', context)
 
@@ -30,7 +31,8 @@ def add(request):
     context = {
         'title': _('Add Inventory'),
         'form': form,
-        'menu_active': 'inventories',
+        'steps': Installer.get_steps,
+        'menu_active': 'inventory',
         'title_submit': _('Save Inventory'),
         'col_size': '12',
     }
@@ -49,7 +51,8 @@ def edit(request, id):
     context = {
         'title': _('Edit Inventory'),
         'form': form,
-        'menu_active': 'inventories',
+        'steps': Installer.get_steps,
+        'menu_active': 'inventory',
         'title_submit': _('Edit Inventory'),
         'col_size': '12',
     }

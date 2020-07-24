@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 
 from hujan_ui.installers.models import (
     Server, Inventory, GlobalConfig, AdvancedConfig,
-    Deployment)
+    Deployment, Installer)
 from hujan_ui.utils.deployer import Deployer
 
 
@@ -48,7 +48,8 @@ def advanced_config(request):
 def deploy(request):
     context = {
         'title': 'Deploy',
-        'menu_active': 'deploy',
+        'steps': Installer.get_steps,
+        'menu_active': 'deployment',
         'servers': Server.objects.all(),
         'inventories': Inventory.objects.select_related('server').all(),
         'advanced_config': AdvancedConfig.objects.all(),
@@ -59,6 +60,7 @@ def deploy(request):
 
 @login_required
 def do_deploy(request):
+    Installer.set_step_deployment()
     deployer = Deployer()
     if not deployer.is_deploying():
         deployer.deploy()
