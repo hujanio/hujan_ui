@@ -7,9 +7,9 @@ class MultiNodeWriter:
     """
 
     file_name = "/home/kolla/multinode"
-    ansible_user = settings.ANSIBLE_USER
 
     def __init__(self):
+        self.ansible_user = settings.DEFAULT_ANSIBLE_USER
         self.entry = {}
 
     def add_entry(self, group: str, server_name: str):
