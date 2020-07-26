@@ -146,6 +146,8 @@ DIR_EX_RESPONSE = "hujan_ui/maas/ex_response/"
 
 SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 
+# Deployment Config
+ANSIBLE_USER = "ubuntu"
 DEPLOYMENT_LOG_DIR = os.path.join(BASE_DIR, 'deploy_log')
 DEPLOYMENT_COMMAND = ["ls", "/"]
 
