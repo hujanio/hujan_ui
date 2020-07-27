@@ -1,3 +1,6 @@
+from django.conf import settings
+
+
 class MultiNodeWriter:
     """
     Multinode file writer Utility
@@ -6,6 +9,7 @@ class MultiNodeWriter:
     file_name = "/home/kolla/multinode"
 
     def __init__(self):
+        self.ansible_user = settings.DEFAULT_ANSIBLE_USER
         self.entry = {}
 
     def add_entry(self, group: str, server_name: str):
@@ -23,7 +27,7 @@ class MultiNodeWriter:
             for k, v in self.entry.items():
                 f.write("[%s]\n" % k)
                 for x in v:
-                    f.write("%s ansible_user=centos\n" % x)
+                    f.write("%s ansible_user=%s\n" % (x, self.ansible_user))
                 f.write("\n")
 
     @staticmethod
