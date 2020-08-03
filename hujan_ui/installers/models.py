@@ -1,5 +1,8 @@
 from django.db import models
 
+from multiselectfield import MultiSelectField
+from model_utils import Choices
+
 
 class Server(models.Model):
     name = models.CharField(max_length=200)
@@ -28,6 +31,10 @@ class Inventory(models.Model):
 
     def __str__(self):
         return f"{self.server} - {self.group}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)        
+        Installer.set_step_inventory()
 
 
 class GlobalConfig(models.Model):
@@ -61,6 +68,10 @@ class GlobalConfig(models.Model):
     def __str__(self):
         return self.installation_type
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)        
+        Installer.set_step_global_config()
+
 
 class AdvancedConfig(models.Model):
     SERVICE_TYPE = (
@@ -90,3 +101,58 @@ class Deployment(models.Model):
 
     log_name = models.CharField(max_length=255)
     status = models.CharField(max_length=255, choices=DEPLOY_STATUS)
+
+    @classmethod
+    def get_status(cls):
+        deployment = cls.objects.first()
+        return deployment.status
+
+
+class Installer(models.Model):
+    STEPS = Choices(
+        ('server', 'Server'),
+        ('inventory', 'Inventory'),
+        ('global_configuration', 'Global Configuration'),
+        ('advanced_configuration', 'Advanced Configuration'),
+        ('deployment', 'Deployment'),
+    )
+    steps = MultiSelectField(choices=STEPS, default=STEPS.server)
+
+    def __str__(self):
+        return str(self.steps)
+
+    @classmethod
+    def get_steps(cls):
+        installer = cls.objects.first()
+        if not installer:
+            installer = cls.objects.create()
+
+        return installer.steps
+
+    @classmethod
+    def set_step_inventory(cls):
+        installer = cls.objects.first()
+        installer.steps.append(cls.STEPS.inventory)
+        installer.save()
+        return installer
+
+    @classmethod
+    def set_step_global_config(cls):
+        installer = cls.objects.first()
+        installer.steps.append(cls.STEPS.global_configuration)
+        installer.save()
+        return installer
+
+    @classmethod
+    def set_step_advanced_config(cls):
+        installer = cls.objects.first()
+        installer.steps.append(cls.STEPS.advanced_configuration)
+        installer.save()
+        return installer
+
+    @classmethod
+    def set_step_deployment(cls):
+        installer = cls.objects.first()
+        installer.steps.append(cls.STEPS.deployment)
+        installer.save()
+        return installer

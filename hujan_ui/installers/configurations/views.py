@@ -5,11 +5,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models.fields import NOT_PROVIDED
 
-from hujan_ui.installers.models import GlobalConfig, AdvancedConfig
+from hujan_ui.installers.models import GlobalConfig, AdvancedConfig, Installer
+from hujan_ui.installers.decorators import deployment_checked
 from .forms import GlobalConfigForm, AdvancedConfigForm
 
 
 @login_required
+@deployment_checked
 def global_config(request):
     global_config = GlobalConfig.objects.first()
     if not global_config:
@@ -22,7 +24,8 @@ def global_config(request):
 
     context = {
         'title': _('Global Configuration'),
-        'menu_active': 'global-configuration',
+        'steps': Installer.get_steps,
+        'menu_active': 'global_configuration',
         'form': form
     }
     return render(request, 'installers/global-config-form.html', context)
@@ -45,18 +48,22 @@ def reset_global_config(request):
 
 
 @login_required
+@deployment_checked
 def advanced_config(request):
     advanced_config = AdvancedConfig.objects.all()
+    Installer.set_step_advanced_config()
 
     context = {
         'title': _('Advanced Configuration'),
-        'menu_active': 'advanced-configuration',
+        'steps': Installer.get_steps,
+        'menu_active': 'advanced_configuration',
         'advanced_config': advanced_config
     }
     return render(request, 'installers/advanced-config.html', context)
 
 
 @login_required
+@deployment_checked
 def add_advanced_config(request):
     form = AdvancedConfigForm(request.POST or None)
 
@@ -68,7 +75,8 @@ def add_advanced_config(request):
     context = {
         'title': _('Add Advanced Configuration'),
         'form': form,
-        'menu_active': 'advanced-configuration',
+        'steps': Installer.get_steps,
+        'menu_active': 'advanced_configuration',
         'title_submit': _('Save Advanced Configuration'),
         'col_size': '12',
     }
@@ -76,6 +84,7 @@ def add_advanced_config(request):
 
 
 @login_required
+@deployment_checked
 def edit_advanced_config(request, id):
     advanced_config = get_object_or_404(AdvancedConfig, id=id)
     form = AdvancedConfigForm(data=request.POST or None, instance=advanced_config)
@@ -87,7 +96,8 @@ def edit_advanced_config(request, id):
     context = {
         'title': _('Edit Advanced Configuration'),
         'form': form,
-        'menu_active': 'advanced-configuration',
+        'steps': Installer.get_steps,
+        'menu_active': 'advanced_configuration',
         'title_submit': _('Edit Advanced Configuration'),
         'col_size': '12',
     }

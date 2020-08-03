@@ -6,23 +6,28 @@ from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from hujan_ui.installers.models import Server
+from hujan_ui.utils.deployer import Deployer
+from hujan_ui.installers.models import Server, Installer, Deployment
+from hujan_ui.installers.decorators import deployment_checked
 from .forms import AddServerForm
 
 
 @login_required
-def index(request):
+@deployment_checked
+def index(request):        
     servers = Server.objects.all()
     context = {
         'title': _('Servers'),
         'servers': servers,
         'system_ids': ",".join([s.system_id for s in servers]),
-        'menu_active': 'add-server'
+        'steps': Installer.get_steps,
+        'menu_active': 'server',
     }
     return render(request, 'installers/server.html', context)
 
 
 @login_required
+@deployment_checked
 def add(request):
     form = AddServerForm(request.POST or None)
 
@@ -34,7 +39,8 @@ def add(request):
     context = {
         'title': _('Add Server'),
         'form': form,
-        'menu_active': 'add-server',
+        'steps': Installer.get_steps,
+        'menu_active': 'server',
         'title_submit': _('Save Server'),
         'col_size': '12',
     }
@@ -42,6 +48,7 @@ def add(request):
 
 
 @login_required
+@deployment_checked
 def edit(request, id):
     server = get_object_or_404(Server, id=id)
     form = AddServerForm(data=request.POST or None, instance=server)
@@ -53,7 +60,8 @@ def edit(request, id):
     context = {
         'title': _('Edit Server'),
         'form': form,
-        'menu_active': 'servers',
+        'steps': Installer.get_steps,
+        'menu_active': 'server',
         'title_submit': _('Edit Server'),
         'col_size': '12',
         'old_ip_address': server.ip_address

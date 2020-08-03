@@ -5,3 +5,7 @@ requests-oauthlib==1.3.0
 django-pam==1.6.0
 
 sweetify==2.0.0
+
+# utils
+django-model-utils==4.0.0
+django-multiselectfield==0.1.12

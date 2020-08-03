@@ -1,11 +1,29 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
+from hujan_ui.utils.deployer import Deployer
 from hujan_ui.installers.models import (
     Server, Inventory, GlobalConfig, AdvancedConfig,
-    Deployment)
-from hujan_ui.utils.deployer import Deployer
+    Deployment, Installer)
+from hujan_ui.installers.decorators import deployment_checked
+
+
+@login_required
+def index(request):
+    if Deployment.get_status() != Deployment.DEPLOY_SUCCESS:
+            return redirect("installer:servers:index")    
+
+    context = {
+        'title': 'Configurations',
+        'steps': Installer.get_steps,
+        'menu_active': '',
+        'servers': Server.objects.all(),
+        'inventories': Inventory.objects.select_related('server').all(),
+        'advanced_config': AdvancedConfig.objects.all(),
+        'global_config': GlobalConfig.objects.first()
+    }
+    return render(request, 'installers/index.html', context)
 
 
 @login_required
@@ -45,10 +63,12 @@ def advanced_config(request):
 
 
 @login_required
+@deployment_checked
 def deploy(request):
     context = {
-        'title': 'Deploy',
-        'menu_active': 'deploy',
+        'title': 'Deployment',
+        'steps': Installer.get_steps,
+        'menu_active': 'deployment',
         'servers': Server.objects.all(),
         'inventories': Inventory.objects.select_related('server').all(),
         'advanced_config': AdvancedConfig.objects.all(),
@@ -59,12 +79,18 @@ def deploy(request):
 
 @login_required
 def do_deploy(request):
+    if Deployment.get_status() == Deployment.DEPLOY_SUCCESS:
+            return redirect("installer:servers:index")   
+            
+    Installer.set_step_deployment()
     deployer = Deployer()
     if not deployer.is_deploying():
         deployer.deploy()
 
     context = {
-        "deployment": deployer.deployment_model
+        "deployment": deployer.deployment_model,
+        'steps': 'deploying',
+        'menu_active': 'deployment',
     }
     return render(request, 'installers/deploy_progress.html', context)
 

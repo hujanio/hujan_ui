@@ -42,7 +42,8 @@ INSTALLED_APPS = [
 
     'widget_tweaks',
     'django_pam',
-    'sweetify'
+    'sweetify',
+    'multiselectfield'
 ]
 
 MIDDLEWARE = [

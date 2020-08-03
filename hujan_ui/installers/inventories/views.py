@@ -3,22 +3,26 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
-from hujan_ui.installers.models import Inventory
+from hujan_ui.installers.models import Inventory, Installer
+from hujan_ui.installers.decorators import deployment_checked
 from .forms import InventoryForm
 
 
 @login_required
+@deployment_checked
 def index(request):
     inventories = Inventory.objects.select_related('server').all()
     context = {
         'title': _('Inventories'),
         'inventories': inventories,
-        'menu_active': 'inventories',
+        'steps': Installer.get_steps,
+        'menu_active': 'inventory',
     }
     return render(request, 'installers/inventory.html', context)
 
 
 @login_required
+@deployment_checked
 def add(request):
     form = InventoryForm(request.POST or None)
 
@@ -30,7 +34,8 @@ def add(request):
     context = {
         'title': _('Add Inventory'),
         'form': form,
-        'menu_active': 'inventories',
+        'steps': Installer.get_steps,
+        'menu_active': 'inventory',
         'title_submit': _('Save Inventory'),
         'col_size': '12',
     }
@@ -38,6 +43,7 @@ def add(request):
 
 
 @login_required
+@deployment_checked
 def edit(request, id):
     inventory = get_object_or_404(Inventory, id=id)
     form = InventoryForm(data=request.POST or None, instance=inventory)
@@ -49,7 +55,8 @@ def edit(request, id):
     context = {
         'title': _('Edit Inventory'),
         'form': form,
-        'menu_active': 'inventories',
+        'steps': Installer.get_steps,
+        'menu_active': 'inventory',
         'title_submit': _('Edit Inventory'),
         'col_size': '12',
     }

@@ -4,6 +4,7 @@ from . import views
 
 app_name = 'installer'
 urlpatterns = [
+    path('', views.index, name='index'),
     path('servers/', include('hujan_ui.installers.servers.urls')),
     path('inventories/', include('hujan_ui.installers.inventories.urls')),
     path('configurations/', include('hujan_ui.installers.configurations.urls')),
