@@ -29,8 +29,8 @@
                     <td>{{ inventory.server.ip_address }}</td>
                     <td>{{ inventory.get_group_display }}</td>
                     <td>
-                      <a href="{% url 'installer:inventories:edit' inventory.id %}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i> Edit</a>
-                      <button class="btn btn-sm btn-danger delete-swal" data-url="{% url 'installer:inventories:delete' inventory.id %}" data-name="{{ inventory }}"><i class="fas fa-trash-alt"></i> Delete</button>
+                      <a href="{% url 'installer:inventories:edit' inventory.id %}" class="btn btn-sm btn-info" data-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></a>
+                      <button class="btn btn-sm btn-danger delete-swal" data-url="{% url 'installer:inventories:delete' inventory.id %}" data-name="{{ inventory }}" data-toggle="tooltip" title="Delete"><i class="fas fa-trash-alt"></i></button>
                     </td>
                   </tr>
                 {% endfor %}

@@ -32,8 +32,8 @@
                   <td>{{ server.ip_address }}</td>
                   <td id="{{ server.system_id }}"></td>
                   <td>
-                    <a href="{% url 'installer:servers:edit' server.id %}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i> Edit</a>
-                    <button class="btn btn-sm btn-danger delete-swal" data-url="{% url 'installer:servers:delete' server.id %}" data-name="{{ server }}"><i class="fas fa-trash-alt"></i> Delete</button>
+                    <a href="{% url 'installer:servers:edit' server.id %}" class="btn btn-sm btn-info" data-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></a>
+                    <button class="btn btn-sm btn-danger delete-swal" data-url="{% url 'installer:servers:delete' server.id %}" data-name="{{ server }}" data-toggle="tooltip" title="Delete"><i class="fas fa-trash-alt"></i></button>
                   </td>
                 </tr>
                 {% endfor %}
