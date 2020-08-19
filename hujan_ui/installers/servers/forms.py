@@ -12,7 +12,6 @@ class AddServerForm(forms.ModelForm):
         fields = ['machine','ip_address', 'description', 'system_id', 'name']
         widgets = {
             'ip_address': forms.Select(),
-            'description': forms.TextInput(attrs={'required': False}),
             'system_id': forms.HiddenInput(),
             'name': forms.HiddenInput()
         }

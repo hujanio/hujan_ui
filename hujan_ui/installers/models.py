@@ -7,7 +7,7 @@ from model_utils import Choices
 class Server(models.Model):
     name = models.CharField(max_length=200)
     ip_address = models.CharField(max_length=100)
-    description = models.CharField(max_length=220)
+    description = models.CharField(max_length=220, blank=True)
     system_id = models.CharField(max_length=220, help_text="unique id MAAS")
 
     def __str__(self):
