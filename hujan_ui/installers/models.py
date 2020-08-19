@@ -105,7 +105,9 @@ class Deployment(models.Model):
     @classmethod
     def get_status(cls):
         deployment = cls.objects.first()
-        return deployment.status
+        if deployment:
+            return deployment.status
+        return None
 
 
 class Installer(models.Model):
