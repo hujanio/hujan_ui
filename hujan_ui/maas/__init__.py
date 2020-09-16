@@ -15,3 +15,15 @@ def get_machines():
         machine_file.close()
 
     return machines
+
+def get_subnets():
+    if  settings.WITH_EX_RESPONSE:
+        with open(settings.DIR_EX_RESPONSE + "subnets.json") as readfile:
+            subnets = json.load(readfile)
+    else:
+        maas = MAAS()
+        subnets = maas.get("subnets").json()
+        subnet_file = open('hujan_ui/maas/ex_response/subnets.json','w')
+        json.dump(subnets,subnet_file)
+        subnet_file.close()
+    return subnets

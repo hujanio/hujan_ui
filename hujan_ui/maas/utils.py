@@ -15,7 +15,8 @@ class MAAS:
         }
 
     def maas_connect(self):
-        consumer_key, token_key, token_secret = settings.MAAS_API_KEY.split(":")
+        consumer_key, token_key, token_secret = settings.MAAS_API_KEY.split(
+            ":")
         return OAuth1Session(
             consumer_key,
             client_secret='',
@@ -27,6 +28,7 @@ class MAAS:
 
     def get(self, uri, params=None, headers=None):
         maas = self.maas_connect()
+        print(maas)
 
         if headers:
             self.headers.update(headers)

@@ -38,12 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_extensions',
+
     'hujan_ui.installers',
 
     'widget_tweaks',
     'django_pam',
     'sweetify',
-    'multiselectfield'
+    'multiselectfield',
 ]
 
 MIDDLEWARE = [

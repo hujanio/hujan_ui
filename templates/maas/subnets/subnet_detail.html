@@ -1,0 +1,172 @@
+
+{% extends 'master.html' %}
+{% load utils %}
+{% block content %}
+
+<!-- Main content -->
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                
+                <div class="card">
+                    <div class="card-header d-flex p-0">
+                        <h3 class="card-title p-3">{{ machine.fqdn }}</h3>
+                        <ul class="nav nav-pills ml-auto p-2">
+                            <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Summary</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Utilisation</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Static Routes</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Reverse Ranges</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#tab_5" data-toggle="tab">Used</a></li>
+                            <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+                                More <span class="caret"></span>
+                            </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body p-0">
+
+                    </div>
+                </div>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_1">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header d-flex">
+                                        <h3 class="card-title">Subnet Summary</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul>
+                                            <li>Name: {{ subnets.name }}</li>
+                                            <li>CIDR: {{ subnets.cidr }}</li>
+                                            <li>Gateway IP: {{ subnets.gateway_ip }}</li>
+                                            <li>DNS: {{ machine.hardware_info.mainboard_version }}</li>
+                                            <li>Description: {{ subnets.description }}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header d-flex">
+                                        <h3 class="card-title">Hardware Info</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul>
+                                            <li>Manage alloction: {{ machine.hardware_info.cpu_model }}</li>
+                                            <li>Active discovery: {{ machine.hardware_info.mainboard_firmware_date }}</li>
+                                            <li>Proxy Access: {{ machine.hardware_info.mainboard_version }}</li>
+                                            <li>Allow DNS Resolution: {{ machine.hardware_info.mainboard_version }}</li>
+                                            <li>Fabric: {{ machine.hardware_info.mainboard_version }}</li>
+                                            <li>Vlan: {{ machine.hardware_info.mainboard_version }}</li>
+                                            <li>Space: {{ machine.hardware_info.mainboard_version }}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane" id="tab_2">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+
+                                        <ul>
+                                            <li>Subnet adressed: {{ machine.hardware_info.cpu_model }}</li>
+                                            <li>Availablity: {{ machine.hardware_info.mainboard_firmware_date }}</li>
+                                            <li>Used: {{ machine.hardware_info.mainboard_version }}</li>
+                                        </ul>
+                                    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab_3">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <table class="table m-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Gateway Ip</th>
+                                                    <th>Destination</th>
+                                                    <th>Metric</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="tab_4">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <table class="table m-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Start Ip Address</th>
+                                                    <th>End Ip Address</th>
+                                                    <th>Owner</th>
+                                                    <th>Type</th>
+                                                    <th>Comment</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="tab_5">
+
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <table class="table m-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Ip Address</th>
+                                                    <th>Type</th>
+                                                    <th>Node</th>
+                                                    <th>Interface</th>
+                                                    <th>Usage</th>
+                                                    <th>Usage</th>
+                                                    <th>Last Seen</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
