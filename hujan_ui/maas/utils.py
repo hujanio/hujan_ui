@@ -28,7 +28,6 @@ class MAAS:
 
     def get(self, uri, params=None, headers=None):
         maas = self.maas_connect()
-        print(maas)
 
         if headers:
             self.headers.update(headers)

@@ -10,50 +10,51 @@ from hujan_ui import maas
 
 
 @login_required
-def index(req):
-    if req.is_ajax():
+def index(request):
+    if request.is_ajax():
         return JsonResponse({'subnets': maas.get_subnets()})
 
-    ctx = {
+    context = {
         'title': 'Subnets',
         'subnets': maas.get_subnets(),
         'menus_active': 'subnets_active'
     }
-    tpl = 'maas/subnets/index.html'
-    return render(req, tpl, ctx)
+    return render(request, 'maas/subnets/index.html', context)
 
-
-def detail(req, *args, **kwargs):
-    tpl = 'maas/subnets/subnet_detail.html'
+@login_required
+def detail(request, subnet_id):
     if settings.WITH_EX_RESPONSE:
         with open(settings.DIR_EX_RESPONSE + "subnet_details.json") as readfile:
-            subnets = json.load(readfile)
+            subnet = json.load(readfile)
     else:
         maas = MAAS()
-        subnets = maas.get(f"subnets/{kwargs['subnet_id']}/").json()
+        respose = maas.get(f"subnets/{subnet_id}/")
+        if respose.ok:
+            subnet = respose.json()
+        else:
+            subnet = []
 
-    if req.is_ajax():
-        return JsonResponse({'subnet': subnets})
+    if request.is_ajax():
+        return JsonResponse({'subnet': subnet})
 
-    ctx = {
-        'title': f"Subnet - {subnets['name']}",
-        'subnets': subnets,
-        'menu_active': 'machines',
+    context = {
+        'title': f"Subnet - {subnet['name']}",
+        'subnet': subnet,
+        'menu_active': 'subnets',
     }
-    return render(req, tpl, ctx)
+    return render(request, 'maas/subnets/subnet_detail.html', context)
 
+@login_required
+def fabric_detail(request, fabric_id):
+    context = {}
+    return render(request, 'maas/subnets/fabric_detail.html', context)
 
-def fabric_detail(req,*args, **kwargs):
-    tpl = 'maas/subnets/fabric_detail.html'
-    return render(req, tpl, {})
+@login_required
+def vlan_detail(request, vlan_id):
+    context = {}
+    return render(request, 'maas/subnets/vlan_detail.html', context)
 
-
-def vlan_detail(req,*args, **kwargs):
-    tpl = 'maas/subnets/vlan_detail.html'
-    return render(req, tpl, {})
-
-
-def add(req):
-    tpl = 'maas/subnets/add.html'
-
-    return render(req, tpl, {})
+@login_required
+def add(request):
+    context = {}
+    return render(request, 'maas/subnets/add.html', context)
