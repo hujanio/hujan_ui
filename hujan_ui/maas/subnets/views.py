@@ -23,7 +23,7 @@ def index(req):
     return render(req, tpl, ctx)
 
 
-def detail(req,*args, **kwargs):
+def detail(req, *args, **kwargs):
     tpl = 'maas/subnets/subnet_detail.html'
     if settings.WITH_EX_RESPONSE:
         with open(settings.DIR_EX_RESPONSE + "subnet_details.json") as readfile:
@@ -31,7 +31,7 @@ def detail(req,*args, **kwargs):
     else:
         maas = MAAS()
         subnets = maas.get(f"subnets/{kwargs['subnet_id']}/").json()
-    
+
     if req.is_ajax():
         return JsonResponse({'subnet': subnets})
 
@@ -42,16 +42,18 @@ def detail(req,*args, **kwargs):
     }
     return render(req, tpl, ctx)
 
-def fabric_detail(req):
-    tpl = 'maas/subnets/fabric_detail.html'
-    return render(req,tpl,{})
 
-def vlan_detail(req):
+def fabric_detail(req,*args, **kwargs):
+    tpl = 'maas/subnets/fabric_detail.html'
+    return render(req, tpl, {})
+
+
+def vlan_detail(req,*args, **kwargs):
     tpl = 'maas/subnets/vlan_detail.html'
-    return render(req,tpl,{})
+    return render(req, tpl, {})
+
 
 def add(req):
     tpl = 'maas/subnets/add.html'
 
     return render(req, tpl, {})
-
