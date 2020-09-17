@@ -15,7 +15,8 @@ class MAAS:
         }
 
     def maas_connect(self):
-        consumer_key, token_key, token_secret = settings.MAAS_API_KEY.split(":")
+        consumer_key, token_key, token_secret = settings.MAAS_API_KEY.split(
+            ":")
         return OAuth1Session(
             consumer_key,
             client_secret='',

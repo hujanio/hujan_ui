@@ -1,0 +1,65 @@
+{% extends 'master.html' %}
+{% load utils %}
+{% block content %}
+
+<!-- Main content -->
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+
+
+                <div class="invoice p-3 mb-3">
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        Subnet Summary
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+
+
+                                        <div class="col-6">
+                                            <ul>
+                                                <li>Name: {{ subnets.name }}</li>
+                                                <li>CIDR: {{ subnets.cidr }}</li>
+                                                <li>Gateway IP: {{ subnets.gateway_ip }}</li>
+                                                <li>DNS: {{ subnets.dns }}</li>
+                                                <li>Description: {{ subnets.description }}</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-6">
+                                            <ul>
+                                                <li>Manage alloction: {{ subnets.managed }}</li>
+                                                <li>Active discovery:
+                                                    {{ subnets.active_discovery }}
+                                                </li>
+                                                <li>Proxy Access: {{ subnets.allow_proxy }}</li>
+                                                <li>Allow DNS Resolution: {{ subnets.allow_dns }}
+                                                </li>
+                                                <li>Fabric: {{ subnets.vlan.fabric }}</li>
+                                                <li>Vlan: {{ subnets.vlan.name }}</li>
+                                                <li>Space: {{ subnets.space }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% include 'maas/partials/subnet_table.html' %}
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
