@@ -22,8 +22,21 @@ def get_subnets():
             subnets = json.load(readfile)
     else:
         maas = MAAS()
-        subnets = maas.get("subnets").json()
+        subnets = maas.get("subnets/").json()
         subnet_file = open('hujan_ui/maas/ex_response/subnets.json','w')
         json.dump(subnets,subnet_file)
         subnet_file.close()
     return subnets
+
+def get_fabric():
+    if  settings.WITH_EX_RESPONSE:
+        with open(settings.DIR_EX_RESPONSE + "fabrics.json") as readfile:
+            subnets = json.load(readfile)
+    else:
+        maas = MAAS()
+        subnets = maas.get("fabrics/").json()
+        subnet_file = open('hujan_ui/maas/ex_response/fabrics.json','w')
+        json.dump(subnets,subnet_file)
+        subnet_file.close()
+    return subnets
+    

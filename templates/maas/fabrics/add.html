@@ -1,0 +1,68 @@
+{% extends 'master.html' %}
+{% load static widget_tweaks %}
+
+{% block content %}
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="pull-left">
+                {{ title }}
+            </h4>
+        </div>
+        <div class="card-body">
+            <div class="row-fluid">
+                <div class="row">
+                    <div class=" col-md-12 col-lg-12 ">
+                        <h5>{{ title_extra }}</h5>
+                    </div>
+                    <div class="col-md-12">
+
+                        <form class="form-row" action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            {{ form.media }}
+                            {{ form.non_field_errors }}
+                            <div class="col-md-6">
+                                {% for field in form.visible_fields %}
+                                    <div class="form-group">
+                                        <label class="col-md-12"> {{ field.label }} </label>
+                                        <div class="col-md-12">
+                                            {% render_field field|add_class:"form-control"%}
+                                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                                            <small class="form-text text-danger">{{ field.errors }}</small>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            {{ form_ipmi.media }}
+                            {{ form_ipmi.non_field_errors }}
+                            <div class="col-md-6">
+                                {% for field in form_ipmi.visible_fields %}
+                                    <div class="form-group">
+                                        <label class="col-md-12"> {{ field.label }} </label>
+                                        <div class="col-md-12">
+                                            {% render_field field|add_class:"form-control"%}
+                                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                                            <small class="form-text text-danger">{{ field.errors }}</small>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="col-md-2">
+                                <button type="submit" class="ml-2 btn btn-success btn-user btn-block">
+                                    Save Fabric
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer"></div>
+
+    </div>
+</div>
+{% endblock %}
