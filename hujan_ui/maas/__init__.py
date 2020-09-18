@@ -40,3 +40,14 @@ def get_fabric():
         subnet_file.close()
     return subnets
     
+def get_spaces():
+    if settings.WITH_EX_RESPONSE:
+        with open(settings.DIR_EX_RESPONSE + "spaces.json") as readfile:
+            spaces = json.load(readfile)
+    else:
+        maas = MAAS()
+        spaces = maas.get('spaces/').json()
+        space_file = open('hujan_ui/mass/ex_response/spaces.json','w')
+        json.dump(spaces, space_file)
+        space_file.close()
+    return spaces
