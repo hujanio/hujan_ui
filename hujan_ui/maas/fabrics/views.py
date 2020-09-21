@@ -21,8 +21,13 @@ def index(request):
     return render(request, 'maas/fabrics/index.html', context)
 
 def detail(request, fabric_id):
-    context = {}
-    return render(request, 'mass/fabrics/detail.html', context)
+    fabrics = maas.get_fabric()
+    fab = [f for f in fabrics if f['id'] == fabric_id]
+    context = {
+        'title': 'Fabric',
+        'fabric':fab[0]
+    }
+    return render(request, 'maas/fabrics/detail.html', context)
 
 def add(request):
     form = FabricForm(request.POST or None)
@@ -66,16 +71,14 @@ def edit(request, fabric_id):
     return render(request, 'maas/fabrics/add.html', context)
 
 def delete(request, fabric_id):
-    fabs = mass.get_fabric()
-    c = None
-    for fab in fabs:
-        if fab['id'] == fabric_id:
-            c = fab
+    fabs = maas.get_fabric()
+    fab = [fabric for fabric in fabs if fabric['id'] == fabric_id]
     m = MAAS()
     resp = m.delete(f'/fabrics/{fabric_id}/')
     if resp.status_code in m.ok:
         sweetify.success(request, _(
             'Data Successfully Deleted'), button='OK', timer=200)
-        return redirect('maas.fabrics.index')
-    sweetify.warnings(request, _(resp.text), timer=5000)
-    return redirect('maas.fabrics.index')
+        return redirect('maas:fabrics:index')
+    sweetify.warning(request, _(resp.text), timer=5000)
+
+    return redirect('maas:fabrics:index')

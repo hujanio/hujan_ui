@@ -23,6 +23,7 @@
                     <tr>
                       <th>Fabric</th>
                       <th>Class Type</th>
+                      <th class="text-right">#</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -30,6 +31,11 @@
                         <tr>
                           <td>{{ fab.name }}</td>
                           <td>{{ fab.class_type }}</td>
+                          <td class="text-right">
+                            <a class="btn btn-warning" href="{% url 'maas:fabrics:edit' fab.id %}">Edit</a>
+                            <a class="btn btn-info" href="{% url 'maas:fabrics:detail' fab.id %}">Detail</a>
+                            <a class="btn btn-danger" href="{% url 'maas:fabrics:delete' fab.id %}">Delete</a>
+                          </td>
                         </tr>
                       {% endfor %}
                     </tbody>

@@ -47,7 +47,7 @@ def get_spaces():
     else:
         maas = MAAS()
         spaces = maas.get('spaces/').json()
-        space_file = open('hujan_ui/mass/ex_response/spaces.json','w')
+        space_file = open('hujan_ui/maas/ex_response/spaces.json','w')
         json.dump(spaces, space_file)
         space_file.close()
     return spaces

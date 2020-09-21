@@ -8,6 +8,8 @@ from django.http import JsonResponse
 from hujan_ui.maas.utils import MAAS
 from hujan_ui import maas
 
+from .forms import SubnetForm
+
 
 @login_required
 def index(request):
@@ -33,7 +35,7 @@ def detail(request, subnet_id):
             subnet = respose.json()
         else:
             subnet = []
-
+    
     if request.is_ajax():
         return JsonResponse({'subnet': subnet})
 
@@ -56,5 +58,51 @@ def vlan_detail(request, vlan_id):
 
 @login_required
 def add(request):
-    context = {}
+    form = SubnetForm(request.POST or None)
+    if form.is_valid():
+        maas = MAAS()
+        data = form.clean()
+        resp = maas.post('subnets',data=data)
+        if resp.status_code in maas.ok:
+            sweetify.success(request, _('Subnet Added Successfully'), timer=2000)
+        sweetify.warning(request, _(resp.text), timer=5000)
+    context = {
+        'title': 'Form Add Subnet',
+        'form': form
+    }
     return render(request, 'maas/subnets/add.html', context)
+
+@login_required
+def edit(request, subnet_id):
+    subnets = maas.get_subnets()
+    subnet = [s for s in subnets if s['id'] == subnet_id]
+    print(subnet)
+    form = SubnetForm(request.POST or None,initial=subnet[0])
+    if form.is_valid():
+        maas = MAAS()
+        data = form.clean()
+        resp = maas.put(f'subnets/{subnet_id}/')
+        if resp.status_code in maas.ok:
+            sweetify.success(request,_('Subnet Update Successfully'), timer=2000)
+        sweetify.warning(request, _(resp.text), timer=5000)
+    
+    context = {
+        'title': 'Form Edti Subnet',
+        'form': form
+    }
+
+@login_required
+def delete(request, subnet_id):
+    subnets = maas.get_subnets()
+    subnet = [s for s in subnets if s['id'] == subnet_id]
+    if subnet[0] != None:
+        mass = MAAS()
+        resp = mass.delete(f'subnets/{subnet_id}/')
+        if resp.status_code in maas.ok:
+            sweetify.success(request, _('Subnet Deleted Successfully'), timer=2000)
+        sweetify.warning(request, _(resp.text), timer=5000)
+    
+    return redirect('maas.subnets.index')
+
+
+    
