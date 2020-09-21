@@ -9,4 +9,5 @@ urlpatterns = [
     path('subnets/', include('hujan_ui.maas.subnets.urls')),
     path('fabrics/', include('hujan_ui.maas.fabrics.urls')),
     path('spaces/', include('hujan_ui.maas.spaces.urls')),
+    path('vlans/', include('hujan_ui.maas.vlans.urls')),
 ]

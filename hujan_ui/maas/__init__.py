@@ -51,3 +51,12 @@ def get_spaces():
         json.dump(spaces, space_file)
         space_file.close()
     return spaces
+
+def get_vlan(id=None):
+    vlans = []
+    with open(settings.DIR_EX_RESPONSE + "vlans.json") as readfile:
+        vlans =json.load(readfile)
+    if not vlans:
+        vlans = []
+    return vlans
+        
