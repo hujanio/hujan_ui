@@ -56,14 +56,20 @@ def edit(request, space_id):
 
 def delete(request, space_id):
     spaces = maas.get_spaces()
-    space = [s for s in space_id if s['id'] == space_id] 
+    space = [s for s in spaces if s['id'] == space_id] 
+    
+    if not space[0]:
+        print(space[0])
+        sweetify.warning(request, _('Data Space not Found..'), timer=5000)
+        return redirect('maas.spaces.index')
+
+    space_id = space[0]['id']
     m = MAAS()
     resp = m.delete(f'spaces/{space_id}/')
     if resp.status_code in m.ok:
         sweetify.success(request, _('Spaces Deteled Successfully'), timer=2000)
     sweetify.warning(request, _(resp.text), timer=5000)
-
-    return redirect('maas.spaces.index')
+    return redirect('maas:spaces:index')
     
 
 def detail(request, space_id):

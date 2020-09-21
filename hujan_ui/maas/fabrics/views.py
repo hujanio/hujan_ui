@@ -62,7 +62,7 @@ def edit(request, fabric_id):
         resp = m.put(f'/fabrics/{fabric_id}/', data=data)
         if resp.status_code in m.ok:
             sweetify.success(request, _('Successful'), button='OK', timer=2000)
-            return redirect('maas.fabrics.index')
+            return redirect('maas:fabrics:index')
         sweetify.warning(request, _(resp.text), button='Ok', timer=5000)
     context = {
         'title': 'Ubah Fabric',
@@ -73,7 +73,12 @@ def edit(request, fabric_id):
 def delete(request, fabric_id):
     fabs = maas.get_fabric()
     fab = [fabric for fabric in fabs if fabric['id'] == fabric_id]
+
+    if not fab[0]:
+        sweetify.info(request, _('Data Fabric not Found...'), timer=5000)
+        return redirect('maas:fabrics:index')
     m = MAAS()
+    fabric_id = fab[0]['id']
     resp = m.delete(f'/fabrics/{fabric_id}/')
     if resp.status_code in m.ok:
         sweetify.success(request, _(
