@@ -1,7 +1,7 @@
 import json
 import sweetify
 from django.utils.translation import ugettext_lazy as _
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -48,10 +48,7 @@ def detail(request, subnet_id):
 
 @login_required
 def fabric_detail(request, fabric_id):
-
-    return redirect('maas:fabric:detail',fabric_id)
-    # context = {}
-    # return render(request, 'maas/subnets/fabric_detail.html', context)
+    return redirect('maas:fabrics:detail',fabric_id)
 
 @login_required
 def vlan_detail(request, vlan_id):
