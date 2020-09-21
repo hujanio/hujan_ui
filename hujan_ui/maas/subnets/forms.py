@@ -1,14 +1,14 @@
 from django import forms
 
 class SubnetForm(forms.Form):
-    cidr = forms.CharField()
-    name = forms.CharField()
-    description = forms.CharField()
-    vlan = forms.ChoiceField()
-    fabric = forms.ChoiceField()
-    vid = forms.ChoiceField()
-    space = forms.CharField()
-    gateway_ip = forms.CharField()
+    cidr = forms.CharField(required=False)
+    name = forms.CharField(required=False)
+    description = forms.CharField(required=False)
+    vlan = forms.ChoiceField(required=False)
+    fabric = forms.ChoiceField(required=False)
+    vid = forms.ChoiceField(required=False)
+    space = forms.CharField(required=False)
+    gateway_ip = forms.CharField(required=False)
 
     RDNS= [
         (0,'Disabled'),
@@ -18,5 +18,5 @@ class SubnetForm(forms.Form):
     rdns_mode = forms.ChoiceField(choices=RDNS)
     allow_dns = forms.BooleanField()
     allow_proxy = forms.BooleanField()
-    dns_servers = forms.CharField()
-    managed = forms.IntegerField()
+    dns_servers = forms.CharField(required=False)
+    managed = forms.IntegerField(required=False)

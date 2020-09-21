@@ -37,6 +37,11 @@
                           <td><a href="{% url 'maas:subnets:subnet_detail' subnet.id%}">{{subnet.cidr}}</a></td>
                           <td>0 %</td>
                           <td>{{subnet.space}}</td>
+                          <td>
+                            <a href="{% url 'maas:subnets:subnet_edit' subnet.id %}" class="btn btn-warning">Edit</a>
+                            <a href="{% url 'maas:subnets:subnet_detail' subnet.id %}" class="btn btn-info">Detail</a>
+                            <a href="{% url 'maas:subnets:subnet_delete' subnet.id %}" class="btn btn-danger">Delete</a>
+                          </td>
                         </tr>
                       {% endfor %}
                     </tbody>
