@@ -71,8 +71,9 @@ def detail(request, space_id):
     space = [s for s in spaces if s['id'] == space_id] 
     context = {
         'title': 'Detail Space',
-        'space': space,
+        'space': space[0],
+        'subnets':maas.get_subnets()
     }
-    return render(request, 'maas/space/detail.html', context)
+    return render(request, 'maas/spaces/detail.html', context)
 
         

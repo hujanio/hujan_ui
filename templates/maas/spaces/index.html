@@ -30,8 +30,8 @@
                     <td class="text-right">
                       <div class="btn-group" role="group" aria-label="Basic example">
                         <a href="{% url 'maas:spaces:edit' space.id %}" class="btn btn-warning">Edit</a>
-                        <a href="{% url 'maas:spaces:edit' space.id %}" class="btn btn-info">Detail</a>
-                        {% comment %} <a href="{% url 'maas:spaces:delete' space.id %}" class="btn btn-danger">Delete</a> {% endcomment %}
+                        <a href="{% url 'maas:spaces:detail' space.id %}" class="btn btn-info">Detail</a>
+                        <a href="{% url 'maas:spaces:delete' space.id %}" class="btn btn-danger">Delete</a>
                       </div>
                     </td>
                   </tr>
