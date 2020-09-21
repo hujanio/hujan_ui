@@ -25,17 +25,8 @@ def index(request):
 
 @login_required
 def detail(request, subnet_id):
-    if settings.WITH_EX_RESPONSE:
-        with open(settings.DIR_EX_RESPONSE + "subnet_details.json") as readfile:
-            subnet = json.load(readfile)
-    else:
-        maas = MAAS()
-        respose = maas.get(f"subnets/{subnet_id}/")
-        if respose.ok:
-            subnet = respose.json()
-        else:
-            subnet = []
     
+    subnet = maas.get_subnets(subnet_id)
     if request.is_ajax():
         return JsonResponse({'subnet': subnet})
 
@@ -45,10 +36,6 @@ def detail(request, subnet_id):
         'menu_active': 'subnets',
     }
     return render(request, 'maas/subnets/subnet_detail.html', context)
-
-@login_required
-def fabric_detail(request, fabric_id):
-    return redirect('maas:fabrics:detail',fabric_id)
 
 @login_required
 def vlan_detail(request, vlan_id):
@@ -73,14 +60,14 @@ def add(request):
 
 @login_required
 def edit(request, subnet_id):
-    subnets = maas.get_subnets()
-    subnet = [s for s in subnets if s['id'] == subnet_id]
-    print(subnet)
-    form = SubnetForm(request.POST or None,initial=subnet[0])
+    subnet = maas.get_subnets(subnet_id)
+    if not subnet:
+        return redirect('maas.subnets.index')
+    form = SubnetForm(request.POST or None,initial=subnet)
     if form.is_valid():
         m = MAAS()
         data = form.clean()
-        resp = m.put(f'subnets/{subnet_id}/',data=data)
+        resp = m.put(f'subnets/{subnet_id}/', data=data)
         if resp.status_code in m.ok:
             sweetify.success(request,_('Subnet Update Successfully'), timer=2000)
         sweetify.warning(request, _(resp.text), timer=5000)

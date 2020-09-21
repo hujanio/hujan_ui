@@ -1,7 +1,7 @@
 from django import forms
 
 class SubnetForm(forms.Form):
-    cidr = forms.CharField(required=False)
+    cidr = forms.CharField(required=True)
     name = forms.CharField(required=False)
     description = forms.CharField(required=False)
     vlan = forms.ChoiceField(required=False)

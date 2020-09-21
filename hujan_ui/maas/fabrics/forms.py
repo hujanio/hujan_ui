@@ -1,6 +1,7 @@
 from django import forms
 from hujan_ui.maas.utils import MAAS
 
+
 class FabricForm(forms.Form):
     name = forms.CharField()
     description = forms.CharField()

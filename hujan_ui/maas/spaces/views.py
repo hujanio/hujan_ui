@@ -1,11 +1,10 @@
 import sweetify
-
-
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render, redirect
 from hujan_ui import maas
 from hujan_ui.maas.utils import MAAS
 from . import forms
+
 
 def index(request):
     if request.is_ajax():
@@ -17,6 +16,7 @@ def index(request):
         'menus_active': 'spaces_active'
     }
     return render(request, 'maas/spaces/index.html', context)
+
 
 def add(request):
     form = forms.SpacesForm(request.POST or None)
@@ -34,10 +34,10 @@ def add(request):
     }
     return render(request, 'maas/spaces/add.html', context)
 
+
 def edit(request, space_id):
-    spaces = maas.get_spaces()
-    space = [s for s in spaces if s['id'] == space_id]
-    form = forms.SpacesForm(request.POST or None,initial=space[0])
+    spaces = maas.get_spaces(space_id)
+    form = forms.SpacesForm(request.POST or None,initial=spaces)
 
     if form.is_valid():
         data = form.clean()
@@ -55,11 +55,8 @@ def edit(request, space_id):
 
 
 def delete(request, space_id):
-    spaces = maas.get_spaces()
-    space = [s for s in spaces if s['id'] == space_id] 
-    
-    if not space[0]:
-        print(space[0])
+    spaces = maas.get_spaces(space_id)
+    if not spaces:
         sweetify.warning(request, _('Data Space not Found..'), timer=5000)
         return redirect('maas.spaces.index')
 
@@ -73,11 +70,10 @@ def delete(request, space_id):
     
 
 def detail(request, space_id):
-    spaces = maas.get_spaces()
-    space = [s for s in spaces if s['id'] == space_id] 
+    spaces = maas.get_spaces(space_id)
     context = {
         'title': 'Detail Space',
-        'space': space[0],
+        'space': spaces,
         'subnets':maas.get_subnets()
     }
     return render(request, 'maas/spaces/detail.html', context)

@@ -11,23 +11,24 @@ from .forms import FabricForm
 
 def index(request):
     if request.is_ajax():
-        return JsonResponse({'fabrics': maas.get_fabric()})
+        return JsonResponse({'fabrics': maas.get_fabrics() })
 
     context = {
         'title': 'Fabrics',
-        'fabrics': maas.get_fabric(),
+        'fabrics': maas.get_fabrics(),
         'menus_active': 'fabrics_active'
     }
     return render(request, 'maas/fabrics/index.html', context)
 
+
 def detail(request, fabric_id):
-    fabrics = maas.get_fabric()
-    fab = [f for f in fabrics if f['id'] == fabric_id]
+    fabrics = maas.get_fabrics(fabric_id)
     context = {
         'title': 'Fabric',
-        'fabric':fab[0]
+        'fabric': fabrics
     }
     return render(request, 'maas/fabrics/detail.html', context)
+
 
 def add(request):
     form = FabricForm(request.POST or None)
@@ -48,14 +49,11 @@ def add(request):
     }
     return render(request, 'maas/fabrics/add.html', context)
 
-def edit(request, fabric_id):
-    fabs = maas.get_fabric()
-    c = None
-    for fab in fabs:
-        if fab['id'] == fabric_id:
-            c = fab
 
-    form = FabricForm(request.POST or None, initial=c)
+def edit(request, fabric_id):
+    fabs = maas.get_fabrics(fabric_id)
+
+    form = FabricForm(request.POST or None, initial=fabs)
     if form.is_valid():
         m = MAAS()
         data = form.clean()
@@ -70,11 +68,11 @@ def edit(request, fabric_id):
     }
     return render(request, 'maas/fabrics/add.html', context)
 
-def delete(request, fabric_id):
-    fabs = maas.get_fabric()
-    fab = [fabric for fabric in fabs if fabric['id'] == fabric_id]
 
-    if not fab[0]:
+def delete(request, fabric_id):
+    fabs = maas.get_fabrics(fabric_id)
+
+    if not fabs:
         sweetify.info(request, _('Data Fabric not Found...'), timer=5000)
         return redirect('maas:fabrics:index')
     m = MAAS()
