@@ -1,0 +1,39 @@
+{% extends 'master.html' %}
+
+{% block content %}
+
+<div class="content">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Space {{ space.name }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <tr>
+                                <th>Name</th>
+                                <th>Cidr</th>
+                                <th>Gateway IP</th>
+                                <th></th>
+                            </tr>
+                            {% for subnet in subnets %}
+                            <tr>
+                                <th>{{subnet.name}}</th>
+                                <th>{{subnet.cidr}}</th>
+                                <th>{{subnet.gateway_ip}}</th>
+                                <th></th>
+                            </tr>
+                            {% endfor %}
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,68 @@
+{% extends 'master.html' %}
+
+{% block content %}
+
+<div class="content">
+    <div class="container-fluid" <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Fabric Summary</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-4">
+                                    <span>Name</span>
+                                </div>
+                                <div class="col-5">
+                                    <span>{{ fab.name }}</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <span>Description</span>
+                                </div>
+                                <div class="col-5">
+                                    <span>{{ fab.description }}</span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-4">
+                                    <span>Rack Controller</span>
+                                </div>
+                                <div class="col-5">
+                                    <span>{{ fab.rack }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <h3>VLAN on this fabric</h3>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Vlan</th>
+                            <th>Subnet</th>
+                            <th>Available</th>
+                            <th>Space</th>
+                        </tr>
+                        {% for vlan in vlans %}
+                        <tr>
+                            <td>Vlan</td>
+                            <td>Subnet</td>
+                            <td>Available</td>
+                            <td>Space</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

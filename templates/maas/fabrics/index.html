@@ -1,0 +1,60 @@
+
+{% extends 'master.html' %}
+{% load utils %}
+{% block content %}
+
+<!-- Main content -->
+<div class="content">
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header border-transparent">
+                <form class="form-inline float-left">
+                    <input type="text" class="form-control mr-sm-2" id="inlineFormInputName2" placeholder="Search Fabric">
+                </form>
+                <a href="{% url 'maas:fabrics:add' %}" class="btn btn-sm btn-info float-right">Add Fabric</a>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table m-0">
+                    <thead>
+                    <tr>
+                      <th>Fabric</th>
+                      <th>Class Type</th>
+                      <th class="text-right">#</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                      {% for fab in fabrics %}
+                        <tr>
+                          <td>{{ fab.name }}</td>
+                          <td>{{ fab.class_type }}</td>
+                          <td class="text-right">
+                            <a class="btn btn-warning" href="{% url 'maas:fabrics:edit' fab.id %}">Edit</a>
+                            <a class="btn btn-info" href="{% url 'maas:fabrics:detail' fab.id %}">Detail</a>
+                            <a class="btn btn-danger" href="{% url 'maas:fabrics:delete' fab.id %}">Delete</a>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.table-responsive -->
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer clearfix">
+
+
+              </div>
+            </div>
+
+        </div>
+        <!-- /.col-md-12 -->
+    </div>
+    <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content -->
+{% endblock %}

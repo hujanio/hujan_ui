@@ -25,25 +25,25 @@
 
                                         <div class="col-6">
                                             <ul>
-                                                <li>Name: {{ subnets.name }}</li>
-                                                <li>CIDR: {{ subnets.cidr }}</li>
-                                                <li>Gateway IP: {{ subnets.gateway_ip }}</li>
-                                                <li>DNS: {{ subnets.dns }}</li>
-                                                <li>Description: {{ subnets.description }}</li>
+                                                <li>Name: {{ subnet.name }}</li>
+                                                <li>CIDR: {{ subnet.cidr }}</li>
+                                                <li>Gateway IP: {{ subnet.gateway_ip }}</li>
+                                                <li>DNS: {{ subnet.dns }}</li>
+                                                <li>Description: {{ subnet.description }}</li>
                                             </ul>
                                         </div>
                                         <div class="col-6">
                                             <ul>
-                                                <li>Manage alloction: {{ subnets.managed }}</li>
+                                                <li>Manage alloction: {{ subnet.managed }}</li>
                                                 <li>Active discovery:
-                                                    {{ subnets.active_discovery }}
+                                                    {{ subnet.active_discovery }}
                                                 </li>
-                                                <li>Proxy Access: {{ subnets.allow_proxy }}</li>
-                                                <li>Allow DNS Resolution: {{ subnets.allow_dns }}
+                                                <li>Proxy Access: {{ subnet.allow_proxy }}</li>
+                                                <li>Allow DNS Resolution: {{ subnet.allow_dns }}
                                                 </li>
-                                                <li>Fabric: {{ subnets.vlan.fabric }}</li>
-                                                <li>Vlan: {{ subnets.vlan.name }}</li>
-                                                <li>Space: {{ subnets.space }}</li>
+                                                <li>Fabric: {{ subnet.vlan.fabric }}</li>
+                                                <li>Vlan: {{ subnet.vlan.name }}</li>
+                                                <li>Space: {{ subnet.space }}</li>
                                             </ul>
                                         </div>
                                     </div>
