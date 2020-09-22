@@ -23,3 +23,7 @@ projects/logs/*
 .idea/*
 
 deploy_log/*
+**.ipynb
+.vscode
+.vim
+.ipynb_checkpoints

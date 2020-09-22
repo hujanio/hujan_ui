@@ -28,7 +28,7 @@ def get_subnets(subnet_id=None):
     else:
         maas = MAAS()
         if subnet_id:
-            subnets = maas.get("subnets/{subnet_id}/")
+            subnets = maas.get("subnets/{subnet_id}/").json()
         else:
             subnets = maas.get("subnets/").json()
             subnet_file = open('hujan_ui/maas/ex_response/subnets.json','w')
@@ -47,7 +47,7 @@ def get_fabrics(fabric_id=None):
     else:
         maas = MAAS()
         if fabric_id:
-            fabrics = maas.get(f"fabrics/{fabric_id}/")
+            fabrics = maas.get(f"fabrics/{fabric_id}/").json()
         else:
             fabrics = maas.get("fabrics/").json()
             fabric_file = open('hujan_ui/maas/ex_response/fabrics.json','w')
@@ -66,7 +66,7 @@ def get_spaces(space_id=None):
     else:
         m = MAAS()
         if space_id:
-            spaces = m.get('spaces/{space_id}/')
+            spaces = m.get('spaces/{space_id}/').json()
         else:
             spaces = m.get('spaces/').json()
             space_file = open('hujan_ui/maas/ex_response/spaces.json','w')
