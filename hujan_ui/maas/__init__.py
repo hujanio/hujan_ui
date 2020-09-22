@@ -53,6 +53,7 @@ def get_fabrics(fabric_id=None):
             fabric_file = open('hujan_ui/maas/ex_response/fabrics.json','w')
             json.dump(fabrics, fabric_file)
             fabric_file.close()
+            
     return fabrics
     
 
@@ -63,6 +64,7 @@ def get_spaces(space_id=None):
         if space_id:
             s = [space for space in spaces if space['id'] == space_id]
             spaces = s[0] if s else []
+
     else:
         m = MAAS()
         if space_id:
@@ -72,6 +74,7 @@ def get_spaces(space_id=None):
             space_file = open('hujan_ui/maas/ex_response/spaces.json','w')
             json.dump(spaces, space_file)
             space_file.close()
+
     return spaces
 
 
