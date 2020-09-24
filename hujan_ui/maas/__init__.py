@@ -44,6 +44,8 @@ def get_fabrics(fabric_id=None):
         if fabric_id:
             fab = [f for f in fabrics if f['id'] == fabric_id]
             fabrics = fab[0] if fab else []
+        vlans = []
+            
     else:
         maas = MAAS()
         if fabric_id:
@@ -78,11 +80,15 @@ def get_spaces(space_id=None):
     return spaces
 
 
-def get_vlan(id=None):
+def get_vlans(id=None):
     vlans = []
     with open(settings.DIR_EX_RESPONSE + "vlans.json") as readfile:
         vlans =json.load(readfile)
     if not vlans:
         vlans = []
+    else:
+        if id:
+            vlan = [i for i in vlans if i['id'] == id]
+            vlans = vlan[0] if vlan else []
     return vlans
         
