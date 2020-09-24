@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from hujan_ui.maas.utils import MAAS
 from hujan_ui import maas
-
 from .forms import SubnetForm
 
 
@@ -23,6 +22,7 @@ def index(request):
     }
     return render(request, 'maas/subnets/index.html', context)
 
+
 @login_required
 def detail(request, subnet_id):
     
@@ -37,10 +37,6 @@ def detail(request, subnet_id):
     }
     return render(request, 'maas/subnets/subnet_detail.html', context)
 
-@login_required
-def vlan_detail(request, vlan_id):
-    context = {}
-    return render(request, 'maas/subnets/vlan_detail.html', context)
 
 @login_required
 def add(request):
@@ -51,12 +47,14 @@ def add(request):
         resp = m.post('subnets/',data=data)
         if resp.status_code in m.ok:
             sweetify.success(request, _('Subnet Added Successfully'), timer=2000)
+            return redirect('maas:subnets:index')
         sweetify.warning(request, _(resp.text), timer=5000)
     context = {
         'title': 'Form Add Subnet',
         'form': form
     }
     return render(request, 'maas/subnets/add.html', context)
+
 
 @login_required
 def edit(request, subnet_id):
@@ -67,9 +65,15 @@ def edit(request, subnet_id):
     if form.is_valid():
         m = MAAS()
         data = form.clean()
+        if data['vlan']:
+            vl = maas.get_vlans(int(data['vlan']))
+            data['vid'] =  vl['vid']
+            data['fabric'] = vl['fabric_id'] 
+        
         resp = m.put(f'subnets/{subnet_id}/', data=data)
         if resp.status_code in m.ok:
             sweetify.success(request,_('Subnet Update Successfully'), timer=2000)
+            return redirect('maas:subnets:index')
         sweetify.warning(request, _(resp.text), timer=5000)
     
     context = {
@@ -78,15 +82,17 @@ def edit(request, subnet_id):
     }
     return render(request, 'maas/subnets/add.html', context)
 
+
 @login_required
 def delete(request, subnet_id):
     subnets = maas.get_subnets()
     subnet = [s for s in subnets if s['id'] == subnet_id]
     if subnet[0] != None:
         m = MAAS()
-        resp = mass.delete(f'subnets/{subnet_id}/')
+        resp = m.delete(f'subnets/{subnet_id}/')
         if resp.status_code in m.ok:
             sweetify.success(request, _('Subnet Deleted Successfully'), timer=2000)
+            return redirect('maas:subnets:index')
         sweetify.warning(request, _(resp.text), timer=5000)
     
     return redirect('maas:subnets:index')

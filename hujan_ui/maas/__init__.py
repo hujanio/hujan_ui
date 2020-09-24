@@ -44,7 +44,13 @@ def get_fabrics(fabric_id=None):
         if fabric_id:
             fab = [f for f in fabrics if f['id'] == fabric_id]
             fabrics = fab[0] if fab else []
-        vlans = []
+        vlans = load_dokumen('vlans.json')
+        store = []
+        for f in fabrics:
+            for g in f['vlans']:
+                store.append(g)
+        write_dokumen(store, 'vlans.json')
+
             
     else:
         maas = MAAS()
@@ -91,4 +97,16 @@ def get_vlans(id=None):
             vlan = [i for i in vlans if i['id'] == id]
             vlans = vlan[0] if vlan else []
     return vlans
+
+
+def load_dokumen(data):
+    with open(settings.DIR_EX_RESPONSE + data) as readfile:
+        res = json.load(readfile)
+    return res
+
+
+def write_dokumen(data, store):
+    file = open(settings.DIR_EX_RESPONSE + store, 'w')
+    json.dump(data, file)
+    file.close()
         
