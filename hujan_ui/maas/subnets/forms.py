@@ -5,8 +5,8 @@ class SubnetForm(forms.Form):
     name = forms.CharField(required=False)
     description = forms.CharField(required=False)
     vlan = forms.ChoiceField(required=False)
-    fabric = forms.ChoiceField(required=False,widget=forms.HiddenInput)
-    vid = forms.ChoiceField(required=False,widget=forms.HiddenInput)
+    fabric = forms.ChoiceField(required=False, widget=forms.HiddenInput)
+    vid = forms.ChoiceField(required=False, widget=forms.HiddenInput)
     # space = forms.ChoiceField(required=False)
     gateway_ip = forms.CharField(required=False)
 
@@ -26,7 +26,6 @@ class SubnetForm(forms.Form):
         self.fields['vlan'].choices = self.get_choice_vlan()
         # self.fields['space'].choices = self.get_choice_space()
         
-    
     def get_choice_vlan(self):
         resp = maas.get_vlans()
         b = [(i['id'], i['name']+' - '+ i['fabric']) for i in resp]
@@ -38,5 +37,6 @@ class SubnetForm(forms.Form):
         b = [(i['id'], i['name']) for i in resp]
         b.insert(0,(None,'-------')) 
         return b
+
             
         
