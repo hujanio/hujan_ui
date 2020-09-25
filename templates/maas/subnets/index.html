@@ -12,7 +12,16 @@
             <form class="form-inline float-left">
               <input type="text" class="form-control mr-sm-2" id="inlineFormInputName2" placeholder="Search Subnets">
             </form>
-            <a href="{% url 'maas:subnets:add' %}" class="btn btn-sm btn-info float-right">Add Subnet</a>
+            <button type="button" class="float-right btn btn-default dropdown-toggle" data-toggle="dropdown">
+              Action
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="{% url 'maas:subnets:add' %}">Add Subnet</a>
+              <a class="dropdown-item" href="{% url 'maas:fabrics:add' %}">Add Fabric</a>
+              <a class="dropdown-item" href="{% url 'maas:spaces:add' %}">Add Spaces</a>
+              
+            </div>
+            
           </div>
           <!-- /.card-header -->
           <div class="card-body p-0">
@@ -34,7 +43,7 @@
                   <tr>
                     <td><a href="{% url 'maas:fabrics:detail' subnet.vlan.fabric_id %}">{{ subnet.vlan.fabric }} </a>
                     </td>
-                    <td><a href="{% url 'maas:subnets:vlan_detail' subnet.vlan.id %}">{{subnet.vlan.name}}</a></td>
+                    <td><a href="{% url 'maas:vlans:detail' subnet.vlan.id %}">{{subnet.vlan.name}}</a></td>
                     <td>--</td>
                     <td><a href="{% url 'maas:subnets:subnet_detail' subnet.id%}">{{subnet.cidr}}</a></td>
                     <td>0 %</td>
