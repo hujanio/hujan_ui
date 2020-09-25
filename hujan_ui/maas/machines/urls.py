@@ -7,4 +7,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('<slug:system_id>/details/', views.details, name='details'),
     path('add/', views.add, name='add'),
+    path('load_machine/', views.load_machine, name='load_machine'),
 ]

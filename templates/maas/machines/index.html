@@ -1,5 +1,6 @@
 {% extends 'master.html' %}
 {% load utils %}
+{% load static %}
 {% block content %}
 
 <!-- Main content -->
@@ -17,7 +18,7 @@
               <!-- /.card-header -->
               <div class="card-body p-0">
                 <div class="table-responsive">
-                  <table class="table m-0">
+                  <table class="table m-0" id="table_machine">
                     <thead>
                     <tr>
                       <th>FQDN | MAC</th>
@@ -73,4 +74,47 @@
 
 
 {% block extra_js %}
+<script type="text/javascript">
+
+  (function ($, window, document) {
+    let resLastStatusMachine = function(a){
+      let t = $('#table_machine');
+
+      t.find('tbody').empty()
+      t.append(a)
+      // a.forEach(element => {
+      //   if (element.power_state == 'on') {
+      //     cps = 'text-success';
+      //   }else if(element.postMessage == 'of'){
+      //     cps = 'text-secondary'
+      //   }else{
+      //     cps = 'text-warning';
+      //   }
+
+        
+      //   // t.append(`<tr>
+      //   //   <td>${element.fqdn}</td>
+      //   //   <td><i class='${cps} fas fa-power-off'></i> <small>${element.power_state.toUpperCase()}</small></td>
+      //   //   <td>${element.status_name}</td>
+      //   //   <td>${element.owner}</td>
+      //   //   <td>${element.cpu_count}</td>
+      //   //   <td>${element.memory}</td>
+      //   //   <td>${element.storage}</td>
+      //   //   </tr>`)
+      // });
+      // console.log(a)
+    }
+    let worker = new Worker('{% static 'webworker.js' %}')
+    worker.addEventListener('error', function(a) {
+        console.log(a);
+        console.error('Error: Line ' + a.lineno + ' in ' + a.filename + ': ' + a.message);
+    }, false);
+    worker.addEventListener('message', function(a) {
+        if (a.data.cmd === 'resLastStatusMachine') { resLastStatusMachine(a.data.val) }
+      
+    });
+    worker.postMessage({ cmd: 'reqLastMachine', val: `${window.location.origin}/maas/machines/load_machine/`});
+
+}(jQuery, window, document));
+</script>
 {% endblock extra_js %}

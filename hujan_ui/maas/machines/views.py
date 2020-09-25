@@ -10,6 +10,7 @@ from django.http import JsonResponse
 from hujan_ui.maas.utils import MAAS
 from hujan_ui import maas
 from .forms import AddMachineForm, PowerTypeIPMIForm
+from django.template.defaultfilters import filesizeformat
 
 
 @login_required
@@ -72,3 +73,24 @@ def add(request):
         'form_ipmi': form_ipmi
     }
     return render(request, "maas/machines/add-form.html", context)
+
+
+def load_machine(request):
+    
+    m = MAAS()
+    machines = maas.get_machines()
+    html = ''
+    for m in machines:
+        power = "<i class='text-success fas fa-power-off'></i> <small>ON</small>" if m['power_state'] == 'on' else "<i class='text-success fas fa-power-off'></i> <small>OFF</small>"
+        html += '<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>'.format(
+            m['fqdn'], 
+            power, 
+            m['status_name'], 
+            m['owner'], 
+            m['cpu_count'], 
+            filesizeformat(m['memory']), 
+            filesizeformat(m['storage'])
+            )
+
+    return JsonResponse({'data': html})
+
