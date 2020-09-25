@@ -82,27 +82,6 @@
 
       t.find('tbody').empty()
       t.append(a)
-      // a.forEach(element => {
-      //   if (element.power_state == 'on') {
-      //     cps = 'text-success';
-      //   }else if(element.postMessage == 'of'){
-      //     cps = 'text-secondary'
-      //   }else{
-      //     cps = 'text-warning';
-      //   }
-
-        
-      //   // t.append(`<tr>
-      //   //   <td>${element.fqdn}</td>
-      //   //   <td><i class='${cps} fas fa-power-off'></i> <small>${element.power_state.toUpperCase()}</small></td>
-      //   //   <td>${element.status_name}</td>
-      //   //   <td>${element.owner}</td>
-      //   //   <td>${element.cpu_count}</td>
-      //   //   <td>${element.memory}</td>
-      //   //   <td>${element.storage}</td>
-      //   //   </tr>`)
-      // });
-      // console.log(a)
     }
     let worker = new Worker('{% static 'webworker.js' %}')
     worker.addEventListener('error', function(a) {
