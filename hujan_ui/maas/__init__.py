@@ -5,18 +5,18 @@ from .utils import MAAS
 
 def get_machines(machine_id=None):
     if settings.WITH_EX_RESPONSE:
-        machines = load_dokument('machines.json')
+        machines = load_document('machines.json')
     else:
         maas = MAAS()
         machines = maas.get("machines/").json()
-        write_dokument(machines, 'machines.json')
+        write_document(machines, 'machines.json')
 
     return machines
 
 
 def get_subnets(subnet_id=None):
     if  settings.WITH_EX_RESPONSE:
-        subnets = load_dokument('subnets.json')
+        subnets = load_document('subnets.json')
         if subnet_id:
             sub = [subnet for subnet in subnets if subnet['id'] == subnet_id]
             subnets = sub[0] if sub else []
@@ -27,7 +27,7 @@ def get_subnets(subnet_id=None):
             subnets = maas.get("subnets/{subnet_id}/").json()
         else:
             subnets = maas.get("subnets/").json()
-            write_dokument(subnets, 'subnets.json')
+            write_document(subnets, 'subnets.json')
 
     return subnets
 
@@ -35,7 +35,7 @@ def get_subnets(subnet_id=None):
 def get_fabrics(fabric_id=None):
     if  settings.WITH_EX_RESPONSE:
         
-        fabrics = load_dokument('fabrics.json')
+        fabrics = load_document('fabrics.json')
         if fabric_id:
             fab = [f for f in fabrics if f['id'] == fabric_id]
             fabrics = fab[0] if fab else []
@@ -53,14 +53,14 @@ def get_fabrics(fabric_id=None):
             fabrics = maas.get(f"fabrics/{fabric_id}/").json()
         else:
             fabrics = maas.get("fabrics/").json()
-            write_dokument(fabrics, 'fabrics.json')
+            write_document(fabrics, 'fabrics.json')
             
     return fabrics
     
 
 def get_spaces(space_id=None):
     if settings.WITH_EX_RESPONSE:
-        spaces = load_dokument('spaces.json')
+        spaces = load_document('spaces.json')
         if space_id:
             s = [space for space in spaces if space['id'] == space_id]
             spaces = s[0] if s else []
@@ -71,13 +71,13 @@ def get_spaces(space_id=None):
             spaces = m.get('spaces/{space_id}/').json()
         else:
             spaces = m.get('spaces/').json()
-            write_dokument(spaces, 'spaces.json')
+            write_document(spaces, 'spaces.json')
 
     return spaces
 
 
 def get_vlans(id=None):
-    vlans = load_dokument('vlans.json')
+    vlans = load_document('vlans.json')
     if not vlans:
         vlans = []
     else:
@@ -87,13 +87,13 @@ def get_vlans(id=None):
     return vlans
 
 
-def load_dokument(data):
+def load_document(data):
     with open(settings.DIR_EX_RESPONSE + data) as readfile:
         return json.load(readfile)
     
 
 
-def write_dokument(data, store):
+def write_document(data, store):
     file = open(settings.DIR_EX_RESPONSE + store, 'w')
     json.dump(data, file)
     file.close()

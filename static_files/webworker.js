@@ -3,7 +3,7 @@ importScripts('./ajax.js')
 function reqLastMachine(address) {
     ajax(address, null, 'GET',function(f) {
         self.postMessage({ cmd: 'resLastStatusMachine', val: f.data});
-        timeMachine = setTimeout(function() { reqLastMachine(address) },10000) 
+        timeMachine = setTimeout(function() { reqLastMachine(address) },5000) 
     });
 }
 
