@@ -23,9 +23,10 @@ def add(request):
     if form.is_valid():
         data = form.clean()
         m = MAAS()
-        resp = m.post('spaces/',data=data)
+        resp = m.post('spaces/', data=data)
         if resp.status_code in m.ok:
-            sweetify.success(request, _('Spaces Successfully Added'), timer=2000)
+            sweetify.success(request, _(
+                'Spaces Successfully Added'), timer=2000)
         sweetify.warning(request, _(resp.text), timer=5000)
         return redirect('index')
     context = {
@@ -37,14 +38,15 @@ def add(request):
 
 def edit(request, space_id):
     spaces = maas.get_spaces(space_id)
-    form = forms.SpacesForm(request.POST or None,initial=spaces)
+    form = forms.SpacesForm(request.POST or None, initial=spaces)
 
     if form.is_valid():
         data = form.clean()
         m = MAAS()
-        resp = m.put(f'/spaces/{space_id}/',data=data)
+        resp = m.put(f'/spaces/{space_id}/', data=data)
         if resp.status_code in m.ok:
-            sweetify.success(request, _('Space Successfully Updated'), timer=2000)
+            sweetify.success(request, _(
+                'Space Successfully Updated'), timer=2000)
         sweetify.warning(request, _(resp.text), timer=5000)
         return redirect('maas:spaces:index')
     context = {
@@ -67,15 +69,14 @@ def delete(request, space_id):
         sweetify.success(request, _('Spaces Deteled Successfully'), timer=2000)
     sweetify.warning(request, _(resp.text), timer=5000)
     return redirect('maas:spaces:index')
-    
+
 
 def detail(request, space_id):
     spaces = maas.get_spaces(space_id)
     context = {
         'title': 'Detail Space',
         'space': spaces,
-        'subnets':maas.get_subnets()
+        'subnets': maas.get_subnets()
     }
     return render(request, 'maas/spaces/detail.html', context)
 
-        

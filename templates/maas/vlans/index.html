@@ -1,4 +1,62 @@
+{% extends 'master.html' %}
 
-{% for vlan in vlans %}
-    {{vlan.name}}
-{% endfor %}
+{% load utils %}
+{% block content %}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Daftar Vlan</h3>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="table-responsive">
+                            <table class="table m-0">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Primary Rack</th>
+                                        <th>Fabric</th>
+
+
+                                        <th class="text-right">#</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in vlans  %}
+                                    <tr>
+                                        <td>{{ item.name }}</td>
+                                        <td>{{ item.primary_rack }}</td>
+                                        <td><a href="{% url 'maas:fabrics:detail' item.fabric_id %}">{{ item.fabric }}</a></td>
+                                        <td>{{ item.name }}</td>
+                                        <td>
+
+                                            <div class="btn-group">
+                                                <a href="{% url 'maas:vlans:edit' item.id %}"
+                                                    class="btn btn-success">Edit</a>
+                                                <a href="{% url 'maas:vlans:detail' item.id %}"
+                                                    class="btn btn-info">Detail</a>
+                                                <a href="{% url 'maas:vlans:delete' item.id %}"
+                                                        class="btn btn-danger">Delete</a>
+                                            </div>
+
+                                        </td>
+                                    </tr {% endfor %}>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}
