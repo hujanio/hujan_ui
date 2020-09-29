@@ -39,12 +39,12 @@ def get_fabrics(fabric_id=None):
         if fabric_id:
             fab = [f for f in fabrics if f['id'] == fabric_id]
             fabrics = fab[0] if fab else []
-        vlans = load_dokumen('vlans.json')
+        vlans = load_document('vlans.json')
         store = []
         for f in fabrics:
             for g in f['vlans']:
                 store.append(g)
-        write_dokumen(store, 'vlans.json')
+        write_document(store, 'vlans.json')
 
             
     else:
