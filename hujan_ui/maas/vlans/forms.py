@@ -11,17 +11,20 @@ class BaseVlanForm(forms.Form):
         self.fields['fabric_id'].choices = self.get_choice_fabric()
         self.fields['space'].choices = self.get_choice_space()
 
+
     def get_choice_fabric(self):
         fabrics = maas.get_fabrics()
-        f = [(x['id'], x['name']) for x in fabrics]
-        f.insert(0,(None, '-----'))
-        return f
+        choices = [(x['id'], x['name']) for x in fabrics]
+        choices.insert(0,(None, '-----'))
+        return choices
+
 
     def get_choice_space(self):
         space = maas.get_spaces()
-        f = [(x['id'], x['name']) for x in space]
-        f.insert(0,(None, '-----'))
-        return f
+        choices = [(x['id'], x['name']) for x in space]
+        choices.insert(0,(None, '-----'))
+        return choices
+
 
 class VlanForm(forms.Form):
     name = forms.CharField(required=True)
@@ -35,17 +38,19 @@ class VlanForm(forms.Form):
         self.fields['fabric_id'].choices = self.get_choice_fabric()
         self.fields['space'].choices = self.get_choice_space()
 
+
     def get_choice_fabric(self):
         fabrics = maas.get_fabrics()
-        f = [(x['id'], x['name']) for x in fabrics]
-        f.insert(0,(None, '-----'))
-        return f
+        choices = [(x['id'], x['name']) for x in fabrics]
+        choices.insert(0,(None, '-----'))
+        return choices
+
 
     def get_choice_space(self):
         space = maas.get_spaces()
-        f = [(x['id'], x['name']) for x in space]
-        f.insert(0,(None, '-----'))
-        return f
+        choices = [(x['id'], x['name']) for x in space]
+        choices.insert(0,(None, '-----'))
+        return choices
 
 
 class VlanEditForm(BaseVlanForm):

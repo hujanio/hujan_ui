@@ -22,7 +22,7 @@ def add(request):
         m = MAAS()
         data = form.clean()
         fabId = data['fabric_id']
-        resp = m.post(f'fabrics/{fabId}/vlans/',data=data)
+        resp = m.post(f'fabrics/{fabId}/vlans/', data=data)
         if resp.status_code in m.ok:
             sweetify.success(request, _('Vlan Added Successful'), timer=3000)
             return redirect('maas:subnets:index')
@@ -38,7 +38,7 @@ def add(request):
 
 def edit(request, vlan_id):
     vlan = maas.get_vlans(vlan_id)
-    form = VlanEditForm(request.POST or None,initial=vlan)
+    form = VlanEditForm(request.POST or None, initial=vlan)
     if form.is_valid():
         m = MAAS()
         data = form.clean()
@@ -58,7 +58,6 @@ def edit(request, vlan_id):
     return render(request, 'maas/vlans/add.html', context)
 
 
-
 def detail(request, vlan_id):
     vlan = maas.get_vlans(vlan_id)
     if vlan:   
@@ -72,7 +71,6 @@ def detail(request, vlan_id):
 
 
 def delete(request, vlan_id):
-    # s = sweetify.sweetalert(request, 'Konfirmasi', text='Yakin!',persistent='Ok',confirmButtonText="OK", showConfirmButton=True)
     vlan = maas.get_vlans(vlan_id)
     fid = vlan['fabric_id']
     vid = vlan['vid']

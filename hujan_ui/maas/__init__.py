@@ -14,7 +14,13 @@ def get_machines(machine_id=None):
     return machines
 
 
-def get_subnets(subnet_id=None):
+def get_subnets(subnet_id=None, op=None):
+    if op and subnet_id:
+        m = MAAS()
+        res = m.get(f'subnets/{subnet_id}/?op={op}').json()
+
+        return res
+
     if  settings.WITH_EX_RESPONSE:
         subnets = load_document('subnets.json')
         if subnet_id:
