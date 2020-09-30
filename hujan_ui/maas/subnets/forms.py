@@ -16,7 +16,6 @@ class SubnetAddForm(forms.Form):
         # TODO di non aktifkan sementara karena field space sedang tidak di gunakan
         # self.fields['space'].choices = self.get_choice_space()
         
-
     def get_choice_vlan(self):
         resp = maas.get_vlans()
         choices = [(i['id'], i['fabric'] +' - '+ i['name']) for i in resp]
@@ -44,15 +43,13 @@ class SubnetForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['vlan'].choices = self.get_choice_vlan()
         # TODO di non aktifkan sementara karena field space sedang tidak di gunakan
-        # self.fields['space'].choices = self.get_choice_space()
-        
+        # self.fields['space'].choices = self.get_choice_space(
 
     def get_choice_vlan(self):
         resp = maas.get_vlans()
         b = [(i['id'], i['name']+' - '+ i['fabric']) for i in resp]
         b.insert(0, (None,'-------'))
         return b
-
 
     def get_choice_space(self):
         resp = maas.get_spaces()

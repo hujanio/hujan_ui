@@ -11,13 +11,11 @@ class BaseVlanForm(forms.Form):
         self.fields['fabric_id'].choices = self.get_choice_fabric()
         self.fields['space'].choices = self.get_choice_space()
 
-
     def get_choice_fabric(self):
         fabrics = maas.get_fabrics()
         choices = [(x['id'], x['name']) for x in fabrics]
         choices.insert(0, (None, '-----'))
         return choices
-
 
     def get_choice_space(self):
         space = maas.get_spaces()
@@ -38,13 +36,11 @@ class VlanForm(forms.Form):
         self.fields['fabric_id'].choices = self.get_choice_fabric()
         self.fields['space'].choices = self.get_choice_space()
 
-
     def get_choice_fabric(self):
         fabrics = maas.get_fabrics()
         choices = [(x['id'], x['name']) for x in fabrics]
         choices.insert(0, (None, '-----'))
         return choices
-
 
     def get_choice_space(self):
         space = maas.get_spaces()
