@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from hujan_ui.maas.utils import MAAS
 from hujan_ui import maas
-from .forms import SubnetForm
+from .forms import SubnetForm, SubnetAddForm
 
 
 @login_required
@@ -18,6 +18,8 @@ def index(request):
     context = {
         'title': 'Subnets',
         'subnets': maas.get_subnets(),
+        'fabrics': maas.get_fabrics(),
+        'spaces': maas.get_spaces(),
         'menus_active': 'subnets_active'
     }
     return render(request, 'maas/subnets/index.html', context)
@@ -27,12 +29,19 @@ def index(request):
 def detail(request, subnet_id):
     
     subnet = maas.get_subnets(subnet_id)
+    # unr = maas.get_subnets(subnet_id,op='unreserved_ip_ranges')
+    # stat = maas.get_subnets(subnet_id,op='statistics')
+    rir = maas.get_subnets(subnet_id,op='reserved_ip_ranges')
+
     if request.is_ajax():
         return JsonResponse({'subnet': subnet})
 
     context = {
         'title': f"Subnet - {subnet['name']}",
         'subnet': subnet,
+        # 'unr': unr,
+        # 'stat': stat,
+        'rir': rir,
         'menu_active': 'subnets',
     }
     return render(request, 'maas/subnets/subnet_detail.html', context)
@@ -40,7 +49,7 @@ def detail(request, subnet_id):
 
 @login_required
 def add(request):
-    form = SubnetForm(request.POST or None)
+    form = SubnetAddForm(request.POST or None)
     if form.is_valid():
         m = MAAS()
         data = form.clean()
@@ -60,7 +69,7 @@ def add(request):
 def edit(request, subnet_id):
     subnet = maas.get_subnets(subnet_id)
     if not subnet:
-        return redirect('maas.subnets.index')
+        return redirect('maas:subnets:index')
     form = SubnetForm(request.POST or None,initial=subnet)
     if form.is_valid():
         m = MAAS()
