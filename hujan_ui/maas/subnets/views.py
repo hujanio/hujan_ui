@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from hujan_ui.maas.utils import MAAS
 from hujan_ui import maas
-from .forms import SubnetForm
+from .forms import SubnetForm, SubnetAddForm
 
 
 @login_required
@@ -18,6 +18,8 @@ def index(request):
     context = {
         'title': 'Subnets',
         'subnets': maas.get_subnets(),
+        'fabrics': maas.get_fabrics(),
+        'spaces': maas.get_spaces(),
         'menus_active': 'subnets_active'
     }
     return render(request, 'maas/subnets/index.html', context)
@@ -27,12 +29,21 @@ def index(request):
 def detail(request, subnet_id):
     
     subnet = maas.get_subnets(subnet_id)
+    # unr = maas.get_subnets(subnet_id,op='unreserved_ip_ranges')
+    # stat = maas.get_subnets(subnet_id,op='statistics')
+    # TODO untuk data unreserved dan statistic masih belum sesuai antara api dan maas yang ada 
+    rir = maas.get_subnets(subnet_id,op='reserved_ip_ranges')
+
     if request.is_ajax():
         return JsonResponse({'subnet': subnet})
 
     context = {
         'title': f"Subnet - {subnet['name']}",
         'subnet': subnet,
+        # 'unr': unr,
+        # 'stat': stat,
+        # TODO untuk data unreserved dan statistic masih belum sesuai antara api dan maas yang ada 
+        'rir': rir,
         'menu_active': 'subnets',
     }
     return render(request, 'maas/subnets/subnet_detail.html', context)
@@ -40,11 +51,11 @@ def detail(request, subnet_id):
 
 @login_required
 def add(request):
-    form = SubnetForm(request.POST or None)
+    form = SubnetAddForm(request.POST or None)
     if form.is_valid():
         m = MAAS()
         data = form.clean()
-        resp = m.post('subnets/',data=data)
+        resp = m.post('subnets/', data=data)
         if resp.status_code in m.ok:
             sweetify.success(request, _('Subnet Added Successfully'), timer=2000)
             return redirect('maas:subnets:index')
@@ -60,8 +71,8 @@ def add(request):
 def edit(request, subnet_id):
     subnet = maas.get_subnets(subnet_id)
     if not subnet:
-        return redirect('maas.subnets.index')
-    form = SubnetForm(request.POST or None,initial=subnet)
+        return redirect('maas:subnets:index')
+    form = SubnetForm(request.POST or None, initial=subnet)
     if form.is_valid():
         m = MAAS()
         data = form.clean()
@@ -72,7 +83,7 @@ def edit(request, subnet_id):
         
         resp = m.put(f'subnets/{subnet_id}/', data=data)
         if resp.status_code in m.ok:
-            sweetify.success(request,_('Subnet Update Successfully'), timer=2000)
+            sweetify.success(request, _('Subnet Update Successfully'), timer=2000)
             return redirect('maas:subnets:index')
         sweetify.warning(request, _(resp.text), timer=5000)
     

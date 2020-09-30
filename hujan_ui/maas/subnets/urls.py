@@ -3,6 +3,7 @@ from . import views
 
 app_name = 'subnets'
 
+
 urlpatterns = [
     path('', views.index, name='index'),
     path('add/', views.add, name='add'),

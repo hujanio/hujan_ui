@@ -1,0 +1,35 @@
+{% extends 'master.html' %}
+{% load static widget_tweaks %}
+
+{% block content %}
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Vlan</h3>
+        </div>
+        <div class="card-body">
+
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form.media }}
+                {{ form.non_field_errors }}
+                <div class="col-md-6">
+                    {% for field in form.visible_fields %}
+                    <div class="form-group">
+                        <label class="col-md-12"> {{ field.label }} </label>
+                        <div class="col-md-12">
+                            {% render_field field|add_class:"form-control"%}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                            <small class="form-text text-danger">{{ field.errors }}</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <input type="submit" value="Simpan" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

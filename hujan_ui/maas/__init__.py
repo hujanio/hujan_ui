@@ -14,7 +14,13 @@ def get_machines(machine_id=None):
     return machines
 
 
-def get_subnets(subnet_id=None):
+def get_subnets(subnet_id=None, op=None):
+    if op and subnet_id:
+        m = MAAS()
+        res = m.get(f'subnets/{subnet_id}/?op={op}').json()
+
+        return res
+
     if  settings.WITH_EX_RESPONSE:
         subnets = load_document('subnets.json')
         if subnet_id:
@@ -39,12 +45,12 @@ def get_fabrics(fabric_id=None):
         if fabric_id:
             fab = [f for f in fabrics if f['id'] == fabric_id]
             fabrics = fab[0] if fab else []
-        vlans = load_dokumen('vlans.json')
+        vlans = load_document('vlans.json')
         store = []
         for f in fabrics:
             for g in f['vlans']:
                 store.append(g)
-        write_dokumen(store, 'vlans.json')
+        write_document(store, 'vlans.json')
 
             
     else:

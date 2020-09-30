@@ -1,29 +1,14 @@
 from django import forms
 from hujan_ui import maas
+from django.utils.translation import ugettext_lazy as _
 
-class SubnetForm(forms.Form):
-    cidr = forms.CharField(required=True)
+class SubnetAddForm(forms.Form):
     name = forms.CharField(required=False)
-    description = forms.CharField(required=False)
-    vlan = forms.ChoiceField(required=False)
-    fabric = forms.ChoiceField(required=False, widget=forms.HiddenInput)
-    vid = forms.ChoiceField(required=False, widget=forms.HiddenInput)
-    # TODO: akan diaktifkan nanti, atau bisa jadi di hapus dikarenakan data space nya tidak valid
-    # space = forms.ChoiceField(required=False)
+    cidr = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Use IPv4 or IPv6'}))
     gateway_ip = forms.CharField(required=False)
+    dns_servers = forms.CharField(required=False)
+    vlan = forms.ChoiceField()
 
-    RDNS= [
-        (0,'Disabled'),
-        (1,'Enabled'),
-        (2,'RFC2317'),
-    ]
-    rdns_mode = forms.ChoiceField(choices=RDNS)
-    allow_dns = forms.BooleanField()
-    allow_proxy = forms.BooleanField()
-    # TODO di non aktifkan sementara untuk proses simpan 
-    # dns_servers = forms.CharField(required=False)
-    # managed = forms.IntegerField(required=False)
-    
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -33,14 +18,43 @@ class SubnetForm(forms.Form):
         
     def get_choice_vlan(self):
         resp = maas.get_vlans()
+        choices = [(i['id'], i['fabric'] +' - '+ i['name']) for i in resp]
+        choices.insert(0, (None,'-------'))
+        return choices
+
+
+class SubnetForm(forms.Form):
+    name = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'Name (Optional)'}))
+    cidr = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Use IPv4 or IPv6'}))
+    gateway_ip = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'Use IPv4 or IPv6 (Optional)'}))
+    dns_servers = forms.CharField(required=False)
+    description = forms.CharField(required=False)
+    managed = forms.IntegerField(required=False)
+    allow_proxy = forms.BooleanField(label=_('Proxy Access'))
+    allow_dns = forms.BooleanField(label=_('Allow DNS Resolution'))
+    vlan = forms.ChoiceField(required=False)
+    fabric = forms.ChoiceField(required=False, widget=forms.HiddenInput)
+    vid = forms.ChoiceField(required=False, widget=forms.HiddenInput)
+    # TODO: akan diaktifkan nanti, atau bisa jadi di hapus dikarenakan data space nya tidak valid
+    # space = forms.CharField(required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['vlan'].choices = self.get_choice_vlan()
+        # TODO di non aktifkan sementara karena field space sedang tidak di gunakan
+        # self.fields['space'].choices = self.get_choice_space(
+
+    def get_choice_vlan(self):
+        resp = maas.get_vlans()
         b = [(i['id'], i['name']+' - '+ i['fabric']) for i in resp]
-        b.insert(0,(None,'-------'))
+        b.insert(0, (None,'-------'))
         return b
 
     def get_choice_space(self):
         resp = maas.get_spaces()
         b = [(i['id'], i['name']) for i in resp]
-        b.insert(0,(None,'-------')) 
+        b.insert(0, (None,'-------')) 
         return b
 
             

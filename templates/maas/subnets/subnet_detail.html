@@ -18,11 +18,12 @@
                                     <h3 class="card-title">
                                         Subnet Summary
                                     </h3>
+                                    <div class="float-right ">
+                                        <a href="{% url 'maas:subnets:subnet_edit' subnet.id %}" class="btn btn-success">Edit</a>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
-
-
                                         <div class="col-6">
                                             <ul>
                                                 <li>Name: {{ subnet.name }}</li>

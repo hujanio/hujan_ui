@@ -17,6 +17,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                    
                     </tbody>
                 </table>
             </div>
@@ -45,6 +46,13 @@
                         </tr>
                     </thead>
                     <tbody>
+                    {% for item in rir %}
+                        <tr>
+                            <td>{{ item.start }}</td>
+                            <td>{{ item.end }}</td>
+            
+                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>

@@ -18,10 +18,11 @@
             <div class="dropdown-menu">
               <a class="dropdown-item" href="{% url 'maas:subnets:add' %}">Add Subnet</a>
               <a class="dropdown-item" href="{% url 'maas:fabrics:add' %}">Add Fabric</a>
+              <a class="dropdown-item" href="{% url 'maas:vlans:add' %}">Add Vlan</a>
               <a class="dropdown-item" href="{% url 'maas:spaces:add' %}">Add Spaces</a>
-              
+
             </div>
-            
+
           </div>
           <!-- /.card-header -->
           <div class="card-body p-0">
@@ -44,7 +45,13 @@
                     <td><a href="{% url 'maas:fabrics:detail' subnet.vlan.fabric_id %}">{{ subnet.vlan.fabric }} </a>
                     </td>
                     <td><a href="{% url 'maas:vlans:detail' subnet.vlan.id %}">{{subnet.vlan.name}}</a></td>
-                    <td>--</td>
+                    {% if subnet.dhcp_on %}
+                    <td>Maas-provided</td>
+                    {% else %}
+                    <td>No DHCP </td>
+                   
+                    {% endif %}
+                    
                     <td><a href="{% url 'maas:subnets:subnet_detail' subnet.id%}">{{subnet.cidr}}</a></td>
                     <td>0 %</td>
                     <td>{{subnet.space}}</td>
@@ -57,8 +64,42 @@
                     </td>
                   </tr>
                   {% endfor %}
+                  <tr>
+                    <td colspan=7>Group Fabric</td>
+                  </tr>
+
+                  {% for fabric in fabrics %}
+                  <tr>
+                    <td><a href="{% url 'maas:fabrics:detail' fabric.id %}">{{ fabric.name }} </a></td>
+                    <td>
+                        {% for vlan in fabric.vlans %}
+                          <tr>
+                            <td>--</td>
+                            <td><a href="{% url 'maas:vlans:detail' vlan.id %}">( {{ vlan.vid }}) {{ vlan.name}}</a></td>
+                            <td>
+                            {% if vlan.dhcp_on %}
+                              MAAS-provided
+                            {% else %}
+                              No DHCP
+                            {% endif %}
+                            </td>
+                            <td>--</td>
+                            <td>0 %</td>
+                           <td>{{ vlan.space}}</td> 
+                           <td></td>
+                          </tr>
+                          {% endfor %}
+                        {% endfor %}
+                    </td>
+                    
+
+                  </tr>
+                  
                 </tbody>
               </table>
+
+
+
             </div>
             <!-- /.table-responsive -->
           </div>

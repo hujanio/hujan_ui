@@ -12,8 +12,42 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Detail - {{ title }}</h3>
+                        <div class="float-right">
+
+                            <a href="{% url 'maas:vlans:edit' vlan.id %}" class="btn btn-default">Edit</a>
+                            <a href="{% url 'maas:vlans:delete' vlan.id %}" class="btn btn-danger">Delete</a>
+                        </div>
                     </div>
+                    {{ data }}
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="vid">VID</label>
+                                    <span>{{ vlan.vid }}</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="vid">Name</label>
+                                    <span>{{ vlan.name }}</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="vid">MTU</label>
+                                    <span>{{ vlan.mtu }}</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="vid">Space</label>
+                                    <span>{{ vlan.space }}</span>
+                                </div>
+                                
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="vid">Fabric</label>
+                                    <span>{{ vlan.fabric }}</span>
+                                </div>
+                                
+                            </div>
+                        </div>
 
                     </div>
                 </div>
