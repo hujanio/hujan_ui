@@ -19,8 +19,8 @@ class SubnetAddForm(forms.Form):
 
     def get_choice_vlan(self):
         resp = maas.get_vlans()
-        choices = [(i['id'], i['fabric']+' - '+ i['name']) for i in resp]
-        choices.insert(0,(None,'-------'))
+        choices = [(i['id'], i['fabric'] +' - '+ i['name']) for i in resp]
+        choices.insert(0, (None,'-------'))
         return choices
 
 
@@ -50,14 +50,14 @@ class SubnetForm(forms.Form):
     def get_choice_vlan(self):
         resp = maas.get_vlans()
         b = [(i['id'], i['name']+' - '+ i['fabric']) for i in resp]
-        b.insert(0,(None,'-------'))
+        b.insert(0, (None,'-------'))
         return b
 
 
     def get_choice_space(self):
         resp = maas.get_spaces()
         b = [(i['id'], i['name']) for i in resp]
-        b.insert(0,(None,'-------')) 
+        b.insert(0, (None,'-------')) 
         return b
 
             
