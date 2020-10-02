@@ -21,12 +21,12 @@ def get_subnets(subnet_id=None, op=None):
 
         return res
 
-    if  settings.WITH_EX_RESPONSE:
+    if settings.WITH_EX_RESPONSE:
         subnets = load_document('subnets.json')
         if subnet_id:
             sub = [subnet for subnet in subnets if subnet['id'] == subnet_id]
             subnets = sub[0] if sub else []
-            
+
     else:
         maas = MAAS()
         if subnet_id:
@@ -39,8 +39,8 @@ def get_subnets(subnet_id=None, op=None):
 
 
 def get_fabrics(fabric_id=None):
-    if  settings.WITH_EX_RESPONSE:
-        
+    if settings.WITH_EX_RESPONSE:
+
         fabrics = load_document('fabrics.json')
         if fabric_id:
             fab = [f for f in fabrics if f['id'] == fabric_id]
@@ -52,7 +52,6 @@ def get_fabrics(fabric_id=None):
                 store.append(g)
         write_document(store, 'vlans.json')
 
-            
     else:
         maas = MAAS()
         if fabric_id:
@@ -60,9 +59,9 @@ def get_fabrics(fabric_id=None):
         else:
             fabrics = maas.get("fabrics/").json()
             write_document(fabrics, 'fabrics.json')
-            
+
     return fabrics
-    
+
 
 def get_spaces(space_id=None):
     if settings.WITH_EX_RESPONSE:
@@ -82,6 +81,20 @@ def get_spaces(space_id=None):
     return spaces
 
 
+def get_subnet_infabric():
+    store = []
+    f = get_fabrics()
+    for i in f:
+        for b in i['vlans']:
+            s = get_subnets()
+            for a in s:
+                if b['id'] == a['vlan']['id']:
+                    i['subnet'] = a
+                    store.append(i)
+
+    return store
+
+
 def get_vlans(id=None):
     vlans = load_document('vlans.json')
     if not vlans:
@@ -96,11 +109,10 @@ def get_vlans(id=None):
 def load_document(data):
     with open(settings.DIR_EX_RESPONSE + data) as readfile:
         return json.load(readfile)
-    
 
 
 def write_document(data, store):
     file = open(settings.DIR_EX_RESPONSE + store, 'w')
     json.dump(data, file)
     file.close()
-        
+
