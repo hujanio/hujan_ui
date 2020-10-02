@@ -116,3 +116,4 @@ def write_document(data, store):
     json.dump(data, file)
     file.close()
 
+
