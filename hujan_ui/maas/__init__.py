@@ -83,15 +83,14 @@ def get_spaces(space_id=None):
 
 def get_subnet_infabric():
     store = []
-    f = get_fabrics()
-    for i in f:
-        for b in i['vlans']:
-            s = get_subnets()
-            for a in s:
-                if b['id'] == a['vlan']['id']:
-                    i['subnet'] = a
-                    store.append(i)
-
+    fabrics = get_fabrics()
+    for fabric in fabrics:
+        for vlan in fabric['vlans']:
+            subnets = get_subnets()
+            for subnet in subnets:
+                if vlan['id'] == subnet['vlan']['id']:
+                    fabric['subnet'] = subnet
+                    store.append(fabric)
     return store
 
 
