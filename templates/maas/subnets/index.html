@@ -36,41 +36,34 @@
                     <th>Subnet</th>
                     <th>Available IPS</th>
                     <th>Space</th>
-                    <th class="text-right">#</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td colspan=7>Group Fabric</td>
-                  </tr>
 
                   {% for fabric in group_subnet %}
                   <tr>
                     <td><a href="{% url 'maas:fabrics:detail' fabric.id %}">{{ fabric.name }} </a></td>
+                    {% for vlan in fabric.vlans %}
+                    {% if forloop.first == False %}<tr><td>&nbsp;</td>{% endif %}
+                    <td><a href="{% url 'maas:vlans:detail' vlan.id %}">{{ vlan.name }}</a></td>
                     <td>
-                        {% for vlan in fabric.vlans %}
-                          <tr>
-                            <td>--</td>
-                            <td><a href="{% url 'maas:vlans:detail' vlan.id %}">( {{ vlan.vid }}) {{ vlan.name}}</a></td>
-                            <td>
-                            {% if vlan.dhcp_on %}
-                              MAAS-provided
-                            {% else %}
-                              No DHCP
-                            {% endif %}
-                            </td>
-                            <td><a href="{% url 'maas:subnets:subnet_detail' fabric.subnet.id %}"> {{ fabric.subnet.cidr }}</a></td>
-                            <td>0 %</td>
-                           <td>{{ vlan.space}}</td> 
-                           <td></td>
-                          </tr>
-                          {% endfor %}
-                        {% endfor %}
+                      {% if vlan.dhcp_on %}
+                      MAAS-provided
+                      {% else %}
+                      No DHCP
+                      {% endif %}
                     </td>
-                    
-
+                    <td><a href="{% url 'maas:subnets:subnet_detail' fabric.subnet.id %}">{{ fabric.subnet.cidr }}</a>
+                    </td>
+                    <td>0%</td>
+                    <td>{{ vlan.space }}</td>
+                    {% if forloop.first == False %}</tr>{% endif %} 
+                  {% endfor %}
                   </tr>
-                  
+                  {% endfor %}
+
+
+
                 </tbody>
               </table>
 
