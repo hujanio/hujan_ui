@@ -36,65 +36,34 @@
                     <th>Subnet</th>
                     <th>Available IPS</th>
                     <th>Space</th>
-                    <th class="text-right">#</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {% for subnet in subnets %}
-                  <tr>
-                    <td><a href="{% url 'maas:fabrics:detail' subnet.vlan.fabric_id %}">{{ subnet.vlan.fabric }} </a>
-                    </td>
-                    <td><a href="{% url 'maas:vlans:detail' subnet.vlan.id %}">{{subnet.vlan.name}}</a></td>
-                    {% if subnet.dhcp_on %}
-                    <td>Maas-provided</td>
-                    {% else %}
-                    <td>No DHCP </td>
-                   
-                    {% endif %}
-                    
-                    <td><a href="{% url 'maas:subnets:subnet_detail' subnet.id%}">{{subnet.cidr}}</a></td>
-                    <td>0 %</td>
-                    <td>{{subnet.space}}</td>
-                    <td>
-                      <div class="btn-group">
-                        <a href="{% url 'maas:subnets:subnet_edit' subnet.id %}" class="btn btn-success">Edit</a>
-                        <a href="{% url 'maas:subnets:subnet_detail' subnet.id %}" class="btn btn-info">Detail</a>
-                        <a href="{% url 'maas:subnets:subnet_delete' subnet.id %}" class="btn btn-danger">Delete</a>
-                      </div>
-                    </td>
-                  </tr>
-                  {% endfor %}
-                  <tr>
-                    <td colspan=7>Group Fabric</td>
-                  </tr>
 
-                  {% for fabric in fabrics %}
+                  {% for fabric in group_subnet %}
                   <tr>
                     <td><a href="{% url 'maas:fabrics:detail' fabric.id %}">{{ fabric.name }} </a></td>
+                    {% for vlan in fabric.vlans %}
+                    {% if forloop.first == False %}<tr><td>&nbsp;</td>{% endif %}
+                    <td><a href="{% url 'maas:vlans:detail' vlan.id %}">{{ vlan.name }}</a></td>
                     <td>
-                        {% for vlan in fabric.vlans %}
-                          <tr>
-                            <td>--</td>
-                            <td><a href="{% url 'maas:vlans:detail' vlan.id %}">( {{ vlan.vid }}) {{ vlan.name}}</a></td>
-                            <td>
-                            {% if vlan.dhcp_on %}
-                              MAAS-provided
-                            {% else %}
-                              No DHCP
-                            {% endif %}
-                            </td>
-                            <td>--</td>
-                            <td>0 %</td>
-                           <td>{{ vlan.space}}</td> 
-                           <td></td>
-                          </tr>
-                          {% endfor %}
-                        {% endfor %}
+                      {% if vlan.dhcp_on %}
+                      MAAS-provided
+                      {% else %}
+                      No DHCP
+                      {% endif %}
                     </td>
-                    
-
+                    <td><a href="{% url 'maas:subnets:subnet_detail' fabric.subnet.id %}">{{ fabric.subnet.cidr }}</a>
+                    </td>
+                    <td>0%</td>
+                    <td>{{ vlan.space }}</td>
+                    {% if forloop.first == False %}</tr>{% endif %} 
+                  {% endfor %}
                   </tr>
-                  
+                  {% endfor %}
+
+
+
                 </tbody>
               </table>
 

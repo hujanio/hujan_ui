@@ -20,6 +20,7 @@ def index(request):
         'subnets': maas.get_subnets(),
         'fabrics': maas.get_fabrics(),
         'spaces': maas.get_spaces(),
+        'group_subnet': maas.get_subnet_infabric(),
         'menus_active': 'subnets_active'
     }
     return render(request, 'maas/subnets/index.html', context)
