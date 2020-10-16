@@ -30,6 +30,17 @@
                       <td>{{ interface.vlan.name }}</td>
                       <td>{{ interface.links.0.subnet.name }}</td>
                       <td>{{ interface.links.0.ip_address }}</td>
+                      <td>
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item btn-mark" data-id="{{ interface.id }}" href="#">Mark as Disconnected</a>
+                            <a class="dropdown-item btn-edit" data-id="{{ interface.id }}" href="#">Edit Physical</a>
+                          </div>
+                        </div>
+                      </td>
+
                     </tr>
                   {% endfor %}
                 </tbody>

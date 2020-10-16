@@ -6,12 +6,37 @@ from .utils import MAAS
 def get_machines(machine_id=None):
     if settings.WITH_EX_RESPONSE:
         machines = load_document('machines.json')
+        if machine_id:
+            temp_machine = [machine for machine in machines if machine['system_id'] == machine_id]
+            machines = temp_machine[0] if temp_machine else []
     else:
         maas = MAAS()
-        machines = maas.get("machines/").json()
-        write_document(machines, 'machines.json')
+        if machine_id:
+            machines = maas.get(f'machines/{machine_id}/').json()
+            write_document(machines, 'machine_details.json')
+        else:
+            machines = maas.get("machines/").json()
+            write_document(machines, 'machines.json')
 
     return machines
+
+
+def get_physicals(system_id, id=None):
+    if settings.WITH_EX_RESPONSE:
+        physicals = load_document('interface.json')
+        if system_id and id:
+            temp_physical = [physical for physical in physicals if physical['id'] == id]
+            physicals = temp_physical[0] if temp_physical else []
+    else:
+        m = MAAS()
+        if system_id and id:
+            physicals = m.get(f'nodes/{system_id}/interfaces/{id}/').json()
+            write_document(physicals, 'interface_detail.json')
+        else:
+            physicals = m.get(f'nodes/{system_id}/').json()
+            write_document(physicals, 'interface.json')
+            
+    return physicals
 
 
 def get_subnets(subnet_id=None, op=None):
