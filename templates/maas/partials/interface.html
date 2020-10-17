@@ -35,7 +35,7 @@
                           <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
                           </button>
                           <div class="dropdown-menu">
-                            <a class="dropdown-item btn-mark" data-id="{{ interface.id }}" href="#">Mark as Disconnected</a>
+                            <a class="dropdown-item btn-disconnect" data-url="{% url 'maas:machines:mark_disconnect' machine.system_id interface.id %}" data-id="{{ interface.id }}" href="#">Mark as Disconnected</a>
                             <a class="dropdown-item btn-edit" data-id="{{ interface.id }}" href="#">Edit Physical</a>
                           </div>
                         </div>

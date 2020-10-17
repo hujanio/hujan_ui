@@ -1,5 +1,5 @@
 {% extends 'master.html' %}
-{% load utils %}
+{% load utils static %}
 {% block content %}
 
 <!-- Main content -->
@@ -60,11 +60,12 @@
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
+<script src="{% static 'get_cookie.js' %}"></script>
 {{ block.super }}
 <script>
 $(function(){
     $('.btn-edit').on('click', function(e){
+        console.log(e);
         e.preventDefault();
         let id = $(this).data('id');
         let system_id = $('#system_id').val()
@@ -78,11 +79,43 @@ $(function(){
         })
     });
 
-    $('btn_save').on('click', function(e){
+    $('.btn-disconnect').on('click', function(e){
         e.preventDefault();
-        let form = $(this).closest('form');
-        console.log(form)
-    })
+        let url = $(this).data('url');
+        axios.post(url, 
+            { system_id: $('#system_id').val(), id:'{{ id }}' },
+            { headers: { 'X-CSRFToken': getCookie('csrftoken') } }
+            ).then(res =>{
+            const response = res.data;
+            if(response.status == 'success'){
+                window.location.url = response.urlhref;
+            }
+            swal.fire('failed', response.message)
+        })
+    });
+
+    $('.btn-save').on('click', function(e){
+        e.preventDefault();
+        let form = $('#general_modal').find('form');
+        let action_form = form.attr('action');
+        let data = form.serialize();
+        let jsondata = Object.fromEntries(new URLSearchParams(data))
+        console.log(jsondata, data);
+        axios.post(
+            action_form, 
+            data,
+            {
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            }
+            ).then(res => {
+                const response = res.data;
+                if(response.status == 'success'){
+                    document.location.href = response.urlhref
+                }
+            })
+        })
 });
 </script>
 {% endblock extra_js %}

@@ -92,22 +92,43 @@ def load_machine(request):
     return JsonResponse({'data': html})
 
 
-def edit_physical(request, system_id, id):
+def edit_physical(request, system_id, id=None):
     physical = maas.get_physicals(system_id, id)
-    form = PhysicalForm(request.POST or None, initial=physical)
+    form = PhysicalForm(data=request.POST or None, initial=physical)
     if form.is_valid():
         data = form.clean()
-        data.update({'system_id': system_id, 'id': id})
+        data.update({
+            'system_id': system_id, 
+            'id': id
+        })
+        
         m = MAAS()
-        resp = m.put(f'nodes/{system_id}/interfaces/{id}/')
+        resp = m.put(f'nodes/{system_id}/interfaces/{id}/', data=data)
         if resp.status_code in m.ok:
-            sweetify.success(request, _('Edit Interfaces Successfully'), timer=2000)
-            return redirect('maas:machines:index')
-        sweetify.warning(request, _(resp.text), timer=5000)
-
+            return JsonResponse({
+                'status': 'success', 
+                'message': _('Edit Interfaces Successfully'), 
+                'urlhref': reverse('maas:machines:index')
+            })
+        else:
+            return JsonResponse({
+                'status': 'error',
+                'message': _('Failed Edit Interface')
+            })
+    
     context = {
         'form': form,
         'url': reverse('maas:machines:edit_physical', args=[system_id, id])
     }
+
     html = render_to_string('partials/form_core.html', request=request, context=context)
     return JsonResponse({'html': html}, safe=False)
+
+def mark_disconnect(request, system_id, id):
+    m = MAAS()
+    resp = m.post(f'nodes/{system_id}/interfaces/{id}/?op=disconnect', data={'system_id': system_id, 'id': id})
+    if resp.status_code in m.ok:
+        return JsonResponse({'status': 'success', 'message': _('Interfaces Disconnected Successfully'), 'urlhref': reverse('maas:machines:index') })
+    return JsonResponse({'status': 'error', 'message': _(resp.text) })
+    
+    

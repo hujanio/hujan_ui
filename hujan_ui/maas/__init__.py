@@ -23,10 +23,9 @@ def get_machines(machine_id=None):
 
 def get_physicals(system_id, id=None):
     if settings.WITH_EX_RESPONSE:
-        physicals = load_document('interface.json')
         if system_id and id:
-            temp_physical = [physical for physical in physicals if physical['id'] == id]
-            physicals = temp_physical[0] if temp_physical else []
+            physicals = load_document('interface_detail.json')
+        
     else:
         m = MAAS()
         if system_id and id:
