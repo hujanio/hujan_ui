@@ -83,7 +83,7 @@ class PowerTypeIPMIForm(forms.Form):
 
 
 class PhysicalForm(forms.Form):
-    name = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    mac_address = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    interface_speed = forms.CharField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control'}))
-    link_speed = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    name = forms.CharField()
+    mac_address = forms.CharField()
+    interface_speed = forms.CharField()
+    link_speed = forms.IntegerField()
