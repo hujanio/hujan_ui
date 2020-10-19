@@ -80,3 +80,10 @@ class PowerTypeIPMIForm(forms.Form):
     power_user = forms.CharField()
     power_pass = forms.CharField()
     mac_address = forms.CharField()
+
+
+class PhysicalForm(forms.Form):
+    name = forms.CharField()
+    mac_address = forms.CharField()
+    interface_speed = forms.CharField()
+    link_speed = forms.IntegerField()

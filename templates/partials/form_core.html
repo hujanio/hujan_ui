@@ -1,0 +1,31 @@
+{% load static widget_tweaks %}
+<form method="post" action="{{ url }}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.media }}
+    {{ form.non_field_errors }}
+
+    {% for field in form.hidden_fields %}
+    {{ field }}
+    {% endfor %}
+
+    
+
+    {% for field in form.visible_fields %}
+    <div class="form-group col-md-{{col_size}}">
+        <div class="col-md-12">
+            {% if field.field.widget.input_type == 'checkbox' %}
+            <div class="form-check">
+                {% render_field field|add_class:"form-check-input"%}
+                <label class="form-check-label">{{ field.label }}</label>
+            </div>
+            {% else %}
+            <label class="col-md-12"> {{ field.label }} </label>
+            {% render_field field|add_class:"form-control"%}
+            {% endif %}
+            <small class="form-text text-muted">{{ field.help_text }}</small>
+            <small class="form-text text-danger">{{ field.errors }}</small>
+        </div>
+    </div>
+    {% endfor %}
+
+</form>
