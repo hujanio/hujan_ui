@@ -33,7 +33,7 @@ def details(request, system_id):
     events = maas.get_events()
     
     if request.is_ajax():
-        return JsonResponse({'machine': machine})
+        return JsonResponse({'machine': machine, 'events': events})
 
 
     context = {
