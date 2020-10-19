@@ -30,13 +30,16 @@ def index(request):
 @login_required
 def details(request, system_id):
     machine = maas.get_machines(system_id)
-
+    events = maas.get_events()
+    
     if request.is_ajax():
         return JsonResponse({'machine': machine})
+
 
     context = {
         'title': f"Machines - {machine['fqdn']}",
         'machine': machine,
+        'events': events,
         'menu_active': 'machines',
     }
     return render(request, 'maas/machines/details.html', context)

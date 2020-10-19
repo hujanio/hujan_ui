@@ -18,6 +18,10 @@
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
                             More <span class="caret"></span>
                         </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" data-toggle="tab" href="#tab_4">Events</a></li>
+                            <li><a class="dropdown-item" data-toggle="tab" href="#tab_5">Log</a></li>
+                          </ul>
                         </li>
                     </ul>
                 </div>
@@ -41,6 +45,9 @@
                 <!-- /.tab-pane -->
                 <div class="tab-pane" id="tab_3">
                     {% include 'maas/partials/storage.html' %}
+                </div>
+                <div class="tab-pane" id="tab_4">
+                    {% include 'maas/partials/events.html' %}
                 </div>
                 <!-- /.tab-pane -->
             </div>
