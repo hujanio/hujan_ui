@@ -140,3 +140,13 @@ def write_document(data, store):
     file.close()
 
 
+def get_events():
+    if settings.WITH_EX_RESPONSE:
+        events = load_document('events.json')
+    else:
+        m = MAAS()
+        events = m.get(f'events/?op=query').json()
+        write_document(events, 'events.json')
+
+    return events
+

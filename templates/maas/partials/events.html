@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+        <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Event</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events.events %}
+                <tr>
+                    <td>{{ event.created }}</td>
+                    <td>{{ event.type }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+        </div>
+    </div>
+</div>
