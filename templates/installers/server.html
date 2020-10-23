@@ -2,82 +2,97 @@
 {% load static %}
 
 {% block content %}
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title">Server List</h3>
-            <div class="float-right">
-              <a href="{% url 'installer:servers:add' %}" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add Server<a>
-            </div>
-          </div>
-          <!-- /.card-header -->
-          <div class="card-body">
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Description</th>
-                  <th style="width:15%;">IP Address</th>
-                  <th style="width:10%;">Status</th>
-                  <th style="width:15%;">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for server in servers %}
-                <tr>
-                  <td>{{ server.name }}</td>
-                  <td>{{ server.description }}</td>
-                  <td>{{ server.ip_address }}</td>
-                  <td id="{{ server.system_id }}"></td>
-                  <td>
-                    <a href="{% url 'installer:servers:edit' server.id %}" class="btn btn-sm btn-info" data-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></a>
-                    <button class="btn btn-sm btn-danger delete-swal" data-url="{% url 'installer:servers:delete' server.id %}" data-name="{{ server }}" data-toggle="tooltip" title="Delete"><i class="fas fa-trash-alt"></i></button>
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-          <div class="card-footer">
-            <div class="float-right">
-              <a href="{% url 'installer:inventories:index' %}" class="btn bg-navy">Next&nbsp;&nbsp;&nbsp;<i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Server List</h3>
+        <div class="float-right">
+          <a data-toggle="modal" data-target="#general_modal" class="btn btn-warning"><i
+              class="fas fa-minus"></i>&nbsp;&nbsp;Reset<a>
+              <a href="{% url 'installer:servers:add' %}" class="btn btn-primary"><i
+                  class="fas fa-plus"></i>&nbsp;&nbsp;Add Server<a>
         </div>
-      </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th style="width:15%;">IP Address</th>
+              <th style="width:10%;">Status</th>
+              <th style="width:15%;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for server in servers %}
+            <tr>
+              <td>{{ server.name }}</td>
+              <td>{{ server.description }}</td>
+              <td>{{ server.ip_address }}</td>
+              <td id="{{ server.system_id }}"></td>
+              <td>
+                <a href="{% url 'installer:servers:edit' server.id %}" class="btn btn-sm btn-info" data-toggle="tooltip"
+                  title="Edit"><i class="fas fa-edit"></i></a>
+                <button class="btn btn-sm btn-danger delete-swal"
+                  data-url="{% url 'installer:servers:delete' server.id %}" data-name="{{ server }}"
+                  data-toggle="tooltip" title="Delete"><i class="fas fa-trash-alt"></i></button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer">
+        <div class="float-right">
+          <a href="{% url 'installer:inventories:index' %}" class="btn bg-navy">Next&nbsp;&nbsp;&nbsp;<i
+              class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+{% include 'partials/general_modal.html' %}
 
 {% endblock %}
 
 {% block extra_js %}
 <script>
-    $(document).ready(function() {
-        var systemidArr = "{{ system_ids }}".split(',')
-        console.log(systemidArr)
-        $.each(systemidArr, function(index, value) {
-          getStatus(value)
-        })
-    })
+  $(document).ready(function () {
+    var systemidArr = "{{ system_ids }}".split(',')
+    console.log(systemidArr)
+    $.each(systemidArr, function (index, value) {
+      getStatus(value)
+    });
 
-    function getStatus(systemID) {
-      var url = $(location).attr('origin') + "/maas/machines/" + systemID + "/details/"
-      var $rowServer = $("#"+systemID)
-      console.log(url)
-      $.get(url, function(data, status) {
-        var powerState = data.machine.power_state.toLowerCase()
-        if (powerState == "on") {
-          $rowServer.html("<i class='text-success fas fa-power-off'></i> <small>ON</small>")
-        }
-        else if (powerState == "on") {
-          $rowServer.html("<i class='text-secondary fas fa-power-off'></i> <small>OFF</small>")
-        }
-        else {
-          $rowServer.html("<i class='text-warning fas fa-question-circle' title='Unknown'></i>")
-        }
-      })
-    }
+    let btn = $('#general_modal').find('.modal-title').html('Reset Confirmation')
+      .end().find('.modal-body').html('Are you sure to reset this Server?')
+      .end()
+      .find('.btn-save');
+    btn.replaceWith('<a class="btn btn-primary" href="{% url 'installer:servers:reset' %}">Ok</a>')
+
+
+  });
+
+  function getStatus(systemID) {
+    var url = $(location).attr('origin') + "/maas/machines/" + systemID + "/details/"
+    var $rowServer = $("#"+systemID)
+    console.log(url)
+    $.get(url, function (data, status) {
+      var powerState = data.machine.power_state.toLowerCase()
+      if (powerState == "on") {
+        $rowServer.html("<i class='text-success fas fa-power-off'></i> <small>ON</small>")
+      } else if (powerState == "on") {
+        $rowServer.html("<i class='text-secondary fas fa-power-off'></i> <small>OFF</small>")
+      } else {
+        $rowServer.html("<i class='text-warning fas fa-question-circle' title='Unknown'></i>")
+      }
+    })
+  }
 </script>
 {% endblock %}

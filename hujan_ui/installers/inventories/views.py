@@ -69,3 +69,11 @@ def delete(request, id):
     inventory.delete()
     sweetify.success(request, _("Successfully deleted inventory"), icon='success', button='OK')
     return redirect("installer:inventories:index")
+
+
+@login_required
+def reset(request):
+    Inventory.objects.all().delete()
+    sweetify.success(request, _('Successflully Reset invetory'), icon='success', button='OK')
+    return redirect("installer:inventories:index")
+    
