@@ -64,8 +64,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
 {% include 'partials/js.html' %}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 {% sweetify %}
-{% block extra_js %}{% endblock  %}
+{% block extra_js %}
+<script>
+$(function(){
+$('#btn-reset-all').on('click', function(){
+  let btn = $('#general_modal').find('.modal-title').html('Reset Confirmation')
+        .end().find('.modal-body').html('Are you sure to reset all setting?')
+        .end()
+        .find('.btn-save');
+      btn.replaceWith('<a class="btn btn-primary" href="{% url 'installer:reset_all' %}">Ok</a>')
+  })
 
-
+});
+    </script>
+{% endblock  %}
 </body>
 </html>

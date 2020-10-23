@@ -7,6 +7,8 @@ from hujan_ui.installers.models import (
     Server, Inventory, GlobalConfig, AdvancedConfig,
     Deployment, Installer)
 from hujan_ui.installers.decorators import deployment_checked
+import sweetify
+from django.utils.translation import ugettext_lazy as _
 
 
 @login_required
@@ -106,3 +108,14 @@ def deploy_log(request, id):
         },
         "log": deployer.get_log(int(from_line))
     })
+
+
+def reset_all(request):
+    Server.objects.all().delete()
+    Inventory.objects.all().delete()
+    GlobalConfig.objects.all().delete()
+    AdvancedConfig.objects.all().delete()
+    Deployment.objects.all().delete()
+    sweetify.success(request, _('Reset Successfully'), icon='success', button='OK')
+
+    return redirect('installer:index')

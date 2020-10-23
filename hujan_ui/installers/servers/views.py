@@ -10,6 +10,7 @@ from hujan_ui.utils.deployer import Deployer
 from hujan_ui.installers.models import Server, Installer, Deployment
 from hujan_ui.installers.decorators import deployment_checked
 from .forms import AddServerForm
+from django.db import connection
 
 
 @login_required
@@ -74,4 +75,11 @@ def delete(request, id):
     server = get_object_or_404(Server, id=id)
     server.delete()
     sweetify.success(request, _("Successfully deleted server"), icon='success', button='OK')
+    return redirect("installer:servers:index")
+
+
+@login_required
+def reset(request):
+    Server.objects.all().delete()
+    sweetify.success(request, _('Successflully Reset Server'), icon='success', button='OK')
     return redirect("installer:servers:index")

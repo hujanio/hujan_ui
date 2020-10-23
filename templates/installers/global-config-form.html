@@ -90,9 +90,11 @@
     <!-- /.modal-dialog -->
   </div>
   <!-- /.modal -->
+{% include 'partials/general_modal.html' %}
 {% endblock %}
 
 {% block extra_js %}
+{{ block.super }}
 <script>
     var needSave = false;
     $(".field-input").change(function(){
