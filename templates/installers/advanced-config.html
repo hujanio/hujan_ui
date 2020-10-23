@@ -72,4 +72,10 @@
       <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+
+    {% include 'partials/general_modal.html' %}
 {% endblock %}
+
+{% block extrajs %}
+{{ block.super }}
+{% endblock extrajs %}

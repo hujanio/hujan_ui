@@ -55,6 +55,7 @@
 {% endblock %}
 
 {% block extra_js %}
+{{ block.super }}
 <script>
 $(function(){
   let btn  = $('#general_modal').find('.modal-title').html('Reset Confirmation')

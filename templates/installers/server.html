@@ -9,7 +9,7 @@
       <div class="card-header">
         <h3 class="card-title">Server List</h3>
         <div class="float-right">
-          <a data-toggle="modal" data-target="#general_modal" class="btn btn-warning"><i
+          <a data-toggle="modal" data-target="#general_modal" class="btn btn-reset btn-warning"><i
               class="fas fa-minus"></i>&nbsp;&nbsp;Reset<a>
               <a href="{% url 'installer:servers:add' %}" class="btn btn-primary"><i
                   class="fas fa-plus"></i>&nbsp;&nbsp;Add Server<a>
@@ -62,19 +62,25 @@
 {% endblock %}
 
 {% block extra_js %}
+{{ block.super }}
 <script>
   $(document).ready(function () {
     var systemidArr = "{{ system_ids }}".split(',')
-    console.log(systemidArr)
-    $.each(systemidArr, function (index, value) {
-      getStatus(value)
-    });
+    if(systemidArr){
+      $.each(systemidArr, function (index, value) {
+        getStatus(value)
+      });
+    }
 
-    let btn = $('#general_modal').find('.modal-title').html('Reset Confirmation')
+    $('.btn-reset').on('click', function(){
+      let btn = $('#general_modal').find('.modal-title').html('Reset Confirmation')
       .end().find('.modal-body').html('Are you sure to reset this Server?')
       .end()
       .find('.btn-save');
-    btn.replaceWith('<a class="btn btn-primary" href="{% url 'installer:servers:reset' %}">Ok</a>')
+        btn.replaceWith('<a class="btn btn-primary" href="{% url 'installer:servers:reset' %}">Ok</a>')
+    })
+
+    
 
 
   });
