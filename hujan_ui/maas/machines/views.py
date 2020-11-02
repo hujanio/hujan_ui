@@ -12,6 +12,7 @@ from hujan_ui.maas.utils import MAAS
 from hujan_ui import maas
 from .forms import AddMachineForm, PowerTypeIPMIForm, PhysicalForm
 from django.template.defaultfilters import filesizeformat
+from hujan_ui.maas.exceptions import MAASError
 
 
 @login_required
@@ -19,9 +20,15 @@ def index(request):
     if request.is_ajax():
         return JsonResponse({'machines': maas.get_machines()})
 
+    try:
+        data = maas.get_machines()
+    except (MAASError, ConnectionError, RuntimeError) as e:
+        sweetify.error(request, str(e), button='Ok', timer=2000)
+        data = None
+
     context = {
         'title': 'Machines',
-        'machines': maas.get_machines(),
+        'machines': data,
         'menu_active': 'machines',
     }
     return render(request, 'maas/machines/index.html', context)
@@ -29,12 +36,20 @@ def index(request):
 
 @login_required
 def details(request, system_id):
-    machine = maas.get_machines(system_id)
-    events = maas.get_events()
-    
+    try:
+        machine = maas.get_machines(system_id)
+    except (MAASError, ConnectionError, RuntimeError) as e:
+        sweetify.error(request, str(e), button='Ok', timer=2000)
+        machine = {}
+
+    try:
+        events = maas.get_events()
+    except (MAASError, ConnectionError, RuntimeError) as e:
+        sweetify.error(request, str(e), button='Ok', timer=2000)
+        events = {}
+
     if request.is_ajax():
         return JsonResponse({'machine': machine, 'events': events})
-
 
     context = {
         'title': f"Machines - {machine['fqdn']}",
@@ -75,7 +90,6 @@ def add(request):
 
 
 def load_machine(request):
-    
     m = MAAS()
     machines = maas.get_machines()
     html = ''
@@ -118,7 +132,7 @@ def edit_physical(request, system_id, id=None):
                 'status': 'error',
                 'message': _('Failed Edit Interface')
             })
-    
+
     context = {
         'form': form,
         'url': reverse('maas:machines:edit_physical', args=[system_id, id])
@@ -127,11 +141,14 @@ def edit_physical(request, system_id, id=None):
     html = render_to_string('partials/form_core.html', request=request, context=context)
     return JsonResponse({'html': html}, safe=False)
 
+
 def mark_disconnect(request, system_id, id):
     m = MAAS()
     resp = m.post(f'nodes/{system_id}/interfaces/{id}/?op=disconnect', data={'system_id': system_id, 'id': id})
     if resp.status_code in m.ok:
-        return JsonResponse({'status': 'success', 'message': _('Interfaces Disconnected Successfully'), 'urlhref': reverse('maas:machines:index') })
-    return JsonResponse({'status': 'error', 'message': _(resp.text) })
-    
-    
+        return JsonResponse({
+            'status': 'success',
+            'message': _('Interfaces Disconnected Successfully'),
+            'urlhref': reverse('maas:machines:index')
+        })
+    return JsonResponse({'status': 'error', 'message': _(resp.text)})
