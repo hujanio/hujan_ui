@@ -149,4 +149,3 @@ def get_events():
         write_document(events, 'events.json')
 
     return events
-

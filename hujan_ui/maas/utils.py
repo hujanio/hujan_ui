@@ -1,6 +1,7 @@
 from django.conf import settings
 
 from requests_oauthlib import OAuth1Session, OAuth1
+from .exceptions import MAASError
 
 
 class MAAS:
@@ -15,8 +16,12 @@ class MAAS:
         }
 
     def maas_connect(self):
-        consumer_key, token_key, token_secret = settings.MAAS_API_KEY.split(
-            ":")
+        if not settings.MAAS_API_KEY:
+            raise MAASError("MAAS_API_KEY not yet define")
+        if not settings.MAAS_URL:
+            raise MAASError("MAAS_URL not yet define")
+
+        consumer_key, token_key, token_secret = settings.MAAS_API_KEY.split(":")
         return OAuth1Session(
             consumer_key,
             client_secret='',
@@ -31,8 +36,9 @@ class MAAS:
 
         if headers:
             self.headers.update(headers)
-
-        return maas.get(self.url + uri, params=params, headers=self.headers)
+        response = maas.get(self.url + uri, params=params, headers=self.headers)
+        self._validate_request(response)
+        return response
 
     def post(self, uri, data, params=None, headers=None):
         maas = self.maas_connect()
@@ -40,7 +46,9 @@ class MAAS:
         if headers:
             self.headers.update(headers)
 
-        return maas.post(self.url + uri, json=data, params=params, headers=self.headers)
+        response = maas.post(self.url + uri, json=data, params=params, headers=self.headers)
+        self._validate_request(response)
+        return response
 
     def put(self, uri, data, params=None, headers=None):
         maas = self.maas_connect()
@@ -48,7 +56,9 @@ class MAAS:
         if headers:
             self.headers.update(headers)
 
-        return maas.put(self.url + uri, json=data, params=params, headers=self.headers)
+        response = maas.put(self.url + uri, json=data, params=params, headers=self.headers)
+        self._validate_request(response)
+        return response
 
     def delete(self, uri, params=None, headers=None):
         maas = self.maas_connect()
@@ -56,7 +66,15 @@ class MAAS:
         if headers:
             self.headers.update(headers)
 
-        return maas.delete(self.url + uri, params=params, headers=self.headers)
+        response = maas.delete(self.url + uri, params=params, headers=self.headers)
+        self._validate_request(response)
+        return response
+
+    def _validate_request(self, resp):
+        if resp.status_code == 401:
+            raise MAASError("MAAS API Key not valid")
+        elif resp.status_code in self.fail:
+            raise MAASError("Request to MAAS Server Fail")
 
 
 def maas_connect():
