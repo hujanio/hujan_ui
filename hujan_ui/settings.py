@@ -155,6 +155,8 @@ DEFAULT_ANSIBLE_USER = "ubuntu"
 DEPLOYMENT_LOG_DIR = os.path.join(BASE_DIR, 'deploy_log')
 DEPLOYMENT_COMMAND = ["ls", "/"]
 
+CONFIG_DIR_HOST = "/etc/hosts"
+
 try:
     from .local_settings import *
 except ImportError:

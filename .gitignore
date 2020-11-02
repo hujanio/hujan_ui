@@ -27,3 +27,5 @@ deploy_log/*
 .vscode
 .vim
 .ipynb_checkpoints
+
+hosts
