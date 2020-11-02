@@ -9,3 +9,4 @@ sweetify==2.0.0
 # utils
 django-model-utils==4.0.0
 django-multiselectfield==0.1.12
+django-extensions==3.0.9
