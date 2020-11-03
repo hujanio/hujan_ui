@@ -163,3 +163,13 @@ def mark_disconnect(request, system_id, id):
             'urlhref': reverse('maas:machines:index')
         })
     return JsonResponse({'status': 'error', 'message': _(resp.text)})
+
+
+def machine_commission(request, system_id):
+    try:
+        m = MAAS()
+        resp = m.post(f'machines/{system_id}/?op=commission',data={'system_id': system_id})
+        if resp.status_code in m.ok:
+            sweetify.success(request, _('Commission Succesfully'), timer=5000)
+    except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:
+        sweetify.error(request, str(e), timer=10000)

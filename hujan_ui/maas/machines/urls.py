@@ -10,4 +10,5 @@ urlpatterns = [
     path('load_machine/', views.load_machine, name='load_machine'),
     path('edit_physical/<str:system_id>/<int:id>/', views.edit_physical, name='edit_physical'),
     path('mark_disconnect/<str:system_id>/<int:id>/', views.mark_disconnect, name='mark_disconnect'),
+    path('commission/<str:system_id>/', views.machine_commission, name='machine_commission'),
 ]
