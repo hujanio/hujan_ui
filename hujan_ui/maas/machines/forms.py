@@ -79,7 +79,7 @@ class PowerTypeIPMIForm(forms.Form):
     power_address = forms.CharField()
     power_user = forms.CharField()
     power_pass = forms.CharField()
-    mac_address = forms.CharField()
+    mac_address = forms.CharField(label='Power MAC')
 
 
 class PhysicalForm(forms.Form):

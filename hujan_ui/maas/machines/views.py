@@ -69,21 +69,21 @@ def add(request):
         data = form.clean()
         ipmi_data = form_ipmi.clean()
         data.update({
-            'commission': True,
             'power_parameters': ipmi_data
         })
 
         try:
             maas = MAAS()
             resp = maas.post("machines/", data=data)
+            print(data)
             if resp.status_code in maas.ok:
                 sweetify.success(request, _(
                     'Successfully added domain'), button='Ok', timer=2000)
                 return redirect("maas:machines:index")
 
-            sweetify.warning(request, _(resp.text), button='Ok', timer=5000)
+            sweetify.warning(request, _(resp.text), button='Ok', timer=10000)
         except (MAASError, ConnectionError, RuntimeError, TimeoutError) as e:
-            sweetify.error(request, str(e), button='OK', timer=5000)
+            sweetify.error(request, str(e), button='OK', timer=10000)
         
 
     context = {
