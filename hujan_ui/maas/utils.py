@@ -71,13 +71,8 @@ class MAAS:
         return response
 
     def _validate_request(self, resp):
-        if resp.status_code == 401:
-            raise MAASError("MAAS API Key not valid")
-        elif resp.status_code in self.fail:
-            text = "Request to MAAS Server Fail"
-            if settings.DEBUG:
-                text += f' : {resp.text}'
-            raise MAASError(text)
+        if resp.status_code in self.fail:
+            raise MAASError(resp.text)
 
 
 def maas_connect():
