@@ -75,7 +75,7 @@ def add(request):
         try:
             maas = MAAS()
             resp = maas.post("machines/", data=data)
-            
+
             if resp.status_code in maas.ok:
                 sweetify.success(request, _(
                     'Successfully added domain'), button='Ok', timer=2000)
@@ -99,8 +99,8 @@ def load_machine(request):
     machines = maas.get_machines()
     html = ''
     for m in machines:
-        power = "<i class='text-success fas fa-power-off'></i> <small>ON</small>" if m['power_state'] == 'on' else "<i class='text-success fas fa-power-off'></i> <small>OFF</small>"
-        html += '<tr><td><a href="{}">{}</a></td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>'.format(
+        power = f"<i class='text-success fas fa-power-off'></i> <small>ON</small>" if m['power_state'] == 'on' else "<i class='text-danger fas fa-power-off'></i> <small>OFF</small>"
+        html += '<tr><td><label><input type="checkbox" /></label></td><td><a href="{}">{}</a></td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>'.format(
             reverse('maas:machines:details', args=[m['system_id']]),
             m['fqdn'], 
             power, 

@@ -14,6 +14,15 @@
                     <input type="text" class="form-control mr-sm-2" id="inlineFormInputName2" placeholder="Search machines">
                 </form>
                 <a href="{% url 'maas:machines:add' %}" class="btn btn-sm btn-info float-right">Add Machine</a>
+                <button type="button" data-toggle="dropdown" class="btn btn-sm btn-primary dropdown-toggle float-right">
+                  Action
+                </button>
+                <div class="dropdown-menu">
+                  <a href="#" class="dropdown-item">Commision</a>
+                  <a href="#" class="dropdown-item">Deploy</a>
+                  <a href="#" class="dropdown-item">Turn On / Off</a>
+                  <a href="#" class="dropdown-item">Delete</a>
+                </div>
               </div>
               <!-- /.card-header -->
               <div class="card-body p-0">
@@ -21,6 +30,7 @@
                   <table class="table m-0" id="table_machine">
                     <thead>
                     <tr>
+                      <th>#</th>
                       <th>FQDN | MAC</th>
                       <th>Power</th>
                       <th>Status</th>
