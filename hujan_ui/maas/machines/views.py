@@ -69,17 +69,22 @@ def add(request):
         data = form.clean()
         ipmi_data = form_ipmi.clean()
         data.update({
-            'commission': True,
-            'power_parameters': ipmi_data}
-        )
-        maas = MAAS()
-        resp = maas.post("machines/", data=data)
-        if resp.status_code in maas.ok:
-            sweetify.success(request, _(
-                'Successfully added domain'), button='Ok', timer=2000)
-            return redirect("maas:machines:index")
+            'power_parameters': ipmi_data
+        })
 
-        sweetify.warning(request, _(resp.text), button='Ok', timer=5000)
+        try:
+            maas = MAAS()
+            resp = maas.post("machines/", data=data)
+            
+            if resp.status_code in maas.ok:
+                sweetify.success(request, _(
+                    'Successfully added domain'), button='Ok', timer=2000)
+                return redirect("maas:machines:index")
+
+            sweetify.warning(request, _(resp.text), button='Ok', timer=10000)
+        except (MAASError, ConnectionError, RuntimeError, TimeoutError) as e:
+            sweetify.error(request, str(e), button='OK', timer=10000)
+        
 
     context = {
         'title': 'Add Machine',
@@ -118,20 +123,26 @@ def edit_physical(request, system_id, id=None):
             'system_id': system_id, 
             'id': id
         })
+        try:
+            m = MAAS()
+            resp = m.put(f'nodes/{system_id}/interfaces/{id}/', data=data)
+            if resp.status_code in m.ok:
+                return JsonResponse({
+                    'status': 'success', 
+                    'message': _('Edit Interfaces Successfully'), 
+                    'urlhref': reverse('maas:machines:index')
+                })
+            else:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': _('Failed Edit Interface')
+                })
+        except (MAASError, ConnectionError, RuntimeError) as identifier:
+            return JsonResponse({
+                    'status': 'error',
+                    'message': _(str(e))
+                })
         
-        m = MAAS()
-        resp = m.put(f'nodes/{system_id}/interfaces/{id}/', data=data)
-        if resp.status_code in m.ok:
-            return JsonResponse({
-                'status': 'success', 
-                'message': _('Edit Interfaces Successfully'), 
-                'urlhref': reverse('maas:machines:index')
-            })
-        else:
-            return JsonResponse({
-                'status': 'error',
-                'message': _('Failed Edit Interface')
-            })
 
     context = {
         'form': form,
