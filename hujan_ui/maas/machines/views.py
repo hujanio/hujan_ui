@@ -75,7 +75,7 @@ def add(request):
         try:
             maas = MAAS()
             resp = maas.post("machines/", data=data)
-            print(data)
+            
             if resp.status_code in maas.ok:
                 sweetify.success(request, _(
                     'Successfully added domain'), button='Ok', timer=2000)
