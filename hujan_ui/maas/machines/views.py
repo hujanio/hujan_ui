@@ -190,7 +190,7 @@ def machine_commission(request, system_id=None):
 def delete_machine(request, system_id):
     try:
         m = MAAS()
-        resp = m.post(f'machines/{system_id}/',{'system_id': system_id})
+        resp = m.post(f'machines/{system_id}/', {'system_id': system_id})
         if resp.status_code in m.ok:
             return JsonResponse({'status': 'success', 'message': _('Machine Delete Successfully')})
     except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:
@@ -201,8 +201,9 @@ def deploy_machine(request, system_id):
     form = DeployForm(request.POST or None, initial={'system_id': system_id})
     if form.is_valid():
         try:
+            data = form.clean()
             m = MAAS()
-            resp = m.post(f'machines/{system_id}/?op=deploy',{'system_id': system_id})
+            resp = m.post(f'machines/{system_id}/?op=deploy', data)
             if resp.status_code in m.ok:
                 return JsonResponse({'status': 'success', 'message': _('Machine Deploy Successfully')})
         except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:
