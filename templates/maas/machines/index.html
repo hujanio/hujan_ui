@@ -14,13 +14,24 @@
                     <input type="text" class="form-control mr-sm-2" id="inlineFormInputName2" placeholder="Search machines">
                 </form>
                 <a href="{% url 'maas:machines:add' %}" class="btn btn-sm btn-info float-right">Add Machine</a>
+                <button type="button" data-toggle="dropdown" class="btn btn-sm btn-primary dropdown-toggle float-right">
+                  Action
+                </button>
+                <div class="dropdown-menu">
+                  <a href="#" class="dropdown-item dropdown-item-commission">Commision</a>
+                  <a href="#" class="dropdown-item dropdown-item-deploy">Deploy</a>
+                  <a href="#" class="dropdown-item dropdown-item-onoff">Turn On / Off</a>
+                  <a href="#" class="dropdown-item dropdown-item-delete">Delete</a>
+                </div>
               </div>
               <!-- /.card-header -->
               <div class="card-body p-0">
                 <div class="table-responsive">
+                  <form method="post">
                   <table class="table m-0" id="table_machine">
                     <thead>
                     <tr>
+                      <th>#</th>
                       <th>FQDN | MAC</th>
                       <th>Power</th>
                       <th>Status</th>
@@ -52,6 +63,7 @@
                       {% endfor %}
                     </tbody>
                   </table>
+                  </form>
                 </div>
                 <!-- /.table-responsive -->
               </div>
@@ -68,15 +80,20 @@
     <!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
+
+{% include 'partials/general_modal.html' %}
 <!-- /.content -->
 {% endblock %}
 
 
 
 {% block extra_js %}
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="{% static 'get_cookie.js' %}"></script>
 <script type="text/javascript">
 
   (function ($, window, document) {
+    let systemId;
     let resLastStatusMachine = function(a){
       let t = $('#table_machine');
 
@@ -93,6 +110,43 @@
       
     });
     worker.postMessage({ cmd: 'reqLastMachine', val: `${window.location.origin}/maas/machines/load_machine/`});
+
+    $('.dropdown-item-commission').on('click', function(){
+      let si = $('input[name="csi"]').val();
+      systemId = si;
+      console.log(si);
+      axios.get(`${window.location.origin}/maas/machines/commission/${si}`).then(res => {
+        const response = res.data;
+        console.log(response);
+        $('#general_modal').find('.modal-body').html(response.html).end()
+        .find('.modal-title').html('Machine Commision').end()
+        .modal();
+      });
+
+    });
+    $('.btn-save').on('click', function(e){
+      e.preventDefault();
+      let form = $('#general_modal').find('form');
+      $('#general_modal').modal('hide');
+      let data =  form.serialize();
+      console.log(data);  
+      axios.post(`${window.location.origin}/maas/machines/commission/${systemId}`,data,
+      {
+          headers: {
+              'X-CSRFToken': getCookie('csrftoken'),
+              'Content-Type': 'application/x-www-form-urlencoded',
+          }
+      }
+      ).then(res =>{
+        const response = res.data;
+        console.log(response);
+        swal.fire({
+          icon: response.status,
+          text: response.message
+        })
+
+      })
+    });
 
 }(jQuery, window, document));
 </script>

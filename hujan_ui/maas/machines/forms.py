@@ -87,3 +87,12 @@ class PhysicalForm(forms.Form):
     mac_address = forms.CharField()
     interface_speed = forms.CharField()
     link_speed = forms.IntegerField()
+
+
+class CommissionForm(forms.Form):
+    system_id = forms.CharField(required=True, widget=forms.TextInput({'type': 'hidden'}))
+    enable_ssh = forms.BooleanField(required=False, label='Allow SSH access and prevent machine powering off')
+    skip_bmc_config = forms.BooleanField(required=False, label='Skip configuring supported BMC controllers with a MAAS generated username and password')
+    commissioning_scripts = forms.CharField(required=False, label='Additional commissioning scripts')
+    skip_networking = forms.BooleanField(required=False, label='Retain network configuration')
+    skip_storage = forms.BooleanField(required=False, label='Retain storage configuration')

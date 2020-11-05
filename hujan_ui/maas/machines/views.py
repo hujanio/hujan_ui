@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 
 from hujan_ui.maas.utils import MAAS
 from hujan_ui import maas
-from .forms import AddMachineForm, PowerTypeIPMIForm, PhysicalForm
+from .forms import AddMachineForm, PowerTypeIPMIForm, PhysicalForm, CommissionForm
 from django.template.defaultfilters import filesizeformat
 from hujan_ui.maas.exceptions import MAASError
 
@@ -75,7 +75,7 @@ def add(request):
         try:
             maas = MAAS()
             resp = maas.post("machines/", data=data)
-            
+
             if resp.status_code in maas.ok:
                 sweetify.success(request, _(
                     'Successfully added domain'), button='Ok', timer=2000)
@@ -99,16 +99,17 @@ def load_machine(request):
     machines = maas.get_machines()
     html = ''
     for m in machines:
-        power = "<i class='text-success fas fa-power-off'></i> <small>ON</small>" if m['power_state'] == 'on' else "<i class='text-success fas fa-power-off'></i> <small>OFF</small>"
-        html += '<tr><td><a href="{}">{}</a></td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>'.format(
-            reverse('maas:machines:details', args=[m['system_id']]),
-            m['fqdn'], 
-            power, 
-            m['status_name'], 
-            m['owner'], 
-            m['cpu_count'], 
-            filesizeformat(m['memory']), 
-            filesizeformat(m['storage'])
+        power = f"<i class='text-success fas fa-power-off'></i> <small>ON</small>" if m['power_state'] == 'on' else "<i class='text-danger fas fa-power-off'></i> <small>OFF</small>"
+        html += '<tr><td><label><input name="csi" value="{}" type="radio" /></label></td><td><a href="{}">{}</a></td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>'.format(
+                m['system_id'],
+                reverse('maas:machines:details', args=[m['system_id']]),
+                m['fqdn'], 
+                power, 
+                m['status_name'], 
+                m['owner'], 
+                m['cpu_count'], 
+                filesizeformat(m['memory']), 
+                filesizeformat(m['storage'])
             )
 
     return JsonResponse({'data': html})
@@ -163,3 +164,24 @@ def mark_disconnect(request, system_id, id):
             'urlhref': reverse('maas:machines:index')
         })
     return JsonResponse({'status': 'error', 'message': _(resp.text)})
+
+
+def machine_commission(request, system_id=None):
+    form = CommissionForm(request.POST or None, initial={'system_id': system_id})
+    if form.is_valid():
+        try:
+            m = MAAS()
+            resp = m.post(f'machines/{system_id}/?op=commission', data={'system_id': system_id})
+            if resp.status_code in m.ok:
+                return JsonResponse({'status': 'success', 'message': _('Commission Succesfully') })
+        except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
+    
+    context = {
+        'form': form,
+        'url': reverse('maas:machines:machine_commission', args=[system_id])
+    }
+
+    html = render_to_string('partials/form_core.html', request=request, context=context)
+    return JsonResponse({'html': html}, safe=False)
+    
