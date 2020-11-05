@@ -122,15 +122,30 @@
         .find('.modal-title').html('Machine Commision').end()
         .modal();
       });
-
     });
+
+
+    $('.dropdown-item-deploy').on('click', function(){
+      let si = $('input[name="csi"]').val();
+      systemId = si;
+      console.log(si);
+      axios.get(`${window.location.origin}/maas/machines/deploy/${si}`).then(res => {
+        const response = res.data;
+        $('#general_modal').find('.modal-body').html(response.html).append('Are You Sure ??').end()
+        .find('.modal-title').html('Machine Deploy').end()
+        .modal();
+      })
+      
+    });
+
+
     $('.btn-save').on('click', function(e){
       e.preventDefault();
       let form = $('#general_modal').find('form');
       $('#general_modal').modal('hide');
-      let data =  form.serialize();
+      let data = form.serialize();
       console.log(data);  
-      axios.post(`${window.location.origin}/maas/machines/commission/${systemId}`,data,
+      axios.post(form.attr('action'), data,
       {
           headers: {
               'X-CSRFToken': getCookie('csrftoken'),
