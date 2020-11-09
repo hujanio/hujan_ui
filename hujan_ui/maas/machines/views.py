@@ -69,6 +69,7 @@ def add(request):
         data = form.clean()
         ipmi_data = form_ipmi.clean()
         data.update({
+            'commission': True,
             'power_parameters': ipmi_data
         })
 

@@ -3,9 +3,7 @@ from hujan_ui.maas.utils import MAAS
 
 
 class FabricForm(forms.Form):
-    name = forms.CharField()
-    description = forms.CharField()
-    class_type = forms.CharField()
+    name = forms.CharField(required=False)
 
     def __init__(self, *args, **kwargs):
         self.maas = MAAS()
