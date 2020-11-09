@@ -6,7 +6,7 @@ class MultiNodeWriter:
     Multinode file writer Utility
     """
 
-    file_name = "/home/kolla/multinode"
+    file_name = settings.CONFIG_DIR_MULTINODE
 
     def __init__(self):
         self.ansible_user = settings.DEFAULT_ANSIBLE_USER

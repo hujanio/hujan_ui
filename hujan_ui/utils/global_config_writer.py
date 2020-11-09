@@ -1,5 +1,8 @@
+from django.conf import settings
+
+
 class GlobalConfigWriter:
-    file_name = "/etc/kolla/globals.yml"
+    file_name = settings.CONFIG_DIR_GLOBAL_YML
 
     def __init__(self):
         self.entry = {}
