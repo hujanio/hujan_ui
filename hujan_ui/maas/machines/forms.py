@@ -96,3 +96,7 @@ class CommissionForm(forms.Form):
     commissioning_scripts = forms.CharField(required=False, label='Additional commissioning scripts')
     skip_networking = forms.BooleanField(required=False, label='Retain network configuration')
     skip_storage = forms.BooleanField(required=False, label='Retain storage configuration')
+
+
+class DeployForm(forms.Form):
+    system_id = forms.CharField(required=True, widget=forms.TextInput(attrs={'type': 'hidden'}))

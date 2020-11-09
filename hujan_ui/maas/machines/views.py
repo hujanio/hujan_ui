@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 
 from hujan_ui.maas.utils import MAAS
 from hujan_ui import maas
-from .forms import AddMachineForm, PowerTypeIPMIForm, PhysicalForm, CommissionForm
+from .forms import AddMachineForm, PowerTypeIPMIForm, PhysicalForm, CommissionForm, DeployForm
 from django.template.defaultfilters import filesizeformat
 from hujan_ui.maas.exceptions import MAASError
 
@@ -169,9 +169,10 @@ def mark_disconnect(request, system_id, id):
 def machine_commission(request, system_id=None):
     form = CommissionForm(request.POST or None, initial={'system_id': system_id})
     if form.is_valid():
+        data = form.clean()
         try:
             m = MAAS()
-            resp = m.post(f'machines/{system_id}/?op=commission', data={'system_id': system_id})
+            resp = m.post(f'machines/{system_id}/?op=commission', data=data)
             if resp.status_code in m.ok:
                 return JsonResponse({'status': 'success', 'message': _('Commission Succesfully') })
         except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:
@@ -185,3 +186,39 @@ def machine_commission(request, system_id=None):
     html = render_to_string('partials/form_core.html', request=request, context=context)
     return JsonResponse({'html': html}, safe=False)
     
+
+def delete_machine(request, system_id):
+    try:
+        m = MAAS()
+        resp = m.post(f'machines/{system_id}/', {'system_id': system_id})
+        if resp.status_code in m.ok:
+            return JsonResponse({'status': 'success', 'message': _('Machine Delete Successfully')})
+    except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:
+        return JsonResponse({'status': 'error', 'message': str(e)})
+
+
+def deploy_machine(request, system_id):
+    form = DeployForm(request.POST or None, initial={'system_id': system_id})
+    if form.is_valid():
+        try:
+            data = form.clean()
+            m = MAAS()
+            resp = m.post(f'machines/{system_id}/?op=deploy', data)
+            if resp.status_code in m.ok:
+                return JsonResponse({'status': 'success', 'message': _('Machine Deploy Successfully')})
+        except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
+    context = {
+        'form': form,
+        'url': reverse('maas:machines:deploy_machine', args=[system_id])
+    }
+    html = render_to_string('partials/form_core.html', request=request, context=context)
+    return JsonResponse({'html': html}, safe=False)
+    
+
+
+def onoff_machine(request, system_id):
+    """
+    docstring
+    """
+    pass
