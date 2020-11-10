@@ -120,3 +120,10 @@ def reset_all(request):
     sweetify.success(request, _('Reset Successfully'), icon='success', button='OK')
 
     return redirect('installer:index')
+
+
+def destroy_config(request):
+    """
+    docstring
+    """
+    pass
