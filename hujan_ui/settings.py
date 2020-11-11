@@ -156,6 +156,8 @@ DEPLOYMENT_LOG_DIR = os.path.join(BASE_DIR, 'deploy_log')
 DEPLOYMENT_COMMAND = ["ls", "/"]
 
 CONFIG_DIR_HOST = "/etc/hosts"
+CONFIG_DIR_MULTINODE = "/home/kolla/multinode"
+CONFIG_DIR_GLOBAL_YML = "/etc/kolla/globals.yml"
 
 try:
     from .local_settings import *

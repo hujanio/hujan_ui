@@ -1,4 +1,4 @@
-{% extends 'master.html' %}
+{% extends 'master-installer.html' %}
 {% load static %}
 
 {% block content %}
@@ -219,10 +219,28 @@
             <!-- /.card -->
           </div>
           <div class="card-footer">
+            <a class="btn btn-danger text-white">Destroy</a>
           </div>
         </div>
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
 
+    {% include 'partials/general_modal.html' %}
 {% endblock %}
+
+
+{% block after_js %}
+{{ block.super }}
+<script type="text/javascript">
+$(function(){
+  
+  let btn  = $('#general_modal').find('.modal-title').html('Reset Confirmation')
+  
+  .end().find('.modal-body').html('Are you sure to reset this inventories?')
+  .end()
+  .find('.btn-save');
+  btn.replaceWith('<a class="btn btn-primary" href="{% url 'installer:inventories:reset' %}">Ok</a>')
+});
+</script>
+{% endblock after_js %}

@@ -111,6 +111,7 @@ def deploy_log(request, id):
 
 
 def reset_all(request):
+    Installer.objects.all().delete()
     Server.objects.all().delete()
     Inventory.objects.all().delete()
     GlobalConfig.objects.all().delete()
@@ -119,3 +120,10 @@ def reset_all(request):
     sweetify.success(request, _('Reset Successfully'), icon='success', button='OK')
 
     return redirect('installer:index')
+
+
+def destroy_config(request):
+    """
+    docstring
+    """
+    pass

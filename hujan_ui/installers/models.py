@@ -5,7 +5,7 @@ from model_utils import Choices
 
 
 class Server(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
     ip_address = models.CharField(max_length=100)
     description = models.CharField(max_length=220, blank=True)
     system_id = models.CharField(max_length=220, help_text="unique id MAAS")
@@ -48,6 +48,9 @@ class GlobalConfig(models.Model):
     openstack_release = models.CharField(max_length=50, choices=OPENSTACK_RELEASE, default='train')
     internal_vip_address = models.CharField(max_length=30)
     external_vip_address = models.CharField(max_length=30)
+    storage_interface = models.CharField(max_length=200)
+    network_interface = models.CharField(max_length=200)
+    neutron_plugin_agent = models.CharField(max_length=200)
     enable_tls_on_external_api = models.BooleanField(default=True)
     enable_ceph_service = models.BooleanField(default=True)
     enable_cinder_service = models.BooleanField(default=True)
