@@ -262,4 +262,5 @@ def delete_machine(request, system_id):
 	}
 	html = render_to_string('partials/form_core.html', context, request)
 	return JsonResponse({'html': html}, safe=False)
+
 		
