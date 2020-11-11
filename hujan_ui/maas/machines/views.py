@@ -240,3 +240,27 @@ def onoff_machine(request, system_id):
 	}
 	html = render_to_string('partials/form_core.html', context, request)
 	return JsonResponse({'html': html}, safe=False)
+
+
+def delete_machine(request, system_id):
+	form = ConfirmForm(request.POST or None, initial={'system_id': system_id})
+	if form.is_valid():
+		data = form.clean()
+
+		m = MAAS()
+		try:
+			resp = m.delete(f'machines/{system_id}/', data)
+			if resp.status_code in m.ok:
+				return JsonResponse({'status': 'success', 'message': _('Delete Machine Successfully')})
+		except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:
+			return JsonResponse({'status': 'error', 'message': str(e)})
+
+	context = {
+		'title': 'Delete Machine',
+		'url': reverse('maas:machines:delete_machine', args=[system_id]),
+		'form': form
+	}
+	html = render_to_string('partials/form_core.html', context, request)
+	return JsonResponse({'html': html}, safe=False)
+
+		

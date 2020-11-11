@@ -152,6 +152,20 @@
     });
 
 
+    $('.dropdown-item-delete').on('click', function(){
+      let si = $('input[name="csi"]').val();
+      systemId = si;
+      console.log(si);
+      axios.get(`${window.location.origin}/maas/machines/delete/${si}`).then(res => {
+        const response = res.data;
+        $('#general_modal').find('.modal-body').html(response.html).append('Are You Sure ??').end()
+        .find('.modal-title').html('Machine Delete').end()
+        .modal();
+      })
+      
+    });
+
+
 
     $('.btn-save').on('click', function(e){
       e.preventDefault();
