@@ -104,16 +104,16 @@ def load_machine(request):
 	for m in machines:
 		power = f"<i class='text-success fas fa-power-off'></i> <small>ON</small>" if m['power_state'] == 'on' else "<i class='text-danger fas fa-power-off'></i> <small>OFF</small>"
 		html += '<tr><td><label><input name="csi" value="{}" type="radio" /></label></td><td><a href="{}">{}</a></td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>'.format(
-				m['system_id'],
-				reverse('maas:machines:details', args=[m['system_id']]),
-				m['fqdn'], 
-				power, 
-				m['status_name'], 
-				m['owner'], 
-				m['cpu_count'], 
-				str('{0:.2f}'.format(conv_mb_to_gb(m['memory']))) + ' GiB', 
-				str('{0:.2f}'.format(conv_mb_to_gb(m['storage']))) + ' GB' 
-			)
+			m['system_id'],
+			reverse('maas:machines:details', args=[m['system_id']]),
+			m['fqdn'], 
+			power, 
+			m['status_name'], 
+			m['owner'], 
+			m['cpu_count'], 
+			str('{0:.2f}'.format(conv_mb_to_gb(m['memory']))) + ' GiB', 
+			str('{0:.2f}'.format(conv_mb_to_gb(m['storage']))) + ' GB' 
+		)
 
 	return JsonResponse({'data': html})
 
