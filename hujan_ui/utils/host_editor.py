@@ -67,6 +67,12 @@ class HostEditor:
             for l in self.host_entries:
                 f.write("%s\n" % " ".join(l))
             f.write(self.end_block_msg)
+    
+    def truncate(self):
+        """
+        docstring
+        """
+        pass
 
     @staticmethod
     def save_from_model(servers):

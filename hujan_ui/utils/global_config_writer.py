@@ -26,6 +26,9 @@ class GlobalConfigWriter:
                 else:
                     f.write("%s: \"%s\"\n" % (k, v))
 
+    def truncate(self):
+        open(self.file_name, 'w').close()
+
     @staticmethod
     def save_from_model(global_config):
         writer = GlobalConfigWriter()
