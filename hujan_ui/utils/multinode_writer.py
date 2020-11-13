@@ -30,7 +30,7 @@ class MultiNodeWriter:
                     f.write("%s ansible_user=%s\n" % (x, self.ansible_user))
                 f.write("\n")
     
-    def truncate(self):
+    def clear(self):
         open(self.file_name, 'w').close()
 
     @staticmethod

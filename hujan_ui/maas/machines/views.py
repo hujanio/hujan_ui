@@ -231,7 +231,6 @@ def onoff_machine(request, system_id):
 			else:
 				resp = m.post(f'machines/{system_id}/?op=power_on', data)
 			if resp.status_code in m.ok:
-				print(resp.text)
 				return JsonResponse({'status': 'success', 'message': _('Machine Change Power Successfully')})
  
 		except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:

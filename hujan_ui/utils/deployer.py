@@ -128,6 +128,6 @@ class Deployer:
         he = HostEditor()
         mn = MultiNodeWriter()
 
-        he.truncate()        
-        mn.truncate()
-        cs.truncate()
+        he.clear()        
+        mn.clear()
+        cs.clear()

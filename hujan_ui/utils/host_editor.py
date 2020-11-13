@@ -76,7 +76,6 @@ class HostEditor:
             for line in f:
 
                 if "hujan.io" in line or "HUJAN" in line:
-                    print('true')
                     line = ''
 
                 lines.append(line)

@@ -26,7 +26,7 @@ class GlobalConfigWriter:
                 else:
                     f.write("%s: \"%s\"\n" % (k, v))
 
-    def truncate(self):
+    def clear(self):
         open(self.file_name, 'w').close()
 
     @staticmethod
