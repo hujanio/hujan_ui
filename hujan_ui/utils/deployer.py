@@ -122,3 +122,12 @@ class Deployer:
         self._prepare_log_dir()
         self._create_deployment()
         self._start_process()
+
+    def reset(self):
+        cs = GlobalConfigWriter()
+        he = HostEditor()
+        mn = MultiNodeWriter()
+
+        he.clear()        
+        mn.clear()
+        cs.clear()

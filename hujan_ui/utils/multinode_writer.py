@@ -29,6 +29,9 @@ class MultiNodeWriter:
                 for x in v:
                     f.write("%s ansible_user=%s\n" % (x, self.ansible_user))
                 f.write("\n")
+    
+    def clear(self):
+        open(self.file_name, 'w').close()
 
     @staticmethod
     def save_from_model(inventories):

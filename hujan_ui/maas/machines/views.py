@@ -14,6 +14,8 @@ from .forms import AddMachineForm, PowerTypeIPMIForm, PhysicalForm, CommissionFo
 from django.template.defaultfilters import filesizeformat
 from hujan_ui.maas.exceptions import MAASError
 
+from hujan_ui.utils.core import conv_mb_to_gb
+
 
 @login_required
 def index(request):
@@ -102,16 +104,16 @@ def load_machine(request):
 	for m in machines:
 		power = f"<i class='text-success fas fa-power-off'></i> <small>ON</small>" if m['power_state'] == 'on' else "<i class='text-danger fas fa-power-off'></i> <small>OFF</small>"
 		html += '<tr><td><label><input name="csi" value="{}" type="radio" /></label></td><td><a href="{}">{}</a></td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>'.format(
-				m['system_id'],
-				reverse('maas:machines:details', args=[m['system_id']]),
-				m['fqdn'], 
-				power, 
-				m['status_name'], 
-				m['owner'], 
-				m['cpu_count'], 
-				str(m['memory']) + ' GiB', 
-				str(m['storage']) + ' GB' 
-			)
+			m['system_id'],
+			reverse('maas:machines:details', args=[m['system_id']]),
+			m['fqdn'], 
+			power, 
+			m['status_name'], 
+			m['owner'], 
+			m['cpu_count'], 
+			str('{0:.2f}'.format(conv_mb_to_gb(m['memory']))) + ' GiB', 
+			str('{0:.2f}'.format(conv_mb_to_gb(m['storage']))) + ' GB' 
+		)
 
 	return JsonResponse({'data': html})
 
@@ -229,7 +231,6 @@ def onoff_machine(request, system_id):
 			else:
 				resp = m.post(f'machines/{system_id}/?op=power_on', data)
 			if resp.status_code in m.ok:
-				print(resp.text)
 				return JsonResponse({'status': 'success', 'message': _('Machine Change Power Successfully')})
  
 		except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:

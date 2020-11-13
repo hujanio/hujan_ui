@@ -123,7 +123,9 @@ def reset_all(request):
 
 
 def destroy_config(request):
-    """
-    docstring
-    """
-    pass
+    deployer = Deployer()
+    deployer.reset()
+    sweetify.success(request, _('Destroy Config Successfully'), icon='success', button='OK')
+    Deployment.objects.all().delete()
+
+    return redirect('installer:index')
