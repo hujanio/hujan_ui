@@ -14,6 +14,8 @@ from .forms import AddMachineForm, PowerTypeIPMIForm, PhysicalForm, CommissionFo
 from django.template.defaultfilters import filesizeformat
 from hujan_ui.maas.exceptions import MAASError
 
+from hujan_ui.utils.core import conv_mb_to_gb
+
 
 @login_required
 def index(request):
@@ -109,8 +111,8 @@ def load_machine(request):
 				m['status_name'], 
 				m['owner'], 
 				m['cpu_count'], 
-				str(m['memory']) + ' GiB', 
-				str(m['storage']) + ' GB' 
+				str('{0:.2f}'.format(conv_mb_to_gb(m['memory']))) + ' GiB', 
+				str('{0:.2f}'.format(conv_mb_to_gb(m['storage']))) + ' GB' 
 			)
 
 	return JsonResponse({'data': html})
