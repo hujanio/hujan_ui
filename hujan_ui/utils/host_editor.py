@@ -72,14 +72,11 @@ class HostEditor:
         lines = []
 
         with open(settings.CONFIG_DIR_HOST, 'r') as f:
-
             for line in f:
-
                 if "hujan.io" in line or "HUJAN" in line:
                     line = ''
-
                 lines.append(line)
-
+                
         with open(settings.CONFIG_DIR_HOST, 'w') as f:
             f.writelines(lines)
 
