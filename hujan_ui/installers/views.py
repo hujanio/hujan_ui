@@ -15,7 +15,8 @@ from django.utils.translation import ugettext_lazy as _
 def index(request):
     if Deployment.get_status() != Deployment.DEPLOY_SUCCESS:
         return redirect("installer:servers:index")    
-
+    status = False
+    status = status if Deployment.get_status() != Deployment.DEPLOY_POST_DEPLOY_SUCCESS else True
     context = {
         'title': 'Configurations',
         'steps': Installer.get_steps,
@@ -23,7 +24,8 @@ def index(request):
         'servers': Server.objects.all(),
         'inventories': Inventory.objects.select_related('server').all(),
         'advanced_config': AdvancedConfig.objects.all(),
-        'global_config': GlobalConfig.objects.first()
+        'global_config': GlobalConfig.objects.first(),
+        'deplopment_status': status
     }
     return render(request, 'installers/index.html', context)
 
@@ -82,8 +84,8 @@ def deploy(request):
 @login_required
 def do_deploy(request):
     if Deployment.get_status() == Deployment.DEPLOY_SUCCESS:
-            return redirect("installer:servers:index")   
-            
+        return redirect("installer:servers:index")   
+
     Installer.set_step_deployment()
     deployer = Deployer()
     if not deployer.is_deploying():
@@ -132,4 +134,4 @@ def destroy_config(request):
 
 
 def post_deploy(request):
-    pass
+    return redirect('installer:index')
