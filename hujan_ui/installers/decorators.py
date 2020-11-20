@@ -13,6 +13,10 @@ def deployment_checked(view_func):
     def _wrapped_view(request, *args, **kwargs):         
         if Deployment.get_status() == Deployment.DEPLOY_SUCCESS:
             return redirect("installer:index")      
+        elif Deployment.get_status() == Deployment.DEPLOY_KOLLA:
+            return redirect("installer:index")      
+        elif Deployment.get_status() == Deployment.DEPLOY_POST_DEPLOY_SUCCESS:
+            return redirect("installer:index")
         elif Deployment.get_status() == Deployment.DEPLOY_IN_PROGRESS:
             return redirect("installer:do_deploy")
         return view_func(request, *args, **kwargs)

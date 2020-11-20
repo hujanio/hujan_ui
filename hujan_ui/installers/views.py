@@ -1,3 +1,4 @@
+from os import stat
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -13,10 +14,11 @@ from django.utils.translation import ugettext_lazy as _
 
 @login_required
 def index(request):
-    if Deployment.get_status() != Deployment.DEPLOY_SUCCESS:
-        return redirect("installer:servers:index")    
-    status = False
-    status = status if Deployment.get_status() != Deployment.DEPLOY_POST_DEPLOY_SUCCESS else True
+    status_dev = Deployment.get_status()
+    if status_dev == Deployment.DEPLOY_IN_PROGRESS or status_dev == None:
+        return redirect('installer:servers:index')
+    pd_status = False
+    pd_status = pd_status if status_dev == Deployment.DEPLOY_KOLLA else True
     context = {
         'title': 'Configurations',
         'steps': Installer.get_steps,
@@ -25,7 +27,7 @@ def index(request):
         'inventories': Inventory.objects.select_related('server').all(),
         'advanced_config': AdvancedConfig.objects.all(),
         'global_config': GlobalConfig.objects.first(),
-        'deplopment_status': status
+        'pd_status': pd_status
     }
     return render(request, 'installers/index.html', context)
 
@@ -127,11 +129,14 @@ def reset_all(request):
 def destroy_config(request):
     deployer = Deployer()
     deployer.reset()
-    sweetify.success(request, _('Destroy Config Successfully'), icon='success', button='OK')
     Deployment.objects.all().delete()
+    sweetify.success(request, _('Destroy Config Successfully'), icon='success', button='OK')
 
     return redirect('installer:index')
 
 
 def post_deploy(request):
+    deployer = Deployer()
+    deployer.post_deploy()
+    sweetify.success(request, _('Post Deploy Successfully'), icon='success', button='OK')
     return redirect('installer:index')
