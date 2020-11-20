@@ -14,7 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 @login_required
 def index(request):
     if Deployment.get_status() != Deployment.DEPLOY_SUCCESS:
-            return redirect("installer:servers:index")    
+        return redirect("installer:servers:index")    
 
     context = {
         'title': 'Configurations',
@@ -129,3 +129,7 @@ def destroy_config(request):
     Deployment.objects.all().delete()
 
     return redirect('installer:index')
+
+
+def post_deploy(request):
+    pass

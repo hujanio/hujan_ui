@@ -95,11 +95,13 @@ class Deployment(models.Model):
     DEPLOY_IN_PROGRESS = "in_progress"
     DEPLOY_SUCCESS = "success"
     DEPLOY_FAILED = "failed"
+    DEPLOY_POST_DEPLOY_SUCCESS = 'post_deploy_success'
 
     DEPLOY_STATUS = (
         (DEPLOY_IN_PROGRESS, "In Progress"),
         (DEPLOY_SUCCESS, "Success"),
-        (DEPLOY_FAILED, "Failed")
+        (DEPLOY_FAILED, "Failed"),
+        (DEPLOY_POST_DEPLOY_SUCCESS, "Deploy Success")
     )
 
     log_name = models.CharField(max_length=255)

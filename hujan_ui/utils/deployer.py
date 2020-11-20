@@ -101,6 +101,26 @@ class Deployer:
 
         return t
 
+    def _start_kolla_deploy(self):
+        proc_genpwd = subprocess.Popen(settings.KOLLA_COMMAND_GENPWD,
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.STDOUT)
+        proc_crt = subprocess.Popen(settings.KOLLA_COMMAND_ANSIBLE_CRT,
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.STDOUT)
+
+        proc_bs = subprocess.Popen(settings.KOLLA_COMMAND_ANSIBLE_BS,
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.STDOUT)
+
+        proc_pc = subprocess.Popen(settings.KOLLA_COMMAND_ANSIBLE_PC,
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.STDOUT)
+
+        t = threading.Thread(target=self._output_reader, args=(
+            proc_genpwd, proc_crt, proc_bs, proc_pc))
+        t.run()
+
     def _create_deployment(self):
         """
         Create deployment model
