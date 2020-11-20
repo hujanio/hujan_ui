@@ -22,7 +22,7 @@ if [[ $continue != "Y" ]] || [[ $continue != "y" ]] && [[ $current_step == "STEP
     echo "====KOLLA ANSIBLE====="
     kolla-genpwd
     if [ $? -eq 0 ]; then
-        echo OK
+        echo 'OK'
         kolla-ansible certificates
         if [ $? -eq 0 ]; then
             echo "Certificate SUCCESSS"
@@ -44,7 +44,6 @@ if [[ $continue != "Y" ]] || [[ $continue != "y" ]] && [[ $current_step == "STEP
         else
             echo "Certificate FAILED"
         fi
-
     else
         echo "FAILED RUN KOLLA"
     fi

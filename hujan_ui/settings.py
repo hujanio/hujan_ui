@@ -160,6 +160,8 @@ KOLLA_COMMAND_ANSIBLE_CRT = ['kolla-ansible', 'certificates']
 KOLLA_COMMAND_ANSIBLE_BS = ['kolla-ansible', 'bootstrap-servers']
 KOLLA_COMMAND_ANSIBLE_PC = ['kolla-ansible', 'prechecks']
 KOLLA_COMMAND_ANSIBLE_DEPLOY = ['kolla-ansible', 'deploy']
+KOLLA_COMMAND_ALL_AD = [os.path.join(BASE_DIR, 'scripts/kolla_ansible.sh')]
+
 KOLLA_COMMAND_ANSIBLE_POST_DEPLOY = ['kolla-ansible', 'post-deploy']
 
 CONFIG_DIR_HOST = "/etc/hosts"

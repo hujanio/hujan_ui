@@ -88,6 +88,25 @@ class Deployer:
             self.deployment_model.status = Deployment.DEPLOY_FAILED
             self.deployment_model.save()
 
+
+    def _output_reader_kolla(self, proc):
+        self._write_log("Process Started\n")
+        for line in iter(proc.stdout.readline, b''):
+            line_str = line.decode('utf-8')
+            self._write_log(line_str)
+
+        proc.wait()
+        return_code = proc.returncode
+
+        self._write_log(f"Process exited with return code: {return_code}\n")
+
+        if return_code == 0:
+            self.deployment_model.status = Deployment.DEPLOY_POST_DEPLOY_SUCCESS
+            self.deployment_model.save()
+        else:
+            self.deployment_model.status = Deployment.DEPLOY_FAILED
+            self.deployment_model.save()
+
     def _start_process(self):
         """
         Start Process
@@ -102,23 +121,11 @@ class Deployer:
         return t
 
     def _start_kolla_deploy(self):
-        proc_genpwd = subprocess.Popen(settings.KOLLA_COMMAND_GENPWD,
-                                       stdout=subprocess.PIPE,
-                                       stderr=subprocess.STDOUT)
-        proc_crt = subprocess.Popen(settings.KOLLA_COMMAND_ANSIBLE_CRT,
-                                    stdout=subprocess.PIPE,
-                                    stderr=subprocess.STDOUT)
+        proc_kolla = subprocess.Popen(settings.KOLLA_COMMAND_ALL_AD,
+                                      stdout=subprocess.PIPE,
+                                      stderr=subprocess.STDOUT)
 
-        proc_bs = subprocess.Popen(settings.KOLLA_COMMAND_ANSIBLE_BS,
-                                   stdout=subprocess.PIPE,
-                                   stderr=subprocess.STDOUT)
-
-        proc_pc = subprocess.Popen(settings.KOLLA_COMMAND_ANSIBLE_PC,
-                                   stdout=subprocess.PIPE,
-                                   stderr=subprocess.STDOUT)
-
-        t = threading.Thread(target=self._output_reader, args=(
-            proc_genpwd, proc_crt, proc_bs, proc_pc))
+        t = threading.Thread(target=self._output_reader_kolla, args=(proc_kolla,))
         t.run()
 
     def _create_deployment(self):
@@ -142,6 +149,7 @@ class Deployer:
         self._prepare_log_dir()
         self._create_deployment()
         self._start_process()
+        self._start_kolla_deploy()
 
     def reset(self):
         cs = GlobalConfigWriter()
