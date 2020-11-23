@@ -100,7 +100,7 @@ def do_deploy(request):
         'steps': 'deploying',
         'menu_active': 'deployment',
         'pd_status': pd_status,
-        
+        'd_status': d_status
     }
     return render(request, 'installers/deploy_progress.html', context)
 

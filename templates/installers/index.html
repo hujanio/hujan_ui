@@ -220,9 +220,7 @@
           </div>
           <div class="card-footer">
             
-            {% if d_status %}
-
-            {% else %}
+            {% if not d_status %}
             <a href="{% url 'installer:destroy_config' %}" class="btn btn-danger text-white">Destroy</a>
             {% endif %}
             {% if pd_status == False %}
