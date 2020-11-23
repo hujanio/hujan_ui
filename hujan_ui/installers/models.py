@@ -33,7 +33,7 @@ class Inventory(models.Model):
         return f"{self.server} - {self.group}"
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)        
+        super().save(*args, **kwargs)
         Installer.set_step_inventory()
 
 
@@ -72,7 +72,7 @@ class GlobalConfig(models.Model):
         return self.installation_type
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)        
+        super().save(*args, **kwargs)
         Installer.set_step_global_config()
 
 
@@ -95,11 +95,17 @@ class Deployment(models.Model):
     DEPLOY_IN_PROGRESS = "in_progress"
     DEPLOY_SUCCESS = "success"
     DEPLOY_FAILED = "failed"
+    POST_DEPLOY_IN_PROGRESS = 'post_in_progress'
+    POST_DEPLOY_SUCCESS = 'post_success'
+    POST_DEPLOY_FAILED = 'post_failed'
 
     DEPLOY_STATUS = (
         (DEPLOY_IN_PROGRESS, "In Progress"),
         (DEPLOY_SUCCESS, "Success"),
-        (DEPLOY_FAILED, "Failed")
+        (DEPLOY_FAILED, "Failed"),
+        (POST_DEPLOY_IN_PROGRESS, "Deploy Kolla"),
+        (POST_DEPLOY_SUCCESS, "Deploy Success"),
+        (POST_DEPLOY_FAILED, "Deploy Failed")
     )
 
     log_name = models.CharField(max_length=255)

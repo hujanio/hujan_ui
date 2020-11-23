@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
-
+from hujan_ui.utils.core import check_status_deployment
 from hujan_ui.utils.deployer import Deployer
 from hujan_ui.installers.models import (
     Server, Inventory, GlobalConfig, AdvancedConfig,
@@ -13,9 +13,12 @@ from django.utils.translation import ugettext_lazy as _
 
 @login_required
 def index(request):
-    if Deployment.get_status() != Deployment.DEPLOY_SUCCESS:
-            return redirect("installer:servers:index")    
-
+    status_dev = Deployment.get_status()
+    if status_dev == Deployment.DEPLOY_IN_PROGRESS or \
+       status_dev == Deployment.POST_DEPLOY_IN_PROGRESS or \
+       status_dev is None:
+        return redirect('installer:servers:index')
+    pd_status, d_status = check_status_deployment()
     context = {
         'title': 'Configurations',
         'steps': Installer.get_steps,
@@ -23,7 +26,9 @@ def index(request):
         'servers': Server.objects.all(),
         'inventories': Inventory.objects.select_related('server').all(),
         'advanced_config': AdvancedConfig.objects.all(),
-        'global_config': GlobalConfig.objects.first()
+        'global_config': GlobalConfig.objects.first(),
+        'pd_status': pd_status,
+        'd_status': d_status
     }
     return render(request, 'installers/index.html', context)
 
@@ -82,8 +87,9 @@ def deploy(request):
 @login_required
 def do_deploy(request):
     if Deployment.get_status() == Deployment.DEPLOY_SUCCESS:
-            return redirect("installer:servers:index")   
-            
+        return redirect("installer:servers:index")
+
+    pd_status, d_status = check_status_deployment()
     Installer.set_step_deployment()
     deployer = Deployer()
     if not deployer.is_deploying():
@@ -93,6 +99,8 @@ def do_deploy(request):
         "deployment": deployer.deployment_model,
         'steps': 'deploying',
         'menu_active': 'deployment',
+        'pd_status': pd_status,
+        'd_status': d_status
     }
     return render(request, 'installers/deploy_progress.html', context)
 
@@ -125,7 +133,14 @@ def reset_all(request):
 def destroy_config(request):
     deployer = Deployer()
     deployer.reset()
-    sweetify.success(request, _('Destroy Config Successfully'), icon='success', button='OK')
     Deployment.objects.all().delete()
+    sweetify.success(request, _('Destroy Config Successfully'), icon='success', button='OK')
 
+    return redirect('installer:index')
+
+
+def post_deploy(request):
+    deployer = Deployer()
+    deployer.post_deploy()
+    sweetify.success(request, _('Post Deploy Successfully'), icon='success', button='OK')
     return redirect('installer:index')
