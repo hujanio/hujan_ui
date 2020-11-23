@@ -26,7 +26,7 @@ class Deployer:
         """
         Get currently running deployment model
         """
-        return Deployment.objects.filter(Q(status=Deployment.DEPLOY_IN_PROGRESS) | Q(status=Deployment.DEPLOY_KOLLA)).first()
+        return Deployment.objects.filter(Q(status=Deployment.DEPLOY_IN_PROGRESS) | Q(status=Deployment.POST_DEPLOY_IN_PROGRESS)).first()
 
     def is_deploying(self):
         """
@@ -59,7 +59,6 @@ class Deployer:
         """
         Write line to log file of deployment_model
         """
-        print(self._log_file_path())
         with open(self._log_file_path(), 'a+') as f:
             f.write(line)
 
@@ -90,7 +89,6 @@ class Deployer:
             self.deployment_model.status = Deployment.DEPLOY_FAILED
             self.deployment_model.save()
 
-
     def _output_reader_kolla(self, proc):
         self._write_log("Process Started\n")
         for line in iter(proc.stdout.readline, b''):
@@ -103,10 +101,10 @@ class Deployer:
         self._write_log(f"Process exited with return code: {return_code}\n")
 
         if return_code == 0:
-            self.deployment_model.status = Deployment.DEPLOY_KOLLA
+            self.deployment_model.status = Deployment.POST_DEPLOY_IN_PROGRESS
             self.deployment_model.save()
         else:
-            self.deployment_model.status = Deployment.DEPLOY_FAILED
+            self.deployment_model.status = Deployment.POST_DEPLOY_FAILED
             self.deployment_model.save()
 
     def _output_reader_post_deploy(self, proc):
@@ -118,7 +116,7 @@ class Deployer:
         proc.wait()
         return_code = proc.returncode
         if return_code == 0:
-            self.deployment_model.status = Deployment.DEPLOY_POST_DEPLOY_SUCCESS
+            self.deployment_model.status = Deployment.POST_DEPLOY_SUCCESS
             self.deployment_model.save()
         else:
             self.deployment_model.status = Deployment.DEPLOY_FAILED
@@ -139,7 +137,7 @@ class Deployer:
         return t
 
     def _start_kolla_deploy(self):
-        proc_kolla = subprocess.Popen(settings.KOLLA_COMMAND_ALL_AD,
+        proc_kolla = subprocess.Popen(settings.KOLLA_COMMAND_ALL,
                                       stdout=subprocess.PIPE,
                                       stderr=subprocess.STDOUT)
 
@@ -148,7 +146,6 @@ class Deployer:
 
     def _start_post_deploy(self):
 
-        # print(self.deployment_model)
         proc = subprocess.Popen(self.post_deploy_command,
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT)
@@ -160,7 +157,10 @@ class Deployer:
         Create deployment model
         """
         timestamp = datetime.now().strftime("%d%m%Y-%H%M%S")
-        self.deployment_model = Deployment(log_name=f"deploy-log-{timestamp}.log", status=Deployment.DEPLOY_IN_PROGRESS)
+        self.deployment_model = Deployment(
+            log_name=f"deploy-log-{timestamp}.log",
+            status=Deployment.DEPLOY_IN_PROGRESS
+        )
         self.deployment_model.save()
 
     def _prepare_files(self):
@@ -189,6 +189,6 @@ class Deployer:
         mn = MultiNodeWriter()
 
         he.clear()
-        he.save()        
+        he.save()
         mn.clear()
         cs.clear()

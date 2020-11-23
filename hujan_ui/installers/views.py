@@ -1,4 +1,3 @@
-from os import stat
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -15,10 +14,11 @@ from django.utils.translation import ugettext_lazy as _
 @login_required
 def index(request):
     status_dev = Deployment.get_status()
-    if status_dev == Deployment.DEPLOY_IN_PROGRESS or status_dev == None:
+    if status_dev == Deployment.DEPLOY_IN_PROGRESS or \
+       status_dev is None:
         return redirect('installer:servers:index')
     pd_status = False
-    pd_status = pd_status if status_dev == Deployment.DEPLOY_KOLLA else True
+    pd_status = pd_status if status_dev == Deployment.POST_DEPLOY_IN_PROGRESS else True
     context = {
         'title': 'Configurations',
         'steps': Installer.get_steps,
@@ -86,7 +86,7 @@ def deploy(request):
 @login_required
 def do_deploy(request):
     if Deployment.get_status() == Deployment.DEPLOY_SUCCESS:
-        return redirect("installer:servers:index")   
+        return redirect("installer:servers:index")
 
     Installer.set_step_deployment()
     deployer = Deployer()
