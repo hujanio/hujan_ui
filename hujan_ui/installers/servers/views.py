@@ -31,12 +31,13 @@ def index(request):
 @deployment_checked
 def add(request):
     form = AddServerForm(request.POST or None)
-
-    if form.is_valid():
-        form.save()
-        sweetify.success(request, _("Successfully added server"), button='OK', icon='success')
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            sweetify.success(request, _("Successfully added server"), button='OK', icon='success')
+        else:
+            sweetify.error(request, _('Failed added server'))
         return redirect("installer:servers:index")
-
     context = {
         'title': _('Add Server'),
         'form': form,

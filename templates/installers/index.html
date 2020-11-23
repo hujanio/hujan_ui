@@ -219,7 +219,12 @@
             <!-- /.card -->
           </div>
           <div class="card-footer">
+            
+            {% if d_status %}
+
+            {% else %}
             <a href="{% url 'installer:destroy_config' %}" class="btn btn-danger text-white">Destroy</a>
+            {% endif %}
             {% if pd_status == False %}
               <a href="{% url 'installer:post_deploy' %}" class="btn btn-success text-white">Post Deploy</a>
             {% endif %}

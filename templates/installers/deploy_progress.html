@@ -20,7 +20,13 @@
                     </div>
                 </div>
                 <div class="card-footer">
-
+                    {% if d_status %}
+                    {% else %}
+                    <a href="{% url 'installer:destroy_config' %}" class="btn btn-danger text-white">Destroy</a>
+                    {% endif %}
+                    {% if pd_status == False %}
+                    <a href="{% url 'installer:post_deploy' %}" class="btn btn-success text-white">Post Deploy</a>
+                    {% endif %}
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -61,5 +67,12 @@
         $("document").ready(function () {
             doPoll()
         })
+        $(function(){
+         let btn  = $('#general_modal').find('.modal-title').html('Reset Confirmation')
+         .end().find('.modal-body').html('Are you sure to reset this inventories?')
+         .end()
+         .find('.btn-save');
+         btn.replaceWith('<a class="btn btn-primary" href="{% url 'installer:reset_all' %}">Ok</a>')
+        });
     </script>
 {% endblock %}

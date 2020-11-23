@@ -98,7 +98,7 @@ class Deployer:
         proc.wait()
         return_code = proc.returncode
 
-        self._write_log(f"Process exited with return code: {return_code}\n")
+        self._write_log(f"Process kolla exited with return code: {return_code}\n")
 
         if return_code == 0:
             self.deployment_model.status = Deployment.POST_DEPLOY_IN_PROGRESS
