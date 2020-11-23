@@ -110,10 +110,10 @@ class Deployer:
             self.deployment_model.save()
 
     def _output_reader_post_deploy(self, proc):
-        # self._write_log("Process Started\n")
-        # for line in iter(proc.stdout.readline, b''):
-        #     line_str = line.decode('utf-8')
-        #     self._write_log(line_str)
+        self._write_log("Process Started\n")
+        for line in iter(proc.stdout.readline, b''):
+            line_str = line.decode('utf-8')
+            self._write_log(line_str)
 
         proc.wait()
         return_code = proc.returncode
@@ -123,7 +123,7 @@ class Deployer:
         else:
             self.deployment_model.status = Deployment.DEPLOY_FAILED
             self.deployment_model.save()
-        # self._write_log(f"Process post deploy exited with return code: {return_code}\n")
+        self._write_log(f"Process post deploy exited with return code: {return_code}\n")
 
     def _start_process(self):
         """
