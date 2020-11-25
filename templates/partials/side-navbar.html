@@ -83,7 +83,8 @@
                 </a>
             </li>
 
-            <li class="nav-item">
+            <!-- TODO: Komen sementara sampai fiturnya diperlukan -->
+            <!-- <li class="nav-item">
                 <a href="#" class="nav-link {% if menu_active == 'lain' %}active{% endif %}">
                     <i class="nav-icon fas fa-cogs"></i>
                     <p>Controller<i class="right fas fa-angle-left"></i></p>
@@ -102,7 +103,7 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> -->
 
             <li class="nav-item">
                 <a href="{% url 'maas:dns:index' %}" class="nav-link {% if menu_active == 'domains' %}active{% endif %}">
@@ -117,12 +118,6 @@
                     <p>Settings<i class="right fas fa-angle-left"></i></p>
                 </a>
                 <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>User</p>
-                        </a>
-                    </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>

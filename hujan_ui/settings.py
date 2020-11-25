@@ -155,8 +155,8 @@ DEFAULT_ANSIBLE_USER = "ubuntu"
 DEPLOYMENT_LOG_DIR = os.path.join(BASE_DIR, 'deploy_log')
 DEPLOYMENT_COMMAND = ["ls", "/"]
 
-KOLLA_COMMAND_ALL = [os.path.join(BASE_DIR, 'scripts/kolla_ansible.sh')]
-KOLLA_COMMAND_ANSIBLE_POST_DEPLOY = ['kolla-ansible', 'post-deploy']
+KOLLA_COMMAND_DEPLOY = [os.path.join(BASE_DIR, 'scripts/kolla_ansible.sh')]
+KOLLA_COMMAND_POST_DEPLOY = ['kolla-ansible', 'post-deploy']
 
 CONFIG_DIR_HOST = "/etc/hosts"
 CONFIG_DIR_MULTINODE = "/home/kolla/multinode"
