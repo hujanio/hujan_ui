@@ -14,7 +14,7 @@ from hujan_ui.utils.multinode_writer import MultiNodeWriter
 class Deployer:
     log_dir = settings.DEPLOYMENT_LOG_DIR
     deploy_command = settings.DEPLOYMENT_COMMAND
-    post_deploy_command = settings.DEPLOYMENT_COMMAND
+    post_deploy_command = settings.KOLLA_COMMAND_ANSIBLE_POST_DEPLOY
 
     def __init__(self, deployment_model=None):
         if not deployment_model:
@@ -175,7 +175,9 @@ class Deployer:
         self._prepare_files()
         self._prepare_log_dir()
         self._create_deployment()
-        self._start_process()
+        # TODO: sementara di komment untuk test, karena ini hanya menjalankan
+        # perintah bash ls
+        # self._start_process()
         self._start_kolla_deploy()
 
     def post_deploy(self):
