@@ -32,14 +32,13 @@ class GlobalConfigWriter:
     @staticmethod
     def save_from_model(global_config):
         writer = GlobalConfigWriter()
-        writer.set_entry({
+        
+        params = {
             "kolla_install_type": global_config.installation_type,
             "openstack_release": global_config.openstack_release,
             "kolla_internal_vip_address": global_config.internal_vip_address,
             "kolla_external_vip_address": global_config.external_vip_address,
             "kolla_enable_tls_external": global_config.enable_tls_on_external_api,
-            "storage_interface": global_config.storage_interface,
-            "network_interface": global_config.network_interface,
             "neutron_plugin_agent": global_config.neutron_plugin_agent,
             "enable_ceph": global_config.enable_ceph_service,
             "enable_cinder": global_config.enable_cinder_service,
@@ -53,5 +52,12 @@ class GlobalConfigWriter:
             "ceph_pool_pgp_num": global_config.ceph_pool_pgp_num,
             "glance_backend_ceph": global_config.glance_backend_using_ceph,
             "glance_backend_file": global_config.glance_backend_file
-        })
+        }
+        if global_config.storage_interface:
+            params['storage_interface'] = global_config.storage_interface
+
+        if global_config.network_interface:
+            params['network_interface'] = global_config.network_interface
+
+        writer.set_entry(params)
         writer.save()
