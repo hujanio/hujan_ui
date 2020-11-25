@@ -13,8 +13,8 @@ from hujan_ui.utils.multinode_writer import MultiNodeWriter
 
 class Deployer:
     log_dir = settings.DEPLOYMENT_LOG_DIR
-    deploy_command = settings.DEPLOYMENT_COMMAND
-    post_deploy_command = settings.KOLLA_COMMAND_ANSIBLE_POST_DEPLOY
+    deploy_command = settings.KOLLA_COMMAND_DEPLOY
+    post_deploy_command = settings.KOLLA_COMMAND_POST_DEPLOY
 
     def __init__(self, deployment_model=None):
         if not deployment_model:
@@ -68,7 +68,7 @@ class Deployer:
         """
         return os.path.join(self.log_dir, self.deployment_model.log_name)
 
-    def _output_reader(self, proc):
+    def _output_reader_deploy(self, proc):
         """
         Read process output
         """
@@ -89,24 +89,6 @@ class Deployer:
             self.deployment_model.status = Deployment.DEPLOY_FAILED
             self.deployment_model.save()
 
-    def _output_reader_kolla(self, proc):
-        self._write_log("Process Started\n")
-        for line in iter(proc.stdout.readline, b''):
-            line_str = line.decode('utf-8')
-            self._write_log(line_str)
-
-        proc.wait()
-        return_code = proc.returncode
-
-        self._write_log(f"Process kolla exited with return code: {return_code}\n")
-
-        if return_code == 0:
-            self.deployment_model.status = Deployment.POST_DEPLOY_IN_PROGRESS
-            self.deployment_model.save()
-        else:
-            self.deployment_model.status = Deployment.POST_DEPLOY_FAILED
-            self.deployment_model.save()
-
     def _output_reader_post_deploy(self, proc):
         self._write_log("Process Started\n")
         for line in iter(proc.stdout.readline, b''):
@@ -123,25 +105,12 @@ class Deployer:
             self.deployment_model.save()
         self._write_log(f"Process post deploy exited with return code: {return_code}\n")
 
-    def _start_process(self):
-        """
-        Start Process
-        """
-        proc = subprocess.Popen(self.deploy_command,
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.STDOUT)
-
-        t = threading.Thread(target=self._output_reader, args=(proc,))
-        t.start()
-
-        return t
-
-    def _start_kolla_deploy(self):
-        proc_kolla = subprocess.Popen(settings.KOLLA_COMMAND_ALL,
+    def _start_deploy(self):
+        proc_kolla = subprocess.Popen(self.deploy_command,
                                       stdout=subprocess.PIPE,
                                       stderr=subprocess.STDOUT)
 
-        t = threading.Thread(target=self._output_reader_kolla, args=(proc_kolla,))
+        t = threading.Thread(target=self._output_reader_deploy, args=(proc_kolla,))
         t.run()
 
     def _start_post_deploy(self):
@@ -175,13 +144,9 @@ class Deployer:
         self._prepare_files()
         self._prepare_log_dir()
         self._create_deployment()
-        # TODO: sementara di komment untuk test, karena ini hanya menjalankan
-        # perintah bash ls
-        # self._start_process()
-        self._start_kolla_deploy()
+        self._start_deploy()
 
     def post_deploy(self):
-
         self._prepare_log_dir()
         self._start_post_deploy()
 
