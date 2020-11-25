@@ -48,8 +48,6 @@ class GlobalConfigWriter:
             "enable_neutron_agent_ha": global_config.enable_ha_agent,
             "enable_neutron_vpnaas": global_config.enable_vpnaas,
             "enable_octavia": global_config.enable_octavia_service,
-            "ceph_pool_pg_num": global_config.ceph_pool_pg_num,
-            "ceph_pool_pgp_num": global_config.ceph_pool_pgp_num,
             "glance_backend_ceph": global_config.glance_backend_using_ceph,
             "glance_backend_file": global_config.glance_backend_file
         }
@@ -58,6 +56,12 @@ class GlobalConfigWriter:
 
         if global_config.network_interface:
             params['network_interface'] = global_config.network_interface
+        
+        if global_config.ceph_pool_pg_num:
+            params['ceph_pool_pg_num'] = global_config.ceph_pool_pg_num
+
+        if global_config.ceph_pool_pgp_num:
+            params['ceph_pool_pgp_num'] = global_config.ceph_pool_pgp_num
 
         writer.set_entry(params)
         writer.save()
