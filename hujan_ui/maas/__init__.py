@@ -25,7 +25,7 @@ def get_physicals(system_id, id=None):
     if settings.WITH_EX_RESPONSE:
         if system_id and id:
             physicals = load_document('interface_detail.json')
-        
+
     else:
         m = MAAS()
         if system_id and id:
@@ -34,7 +34,7 @@ def get_physicals(system_id, id=None):
         else:
             physicals = m.get(f'nodes/{system_id}/').json()
             write_document(physicals, 'interface.json')
-            
+
     return physicals
 
 
@@ -105,16 +105,20 @@ def get_spaces(space_id=None):
     return spaces
 
 
-def get_subnet_infabric():
+def get_subnet_byfabric():
+    def check_vlan(subnet, vlan_id):
+        subnets = subnet()
+        for subnet in subnets:
+            if vlan_id == subnet['vlan']['id']:
+                return subnet
+        return None
+
     store = []
     fabrics = get_fabrics()
     for fabric in fabrics:
         for vlan in fabric['vlans']:
-            subnets = get_subnets()
-            for subnet in subnets:
-                if vlan['id'] == subnet['vlan']['id']:
-                    fabric['subnet'] = subnet
-                    store.append(fabric)
+            fabric['subnet'] = check_vlan(get_subnets, vlan['id'])
+        store.append(fabric)
     return store
 
 
@@ -145,7 +149,7 @@ def get_events():
         events = load_document('events.json')
     else:
         m = MAAS()
-        events = m.get(f'events/?op=query').json()
+        events = m.get('events/?op=query').json()
         write_document(events, 'events.json')
 
     return events
