@@ -53,7 +53,10 @@
                       No DHCP
                       {% endif %}
                     </td>
-                    <td><a href="{% url 'maas:subnets:subnet_detail' fabric.subnet.id %}">{{ fabric.subnet.cidr }}</a>
+                    <td>
+                      {% if fabric.subnet %}
+                        <a href="{% url 'maas:subnets:subnet_detail' fabric.subnet.id %}">{{ fabric.subnet.cidr }}</a>
+                      {% endif %}
                     </td>
                     <td>0%</td>
                     <td>{{ vlan.space }}</td>
