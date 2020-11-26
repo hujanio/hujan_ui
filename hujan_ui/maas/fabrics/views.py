@@ -57,6 +57,7 @@ def edit(request, fabric_id):
     if form.is_valid():
         m = MAAS()
         data = form.clean()
+        data.update({'id': fabric_id})
         resp = m.put(f'/fabrics/{fabric_id}/', data=data)
         if resp.status_code in m.ok:
             sweetify.success(request, _('Successful'), button='OK', timer=2000)
