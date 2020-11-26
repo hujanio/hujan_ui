@@ -31,7 +31,7 @@
 
                             {# Include the visible fields #}
                             {% for field in form.visible_fields %}
-                                <div class="col-md-5">
+                                <div class="col-md-5" id="form-{{ field.name }}">
                                     <div class="form-group row">
                                         {% if field.field.widget.input_type == 'checkbox' %}
                                             <label for="inputEmail3" class="col-sm-7 col-form-label">{{ field.label }}</label>
@@ -122,5 +122,17 @@
         }
         return true;
     }
+    $('#id_enable_ceph_service').on('change',function(e){
+        let t = e.target;
+        if(t.hasAttribute('checked')){
+            t.removeAttribute('checked');
+            $('#form-ceph_pool_pg_num').addClass('d-none');
+            $('#form-ceph_pool_pgp_num').addClass('d-none');
+        }else{
+            t.setAttribute('checked','checked');
+            $('#form-ceph_pool_pg_num').removeClass('d-none');
+            $('#form-ceph_pool_pgp_num').removeClass('d-none');
+        }
+    });
 </script>
 {% endblock %}

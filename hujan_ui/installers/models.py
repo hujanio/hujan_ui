@@ -63,8 +63,8 @@ class GlobalConfig(models.Model):
     enable_port_forwading = models.BooleanField(default=True)
     enable_octavia_service = models.BooleanField(default=True)
     enable_promotheus_service = models.BooleanField(default=True)
-    ceph_pool_pg_num = models.IntegerField(default=30)
-    ceph_pool_pgp_num = models.IntegerField(default=30)
+    ceph_pool_pg_num = models.IntegerField(default=30, null=True, blank=True)
+    ceph_pool_pgp_num = models.IntegerField(default=30, null=True, blank=True)
     glance_backend_using_ceph = models.BooleanField(default=True)
     glance_backend_file = models.BooleanField(default=False)
 
