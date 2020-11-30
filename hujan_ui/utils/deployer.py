@@ -1,7 +1,7 @@
 import os
 import subprocess
 import threading
-
+import pwd
 from django.conf import settings
 from django.utils.datetime_safe import datetime
 from django.db.models import Q
@@ -15,6 +15,7 @@ class Deployer:
     log_dir = settings.DEPLOYMENT_LOG_DIR
     deploy_command = settings.KOLLA_COMMAND_DEPLOY
     post_deploy_command = settings.KOLLA_COMMAND_POST_DEPLOY
+    deploy_user = 'kolla'
 
     def __init__(self, deployment_model=None):
         if not deployment_model:
@@ -106,18 +107,26 @@ class Deployer:
         self._write_log(f"Process post deploy exited with return code: {return_code}\n")
 
     def _start_deploy(self):
+        uid = pwd.getpwnam(self.deploy_user).pw_uid
+        gid = pwd.getpwnam(self.deploy_user).pw_gid
+        user = self.deploy_user
         proc_kolla = subprocess.Popen(self.deploy_command,
                                       stdout=subprocess.PIPE,
-                                      stderr=subprocess.STDOUT)
+                                      stderr=subprocess.STDOUT,
+                                      preexec_fn=self._demote(user, uid, gid)
+                                      )
 
         t = threading.Thread(target=self._output_reader_deploy, args=(proc_kolla,))
         t.run()
 
     def _start_post_deploy(self):
-
+        uid = pwd.getpwnam(self.deploy_user).pw_uid
+        gid = pwd.getpwnam(self.deploy_user).pw_gid
+        user = self.deploy_user
         proc = subprocess.Popen(self.post_deploy_command,
                                 stdout=subprocess.PIPE,
-                                stderr=subprocess.STDOUT)
+                                stderr=subprocess.STDOUT,
+                                preexec_fn=self._demote(user, uid, gid))
         t = threading.Thread(target=self._output_reader_post_deploy, args=(proc,))
         t.run()
 
@@ -159,3 +168,11 @@ class Deployer:
         he.save()
         mn.clear()
         cs.clear()
+
+    def _demote(user, uid, gid):
+        def set_ids():
+            os.initgroups(user, gid)
+            os.setgid(gid)
+            os.setuid(uid)
+
+        return set_ids
