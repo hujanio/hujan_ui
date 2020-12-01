@@ -1,7 +1,7 @@
 import os
 import subprocess
 import threading
-
+import pwd
 from django.conf import settings
 from django.utils.datetime_safe import datetime
 from django.db.models import Q
@@ -9,12 +9,14 @@ from hujan_ui.installers.models import Server, Inventory, GlobalConfig, Deployme
 from hujan_ui.utils.global_config_writer import GlobalConfigWriter
 from hujan_ui.utils.host_editor import HostEditor
 from hujan_ui.utils.multinode_writer import MultiNodeWriter
+from hujan_ui.utils.core import demote
 
 
 class Deployer:
     log_dir = settings.DEPLOYMENT_LOG_DIR
     deploy_command = settings.KOLLA_COMMAND_DEPLOY
     post_deploy_command = settings.KOLLA_COMMAND_POST_DEPLOY
+    deploy_user = 'kolla'
 
     def __init__(self, deployment_model=None):
         if not deployment_model:
@@ -106,18 +108,24 @@ class Deployer:
         self._write_log(f"Process post deploy exited with return code: {return_code}\n")
 
     def _start_deploy(self):
+        uid = pwd.getpwnam(self.deploy_user).pw_uid
+        gid = pwd.getpwnam(self.deploy_user).pw_gid
+
         proc_kolla = subprocess.Popen(self.deploy_command,
                                       stdout=subprocess.PIPE,
-                                      stderr=subprocess.STDOUT)
+                                      stderr=subprocess.STDOUT,
+                                      preexec_fn=demote(uid, gid))
 
         t = threading.Thread(target=self._output_reader_deploy, args=(proc_kolla,))
         t.run()
 
     def _start_post_deploy(self):
-
+        uid = pwd.getpwnam(self.deploy_user).pw_uid
+        gid = pwd.getpwnam(self.deploy_user).pw_gid
         proc = subprocess.Popen(self.post_deploy_command,
                                 stdout=subprocess.PIPE,
-                                stderr=subprocess.STDOUT)
+                                stderr=subprocess.STDOUT,
+                                preexec_fn=demote(uid, gid))
         t = threading.Thread(target=self._output_reader_post_deploy, args=(proc,))
         t.run()
 
