@@ -1,4 +1,5 @@
 from hujan_ui.installers.models import Deployment
+import os
 
 
 def conv_kb_to_mb(input_kilobyte):
@@ -15,8 +16,16 @@ def conv_mb_to_gb(input_megabyte):
 
 def check_status_deployment():
     status_dev = Deployment.get_status()
-    pd_status = False
-    d_status = True
-    d_status = d_status if status_dev == Deployment.DEPLOY_SUCCESS else False
-    pd_status = pd_status if status_dev == Deployment.POST_DEPLOY_IN_PROGRESS else True
+    d_status = False if status_dev == Deployment.DEPLOY_SUCCESS or \
+        status_dev == Deployment.DEPLOY_IN_PROGRESS else True
+    pd_status = False if status_dev == Deployment.POST_DEPLOY_IN_PROGRESS or \
+        status_dev == Deployment.DEPLOY_SUCCESS else True
     return pd_status, d_status
+
+
+def demote(user_uid, user_gid):
+    def set_ids():
+        os.setgid(user_gid)
+        os.setuid(user_uid)
+
+    return set_ids
