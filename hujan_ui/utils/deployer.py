@@ -16,7 +16,7 @@ class Deployer:
     log_dir = settings.DEPLOYMENT_LOG_DIR
     deploy_command = settings.KOLLA_COMMAND_DEPLOY
     post_deploy_command = settings.KOLLA_COMMAND_POST_DEPLOY
-    deploy_user = 'kolla'
+    deploy_user = settings.USER_EXEC_KOLLA_COMMAND
 
     def __init__(self, deployment_model=None):
         if not deployment_model:
@@ -117,7 +117,8 @@ class Deployer:
                                       preexec_fn=demote(uid, gid))
 
         t = threading.Thread(target=self._output_reader_deploy, args=(proc_kolla,))
-        t.run()
+        t.start()
+        return t
 
     def _start_post_deploy(self):
         uid = pwd.getpwnam(self.deploy_user).pw_uid
@@ -127,7 +128,8 @@ class Deployer:
                                 stderr=subprocess.STDOUT,
                                 preexec_fn=demote(uid, gid))
         t = threading.Thread(target=self._output_reader_post_deploy, args=(proc,))
-        t.run()
+        t.start()
+        return t
 
     def _create_deployment(self):
         """
