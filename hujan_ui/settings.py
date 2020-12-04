@@ -157,6 +157,7 @@ DEPLOYMENT_COMMAND = ["ls", "/"]
 
 KOLLA_COMMAND_DEPLOY = [os.path.join(BASE_DIR, 'scripts/kolla_ansible.sh')]
 KOLLA_COMMAND_POST_DEPLOY = ['kolla-ansible', 'post-deploy']
+USER_EXEC_KOLLA_COMMAND = 'kolla'
 
 CONFIG_DIR_HOST = "/etc/hosts"
 CONFIG_DIR_MULTINODE = "/home/kolla/multinode"

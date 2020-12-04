@@ -118,6 +118,7 @@ def deploy_log(request, id):
     })
 
 
+@login_required
 def reset_all(request):
     Installer.objects.all().delete()
     Server.objects.all().delete()
@@ -130,6 +131,7 @@ def reset_all(request):
     return redirect('installer:index')
 
 
+@login_required
 def destroy_config(request):
     deployer = Deployer()
     deployer.reset()
@@ -139,6 +141,7 @@ def destroy_config(request):
     return redirect('installer:index')
 
 
+@login_required
 def post_deploy(request):
     deployer = Deployer()
     deployer.post_deploy()
