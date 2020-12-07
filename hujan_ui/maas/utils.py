@@ -10,30 +10,27 @@ class MAAS:
     config = ConfigMAAS.objects.first()
 
     def __init__(self):
-        if self.config is None:
-            self.url = settings.MAAS_URL + "api/2.0/"
+        if self.config:
+            self.maas_url = self.config.maas_url
+            self.mass_api_key = self.config.maas_api_key
         else:
-            self.url = self.config.maas_url + "api/2.0/"
+            self.maas_url = settings.MAAS_URL
+            self.mass_api_key = settings.MAAS_API_KEY
+
+        self.url = self.maas_url + "api/2.0/"
         self.headers = {
             'content-type': 'application/json',
             'accept': 'application/json'
         }
 
     def maas_connect(self):
-        if self.config is None:
-            if not settings.MAAS_API_KEY:
-                raise MAASError("Please enter MAAS API KEY on the menu 'Settings -> MAAS Config'")
-            if not settings.MAAS_URL:
-                raise MAASError("Please enter MAAS URL on the menu 'Settings -> MAAS Config'")
 
-            consumer_key, token_key, token_secret = settings.MAAS_API_KEY.split(":")
-        else:
-            if not self.config.maas_api_key:
-                raise MAASError("Please enter MAAS API KEY on the menu 'Settings -> MAAS Config'")
-            if not self.config.maas_url:
-                raise MAASError("Please enter MAAS URL on the menu 'Settings -> MAAS Config'")
+        if not self.maas_url:
+            raise MAASError("Please enter MAAS API KEY on the menu 'Settings -> MAAS Config'")
+        if not self.mass_api_key:
+            raise MAASError("Please enter MAAS URL on the menu 'Settings -> MAAS Config'")
 
-            consumer_key, token_key, token_secret = self.config.maas_api_key.split(":")
+        consumer_key, token_key, token_secret = self.mass_api_key.split(":")        
 
         return OAuth1Session(
             consumer_key,
@@ -86,19 +83,3 @@ class MAAS:
     def _validate_request(self, resp):
         if resp.status_code in self.fail:
             raise MAASError(resp.text)
-
-
-def maas_connect():
-    config = ConfigMAAS.objects.first()
-    if config is None:
-        consumer_key, token_key, token_secret = settings.MAAS_API_KEY.split(":")
-    else:
-        consumer_key, token_key, token_secret = config.maas_api_key.split(":")
-    return OAuth1(
-        consumer_key,
-        client_secret='',
-        resource_owner_key=token_key,
-        resource_owner_secret=token_secret,
-        signature_method='PLAINTEXT',
-        signature_type='auth_header'
-    )
