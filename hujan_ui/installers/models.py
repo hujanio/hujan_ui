@@ -1,7 +1,8 @@
 from django.db import models
-
+from django.utils.translation import ugettext_lazy as _
 from multiselectfield import MultiSelectField
 from model_utils import Choices
+
 
 
 class Server(models.Model):
@@ -167,3 +168,16 @@ class Installer(models.Model):
         installer.steps.append(cls.STEPS.deployment)
         installer.save()
         return installer
+
+
+class ConfigMAAS(models.Model):
+
+    maas_api_key = models.CharField(max_length=100)
+    maas_url = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name = _("ConfigMAAS")
+        verbose_name_plural = _("ConfigMAASs")
+
+    def __str__(self):
+        return self.maas_url

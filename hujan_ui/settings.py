@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django_extensions',
 
     'hujan_ui.installers',
-    'hujan_ui.maas',
 
     'widget_tweaks',
     'django_pam',
