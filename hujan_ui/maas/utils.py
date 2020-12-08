@@ -1,5 +1,5 @@
 from django.conf import settings
-
+from hujan_ui.installers.models import ConfigMAAS
 from requests_oauthlib import OAuth1Session, OAuth1
 from .exceptions import MAASError
 
@@ -7,21 +7,31 @@ from .exceptions import MAASError
 class MAAS:
     ok = list(range(200, 205))
     fail = list(range(400, 500))
+    config = ConfigMAAS.objects.first()
 
     def __init__(self):
-        self.url = settings.MAAS_URL + "api/2.0/"
+        if self.config:
+            self.maas_url = self.config.maas_url
+            self.mass_api_key = self.config.maas_api_key
+        else:
+            self.maas_url = settings.MAAS_URL
+            self.mass_api_key = settings.MAAS_API_KEY
+
+        self.url = self.maas_url + "api/2.0/"
         self.headers = {
             'content-type': 'application/json',
             'accept': 'application/json'
         }
 
     def maas_connect(self):
-        if not settings.MAAS_API_KEY:
-            raise MAASError("MAAS_API_KEY not yet define")
-        if not settings.MAAS_URL:
-            raise MAASError("MAAS_URL not yet define")
 
-        consumer_key, token_key, token_secret = settings.MAAS_API_KEY.split(":")
+        if not self.maas_url:
+            raise MAASError("Please enter MAAS API KEY on the menu 'Settings -> MAAS Config'")
+        if not self.mass_api_key:
+            raise MAASError("Please enter MAAS URL on the menu 'Settings -> MAAS Config'")
+
+        consumer_key, token_key, token_secret = self.mass_api_key.split(":")        
+
         return OAuth1Session(
             consumer_key,
             client_secret='',
@@ -73,15 +83,3 @@ class MAAS:
     def _validate_request(self, resp):
         if resp.status_code in self.fail:
             raise MAASError(resp.text)
-
-
-def maas_connect():
-    consumer_key, token_key, token_secret = settings.MAAS_API_KEY.split(":")
-    return OAuth1(
-        consumer_key,
-        client_secret='',
-        resource_owner_key=token_key,
-        resource_owner_secret=token_secret,
-        signature_method='PLAINTEXT',
-        signature_type='auth_header'
-    )

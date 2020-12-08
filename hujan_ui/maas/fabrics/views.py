@@ -11,7 +11,7 @@ from .forms import FabricForm
 
 def index(request):
     if request.is_ajax():
-        return JsonResponse({'fabrics': maas.get_fabrics() })
+        return JsonResponse({'fabrics': maas.get_fabrics()})
 
     context = {
         'title': 'Fabrics',
