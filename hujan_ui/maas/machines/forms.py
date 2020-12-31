@@ -37,7 +37,7 @@ class AddMachineForm(forms.Form):
         # ('vmware', 'VMware'),
         # TODO : dimatikan sementara karena machine baru support tipe IPMI saja
     ]
-    power_type = forms.ChoiceField(choices=POWER_TYPE, initial=POWER_TYPE[5][0])
+    power_type = forms.ChoiceField(choices=POWER_TYPE, initial=POWER_TYPE[0][0])
 
     def __init__(self, *args, **kwargs):
         self.maas = MAAS()

@@ -111,11 +111,13 @@
     });
     worker.postMessage({ cmd: 'reqLastMachine', val: `${window.location.origin}/maas/machines/load_machine/`});
 
+    $('#table_machine').on('change', 'input:radio[name="csi"]', function(e){
+      e.preventDefault();
+      systemId = $(this).val();
+    });
+
     $('.dropdown-item-commission').on('click', function(){
-      let si = $('input[name="csi"]').val();
-      systemId = si;
-      console.log(si);
-      axios.get(`${window.location.origin}/maas/machines/commission/${si}`).then(res => {
+      axios.get(`${window.location.origin}/maas/machines/commission/${systemId}`).then(res => {
         const response = res.data;
         console.log(response);
         $('#general_modal').find('.modal-body').html(response.html).end()
@@ -126,10 +128,7 @@
 
 
     $('.dropdown-item-deploy').on('click', function(){
-      let si = $('input[name="csi"]').val();
-      systemId = si;
-      console.log(si);
-      axios.get(`${window.location.origin}/maas/machines/deploy/${si}`).then(res => {
+      axios.get(`${window.location.origin}/maas/machines/deploy/${systemId}`).then(res => {
         const response = res.data;
         $('#general_modal').find('.modal-body').html(response.html).append('Are You Sure ??').end()
         .find('.modal-title').html('Machine Deploy').end()
@@ -139,10 +138,7 @@
     });
 
     $('.dropdown-item-onoff').on('click', function(){
-      let si = $('input[name="csi"]').val();
-      systemId = si;
-      console.log(si);
-      axios.get(`${window.location.origin}/maas/machines/onoff/${si}`).then(res => {
+      axios.get(`${window.location.origin}/maas/machines/onoff/${systemId}`).then(res => {
         const response = res.data;
         $('#general_modal').find('.modal-body').html(response.html).append('Are You Sure ??').end()
         .find('.modal-title').html('Machine On Off').end()
@@ -153,10 +149,7 @@
 
 
     $('.dropdown-item-delete').on('click', function(){
-      let si = $('input[name="csi"]').val();
-      systemId = si;
-      console.log(si);
-      axios.get(`${window.location.origin}/maas/machines/delete/${si}`).then(res => {
+      axios.get(`${window.location.origin}/maas/machines/delete/${systemId}`).then(res => {
         const response = res.data;
         $('#general_modal').find('.modal-body').html(response.html).append('Are You Sure ??').end()
         .find('.modal-title').html('Machine Delete').end()
