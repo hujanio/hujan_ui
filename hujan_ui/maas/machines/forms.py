@@ -14,29 +14,30 @@ class AddMachineForm(forms.Form):
     resouce_pool = forms.ChoiceField()
     mac_addresses = forms.CharField(label='MAC Address')
     POWER_TYPE = [
-        ('amt', 'Intel AMT'),
-        ('apc', 'American Power Conversion (APC) PDU'),
-        ('dli', 'Digital Loggers, Inc. PDU'),
-        ('fence_cdu', 'Sentry Switch CDU'),
-        ('hmc', 'IBM Hardware Management Console (HMC)'),
+        # ('amt', 'Intel AMT'),
+        # ('apc', 'American Power Conversion (APC) PDU'),
+        # ('dli', 'Digital Loggers, Inc. PDU'),
+        # ('fence_cdu', 'Sentry Switch CDU'),
+        # ('hmc', 'IBM Hardware Management Console (HMC)'),
         ('ipmi', 'IPMI'),
-        ('moonshot', 'HP Moonshot - iLO4 (IPMI)'),
-        ('mscm', 'HP Moonshot - iLO Chassis Manager'),
-        ('msftocs', 'Microsoft OCS - Chassis Manager'),
-        ('nova', 'OpenStack Nova'),
-        ('nova', 'OpenStack Nova'),
-        ('openbmc', 'OpenBMC Power Driver'),
-        ('recs_box', 'Christmann RECS|Box Power Driver'),
-        ('redfish', 'Redfish'),
-        ('smk15k', 'SeaMicro 15000'),
-        ('ucsm', 'Cisco UCS Manager'),
-        ('virsh', 'Virsh (virtual systems)'),
-        ('vmware', 'VMware'),
-        ("wedge", "Facebook's Wedge"),
-        ("rsd", "Rack Scale Design"),
-        ('vmware', 'VMware'),
+        # ('moonshot', 'HP Moonshot - iLO4 (IPMI)'),
+        # ('mscm', 'HP Moonshot - iLO Chassis Manager'),
+        # ('msftocs', 'Microsoft OCS - Chassis Manager'),
+        # ('nova', 'OpenStack Nova'),
+        # ('nova', 'OpenStack Nova'),
+        # ('openbmc', 'OpenBMC Power Driver'),
+        # ('recs_box', 'Christmann RECS|Box Power Driver'),
+        # ('redfish', 'Redfish'),
+        # ('smk15k', 'SeaMicro 15000'),
+        # ('ucsm', 'Cisco UCS Manager'),
+        # ('virsh', 'Virsh (virtual systems)'),
+        # ('vmware', 'VMware'),
+        # ("wedge", "Facebook's Wedge"),
+        # ("rsd", "Rack Scale Design"),
+        # ('vmware', 'VMware'),
+        # TODO : dimatikan sementara karena machine baru support tipe IPMI saja
     ]
-    power_type = forms.ChoiceField(choices=POWER_TYPE, initial=POWER_TYPE[5][0])
+    power_type = forms.ChoiceField(choices=POWER_TYPE, initial=POWER_TYPE[0][0])
 
     def __init__(self, *args, **kwargs):
         self.maas = MAAS()
