@@ -114,7 +114,7 @@ class Deployment(models.Model):
 
     @classmethod
     def get_status(cls):
-        deployment = cls.objects.first()
+        deployment = cls.objects.order_by('-id').first()
         if deployment:
             return deployment.status
         return None

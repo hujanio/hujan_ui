@@ -83,6 +83,15 @@ class PowerTypeIPMIForm(forms.Form):
     mac_address = forms.CharField(label='Power MAC')
 
 
+class PowerTypeIntelAMTForm(forms.Form):
+    power_password = forms.CharField(widget=forms.PasswordInput())
+    power_address = forms.CharField()
+
+
+class PowerTypeVMWareForm(forms.Form):
+    pass
+
+
 class PhysicalForm(forms.Form):
     name = forms.CharField()
     mac_address = forms.CharField()

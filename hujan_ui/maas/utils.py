@@ -7,9 +7,10 @@ from .exceptions import MAASError
 class MAAS:
     ok = list(range(200, 205))
     fail = list(range(400, 500))
-    config = ConfigMAAS.objects.first()
+    config = None
 
     def __init__(self):
+        self.config = ConfigMAAS.objects.first()
         if self.config:
             self.maas_url = self.config.maas_url
             self.mass_api_key = self.config.maas_api_key
