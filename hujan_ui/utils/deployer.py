@@ -157,9 +157,7 @@ class Deployer:
         self._start_deploy()
 
     def post_deploy(self):
-        print(self.deployment_model.log_name)
         self._prepare_log_dir()
-        self._create_deployment()
         self._start_post_deploy()
 
     def reset(self):
