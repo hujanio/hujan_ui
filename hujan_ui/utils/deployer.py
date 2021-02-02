@@ -28,8 +28,7 @@ class Deployer:
         """
         Get currently running deployment model
         """
-        return Deployment.objects.filter(Q(status=Deployment.DEPLOY_IN_PROGRESS) | Q(status=Deployment.POST_DEPLOY_IN_PROGRESS)).first()
-
+        return Deployment.objects.order_by('-id').first()
     def is_deploying(self):
         """
         Check if deploying in progress
@@ -92,7 +91,7 @@ class Deployer:
             self.deployment_model.save()
 
     def _output_reader_post_deploy(self, proc):
-        self._write_log("Process Started\n")
+        self._write_log("Process Post Started\n")
         for line in iter(proc.stdout.readline, b''):
             line_str = line.decode('utf-8')
             self._write_log(line_str)
@@ -123,6 +122,7 @@ class Deployer:
     def _start_post_deploy(self):
         uid = pwd.getpwnam(self.deploy_user).pw_uid
         gid = pwd.getpwnam(self.deploy_user).pw_gid
+
         proc = subprocess.Popen(self.post_deploy_command,
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT,
@@ -157,7 +157,9 @@ class Deployer:
         self._start_deploy()
 
     def post_deploy(self):
+        print(self.deployment_model.log_name)
         self._prepare_log_dir()
+        self._create_deployment()
         self._start_post_deploy()
 
     def reset(self):
