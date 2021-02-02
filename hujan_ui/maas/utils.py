@@ -7,9 +7,10 @@ from .exceptions import MAASError
 class MAAS:
     ok = list(range(200, 205))
     fail = list(range(400, 500))
-    config = ConfigMAAS.objects.first()
+    config = None
 
     def __init__(self):
+        self.config = ConfigMAAS.objects.first()
         if self.config:
             self.maas_url = self.config.maas_url
             self.mass_api_key = self.config.maas_api_key
@@ -83,3 +84,16 @@ class MAAS:
     def _validate_request(self, resp):
         if resp.status_code in self.fail:
             raise MAASError(resp.text)
+
+    def db_table_exists(table, cursor=None):
+        try:
+            if not cursor:
+                from django.db import connection
+                cursor = connection.cursor()
+            if not cursor:
+                raise Exception
+            table_names = connection.introspection.get_table_list(cursor)
+        except:
+            raise Exception("unable to determine if the table '%s' exists" % table)
+        else:
+            return table in table_names
