@@ -161,7 +161,7 @@ USER_EXEC_KOLLA_COMMAND = 'kolla'
 CONFIG_DIR_HOST = "/etc/hosts"
 CONFIG_DIR_MULTINODE = "/home/kolla/multinode"
 CONFIG_DIR_GLOBAL_YML = "/etc/kolla/globals.yml"
-CONFIG_DIR_MULTINODE_TEMPLATE = [os.path.join(BASE_DIR + '/scripts/multinode_template')]
+CONFIG_DIR_MULTINODE_TEMPLATE = BASE_DIR + '/scripts/multinode_template'
 
 try:
     from .local_settings import *
