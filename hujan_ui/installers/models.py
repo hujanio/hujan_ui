@@ -52,6 +52,7 @@ class GlobalConfig(models.Model):
     storage_interface = models.CharField(max_length=200, null=True, blank=True)
     network_interface = models.CharField(max_length=200, null=True, blank=True)
     neutron_plugin_agent = models.CharField(max_length=200)
+    neutron_external_interface = models.CharField(max_length=200, null=True, blank=True)
     enable_tls_on_external_api = models.BooleanField(default=True)
     enable_ceph_service = models.BooleanField(default=True)
     enable_cinder_service = models.BooleanField(default=True)
