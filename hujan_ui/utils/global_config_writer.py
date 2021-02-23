@@ -40,6 +40,7 @@ class GlobalConfigWriter:
             "kolla_external_vip_address": global_config.external_vip_address,
             "kolla_enable_tls_external": global_config.enable_tls_on_external_api,
             "neutron_plugin_agent": global_config.neutron_plugin_agent,
+            "neutron_external_interface": global_config.neutron_external_interface,
             "enable_ceph": global_config.enable_ceph_service,
             "enable_cinder": global_config.enable_cinder_service,
             "enable_magnum": global_config.enable_magnum_service,
