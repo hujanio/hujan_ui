@@ -51,7 +51,7 @@
                                         <small class="form-text text-danger">{{ field.errors }}</small>
                                     </div>
                                 </div>
-                                <div class="offset-md-1"></div>
+                                <div class="offset-md-1 offset-{{ field.name }}"></div>
                             {% endfor %}
                         </div>
                     </div>
@@ -127,11 +127,15 @@
         if(t.hasAttribute('checked')){
             t.removeAttribute('checked');
             $('#form-ceph_pool_pg_num').addClass('d-none');
+            $('.offset-ceph_pool_pg_num').addClass('d-none');
             $('#form-ceph_pool_pgp_num').addClass('d-none');
+            $('.offset-ceph_pool_pgp_num').addClass('d-none');
         }else{
             t.setAttribute('checked','checked');
             $('#form-ceph_pool_pg_num').removeClass('d-none');
+            $('.offset-ceph_pool_pg_num').removeClass('d-none');
             $('#form-ceph_pool_pgp_num').removeClass('d-none');
+            $('.offset-ceph_pool_pgp_num').removeClass('d-none');
         }
     });
 </script>
