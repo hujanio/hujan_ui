@@ -4,6 +4,15 @@
 {% block content %}
     <!-- Main content -->
     <section class="content">
+      {% if messages %}
+          <div class="alert alert-success alert-dismissible">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+              {% for message in messages %}
+                  <h5>{{ message.tags|title }}</h5>
+                  {{ message|safe }}
+              {% endfor %}
+          </div>
+      {% endif %}
       <div class="container-fluid">
         <div class="card">
           <div class="card-header">

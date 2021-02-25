@@ -9,6 +9,7 @@ from hujan_ui.installers.models import (
 from hujan_ui.installers.decorators import deployment_checked
 import sweetify
 from django.utils.translation import ugettext_lazy as _
+from django.contrib import messages
 
 
 @login_required
@@ -93,6 +94,7 @@ def do_deploy(request):
     Installer.set_step_deployment()
     deployer = Deployer()
     if not deployer.is_deploying():
+        messages.success(request, """Deployment was Successfully! RUN 'kolla-ansible post-deploy' on your controller on press <b>Post Deploy</b> Button to generate admin password to access Horizon Dashboard 'http://controllerip' If you want to destroy cluster, press <b>Destroy</b> button""")
         deployer.deploy()
 
     context = {
@@ -146,5 +148,6 @@ def post_deploy(request):
     deployer = Deployer()
     deployer.post_deploy()
     sweetify.success(request, _('Post Deploy Successfully'), icon='success', button='OK')
+    messages.success(request, 'Your deployment process is complete')
     return redirect('installer:index')
 
