@@ -148,5 +148,6 @@ def post_deploy(request):
     deployer = Deployer()
     deployer.post_deploy()
     sweetify.success(request, _('Post Deploy Successfully'), icon='success', button='OK')
+    messages.success(request, 'Your deployment process is complete')
     return redirect('installer:index')
 
