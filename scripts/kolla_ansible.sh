@@ -34,7 +34,8 @@ if [[ $continue != "Y" ]] || [[ $continue != "y" ]] && [[ $current_step == "STEP
 
                 if [ $? -eq 0 ]; then
                     kolla-ansible -i /home/kolla/multinode deploy
-                     echo -e "RUN COMMAND SUCCESSFULL \nRUN 'kolla-ansible post-deploy' ON YOUR CONTROLLER TO GENERATE ADMIN PASSWORD \nTO ACCESS HORIZON DASHBOARD 'http://controllerip'"
+                     echo -e "==========================================================================================================\n\nDEPLOYMENT WAS SUCCESFUL! \n\nRUN 'kolla-ansible post-deploy' ON YOUR CONTROLLER OR PRESS POST-DEPLOY BUTTON TO GENERATE ADMIN PASSWORD\n\nTO ACCESS HORIZON DASHBOARD 'http://controllerip' \n\nIF YOU WANT TO DESTROY CLUSTER, PRESS DESTROY BUTTON \n\n==========================================================================================================\n"
+
                 else
                     echo "ERROR DEPLOY"
                 fi
