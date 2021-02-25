@@ -2,9 +2,19 @@
 {% load static %}
 
 {% block content %}
+    
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
+            {% if messages %}
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    {% for message in messages %}
+                        <h5>{{ message.tags|title }}</h5>
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Deploy Summary</h3>
@@ -21,9 +31,7 @@
                 </div>
                 <div class="card-footer">
                     <a href="{% url 'installer:destroy_config' %}" class="btn btn-danger text-white">Destroy</a>
-                    {% if pd_status == False %}
-                    <a href="{% url 'installer:post_deploy' %}" class="btn btn-success text-white">Post Deploy</a>
-                    {% endif %}
+                    <a href="{% url 'installer:post_deploy' %}" class="btn btn-success d-none btn-pd text-white">Post Deploy</a>
                 </div>
             </div>
         </div><!-- /.container-fluid -->
@@ -43,6 +51,10 @@
             var stream_html = "";
             for (var i = 0; i < log_content.length; i++) {
                 stream_html += log_content[i] + "<br>"
+            }
+
+            if(deploy_status == 'success'){
+                $('.btn-pd').removeClass('d-none')
             }
 
             $("#log-stream").html(stream_html);
