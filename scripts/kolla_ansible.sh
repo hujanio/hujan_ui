@@ -26,15 +26,15 @@ if [[ $continue != "Y" ]] || [[ $continue != "y" ]] && [[ $current_step == "STEP
         kolla-ansible certificates
         if [ $? -eq 0 ]; then
             echo "Certificate SUCCESSS"
-            kolla-ansible bootstrap-servers
+            kolla-ansible -i /home/kolla/multinode bootstrap-servers
 
             if [ $? -eq 0 ]; then
                 echo "BOOTSTRAP SUCCESS"
-                kolla-ansible prechecks
+                kolla-ansible -i /home/kolla/multinode prechecks
 
                 if [ $? -eq 0 ]; then
-                    kolla-ansible deploy
-                    echo "RUN COMMAND SUCCESSFULL"
+                    kolla-ansible -i /home/kolla/multinode deploy
+                     echo -e "RUN COMMAND SUCCESSFULL \nRUN 'kolla-ansible post-deploy' ON YOUR CONTROLLER TO GENERATE ADMIN PASSWORD \nTO ACCESS HORIZON DASHBOARD 'http://controllerip'"
                 else
                     echo "ERROR DEPLOY"
                 fi
