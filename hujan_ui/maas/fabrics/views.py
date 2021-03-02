@@ -36,7 +36,7 @@ def detail(request, fabric_id):
     except (MAASError) as e:
         sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', button='Ok', timer=5000)
         context = None
-    
+
     return render(request, 'maas/fabrics/detail.html', context)
 
 
@@ -49,10 +49,10 @@ def add(request):
             maas = MAAS()
             resp = maas.post('fabrics/', data=data)
             if resp.status_code in maas.ok:
-                sweetify.success(request, _(
-                    'Successfully added fabric'), button='Ok', timer=2000)
+                sweetify.sweetalert(request, 'Success', text=_(
+                    'Successfully added fabric'), icon='success', button='Ok', timer=2000)
                 return redirect("maas:fabrics:index")
-            sweetify.warning(request, _(resp.text), button='Ok', timer=5000)
+            sweetify.sweetalert(request, 'Warning', icon='warning', text=_(resp.text), button='Ok', timer=5000)
         except (MAASError) as e:
             sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', button='Ok', timer=5000)
 
@@ -73,9 +73,9 @@ def edit(request, fabric_id):
             data.update({'id': fabric_id})
             resp = m.put(f'/fabrics/{fabric_id}/', data=data)
             if resp.status_code in m.ok:
-                sweetify.success(request, _('Successful'), button='OK', timer=2000)
+                sweetify.sweetalert(request, 'Success', icon='success', text=_('Successful'), button='OK', timer=2000)
                 return redirect('maas:fabrics:index')
-            sweetify.warning(request, _(resp.text), button='Ok', timer=5000)
+            sweetify.sweetalert(request, 'Warning', icon='warning', text=_(resp.text), button='Ok', timer=5000)
         context = {
             'title': 'Ubah Fabric',
             'form': form
@@ -96,8 +96,8 @@ def delete(request, fabric_id):
         fabric_id = fabs[0]['id']
         resp = m.delete(f'/fabrics/{fabric_id}/')
         if resp.status_code in m.ok:
-            sweetify.success(request, _(
-                'Data Successfully Deleted'), button='OK', timer=200)
+            sweetify.sweetalert(request, 'Success', text=_(
+                'Data Successfully Deleted'), button='OK', icon='success', timer=200)
             return redirect('maas:fabrics:index')
         sweetify.sweetalert(request, 'Warning', icon='warning', text=_(str(resp.text)), timer=5000)
     except (MAASError) as e:

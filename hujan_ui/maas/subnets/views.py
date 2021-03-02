@@ -40,7 +40,7 @@ def detail(request, subnet_id):
         subnet = maas.get_subnets(subnet_id)
         # unr = maas.get_subnets(subnet_id,op='unreserved_ip_ranges')
         # stat = maas.get_subnets(subnet_id,op='statistics')
-        # TODO untuk data unreserved dan statistic masih belum sesuai antara api dan maas yang ada 
+        # TODO untuk data unreserved dan statistic masih belum sesuai antara api dan maas yang ada
         rir = maas.get_subnets(subnet_id, op='reserved_ip_ranges')
 
         if request.is_ajax():
@@ -51,7 +51,7 @@ def detail(request, subnet_id):
             'subnet': subnet,
             # 'unr': unr,
             # 'stat': stat,
-            # TODO untuk data unreserved dan statistic masih belum sesuai antara api dan maas yang ada 
+            # TODO untuk data unreserved dan statistic masih belum sesuai antara api dan maas yang ada
             'rir': rir,
             'menu_active': 'subnets',
         }
@@ -70,11 +70,11 @@ def add(request):
             data = form.clean()
             resp = m.post('subnets/', data=data)
             if resp.status_code in m.ok:
-                sweetify.success(request, _('Subnet Added Successfully'), icon='success', timer=2000)
+                sweetify.sweetalert(request, 'Success', text=_('Subnet Added Successfully'), icon='success', timer=2000)
                 return redirect('maas:subnets:index')
-            sweetify.warning(request, _(resp.text), timer=5000)
+            sweetify.sweetalert(request, 'Warning', text=_(resp.text), icon='warning', timer=5000)
         except (MAASError) as e:
-            sweetify.error(request, str(e), button='OK', icon='error', timer=5000)
+            sweetify.sweetalert(request, 'Error', text=str(e), button='OK', icon='error', timer=5000)
     context = {
         'title': 'Form Add Subnet',
         'form': form
@@ -84,26 +84,26 @@ def add(request):
 
 @login_required
 def edit(request, subnet_id):
-    subnet = maas.get_subnets(subnet_id)
-    if not subnet:
-        return redirect('maas:subnets:index')
-    form = SubnetForm(request.POST or None, initial=subnet)
-    if form.is_valid():
-        try:
+    try:
+        subnet = maas.get_subnets(subnet_id)
+        if not subnet:
+            return redirect('maas:subnets:index')
+        form = SubnetForm(request.POST or None, initial=subnet)
+        if form.is_valid():
             m = MAAS()
             data = form.clean()
             if data['vlan']:
                 vl = maas.get_vlans(int(data['vlan']))
                 data['vid'] = vl['vid']
                 data['fabric'] = vl['fabric_id']
-
             resp = m.put(f'subnets/{subnet_id}/', data=data)
             if resp.status_code in m.ok:
-                sweetify.success(request, _('Subnet Update Successfully'), timer=2000)
+                sweetify.sweetalert(request, 'Success', text=_('Subnet Update Successfully'), icon='success', timer=2000)
                 return redirect('maas:subnets:index')
-            sweetify.warning(request, _(resp.text), timer=5000)
-        except (MAASError) as e:
-            sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', timer=5000)
+            sweetify.sweetalert(request, 'Warning', text=_(resp.text), icon='warning', timer=5000)
+    except (MAASError) as e:
+        sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', timer=5000)
+        form = None
 
     context = {
         'title': 'Form Edit Subnet',
