@@ -1,7 +1,6 @@
 import sweetify
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render, redirect
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from hujan_ui.maas.utils import MAAS
@@ -16,7 +15,7 @@ def index(request):
         return JsonResponse({'subnets': maas.get_subnets()})
 
     context = {
-        'title': 'Subnet By Fabric',
+        'title': _('Subnet By Fabric'),
         'subnets': maas.get_subnets(),
         'fabrics': maas.get_fabrics(),
         'spaces': maas.get_spaces(),
@@ -35,7 +34,7 @@ def detail(request, subnet_id):
         return JsonResponse({'subnet': subnet})
 
     context = {
-        'title': f"Subnet - {subnet['name']}",
+        'title': _(f"Subnet - {subnet['name']}"),
         'subnet': subnet,
         'rir': rir,
         'menu_active': 'subnets',
@@ -55,10 +54,10 @@ def add(request):
                 sweetify.success(request, _('Subnet Added Successfully'), icon='success', timer=2000)
                 return redirect('maas:subnets:index')
             sweetify.warning(request, _(resp.text), timer=5000)
-        except (MAASError) as e:
+        except MAASError as e:
             sweetify.error(request, str(e), button='OK', icon='error', timer=5000)
     context = {
-        'title': 'Form Add Subnet',
+        'title': _('Form Add Subnet'),
         'form': form
     }
     return render(request, 'maas/subnets/add.html', context)
@@ -85,7 +84,7 @@ def edit(request, subnet_id):
         sweetify.warning(request, _(resp.text), timer=5000)
 
     context = {
-        'title': 'Form Edit Subnet',
+        'title': _('Form Edit Subnet'),
         'form': form
     }
     return render(request, 'maas/subnets/add.html', context)

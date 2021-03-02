@@ -102,9 +102,8 @@ class PhysicalForm(forms.Form):
 class CommissionForm(forms.Form):
     system_id = forms.CharField(required=True, widget=forms.TextInput({'type': 'hidden'}))
     enable_ssh = forms.BooleanField(required=False, label='Allow SSH access and prevent machine powering off')
-    skip_bmc_config = forms.BooleanField(required=False, label='Skip configuring supported BMC controllers with a MAAS generated username and password')
-    # dimatikan sementara karena membuat error
-    # commissioning_scripts = forms.CharField(required=False, label='Additional commissioning scripts')
+    skip_bmc_config = forms.BooleanField(required=False, label='Skip configuring supported BMC controllers with a '
+                                                               'MAAS generated username and password')
     skip_networking = forms.BooleanField(required=False, label='Retain network configuration')
     skip_storage = forms.BooleanField(required=False, label='Retain storage configuration')
 

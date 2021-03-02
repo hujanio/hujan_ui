@@ -1,5 +1,4 @@
 import sweetify
-import json
 
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render, redirect
@@ -35,25 +34,25 @@ def add(request):
 
     if form.is_valid():
         data = form.clean()
-        maas = MAAS()
-        resp = maas.post('fabrics/', data=data)
-        if resp.status_code in maas.ok:
+        m = MAAS()
+        resp = m.post('fabrics/', data=data)
+        if resp.status_code in m.ok:
             sweetify.success(request, _(
                 'Successfully added fabric'), button='Ok', timer=2000)
             return redirect("maas:fabrics:index")
         sweetify.warning(request, _(resp.text), button='Ok', timer=5000)
 
     context = {
-        'title': 'Tambah Fabric',
+        'title': 'Add Fabric',
         'form': form,
     }
     return render(request, 'maas/fabrics/add.html', context)
 
 
 def edit(request, fabric_id):
-    fabs = maas.get_fabrics(fabric_id)
+    fabrics = maas.get_fabrics(fabric_id)
 
-    form = FabricForm(request.POST or None, initial=fabs)
+    form = FabricForm(request.POST or None, initial=fabrics)
     if form.is_valid():
         m = MAAS()
         data = form.clean()
@@ -64,25 +63,25 @@ def edit(request, fabric_id):
             return redirect('maas:fabrics:index')
         sweetify.warning(request, _(resp.text), button='Ok', timer=5000)
     context = {
-        'title': 'Ubah Fabric',
+        'title': 'Edit Fabric',
         'form': form
     }
     return render(request, 'maas/fabrics/add.html', context)
 
 
 def delete(request, fabric_id):
-    fabs = maas.get_fabrics(fabric_id)
+    fabrics = maas.get_fabrics(fabric_id)
 
-    if not fabs:
+    if not fabrics:
         sweetify.info(request, _('Data Fabric not Found...'), timer=5000)
         return redirect('maas:fabrics:index')
     m = MAAS()
-    fabric_id = fab[0]['id']
+    fabric_id = fabrics[0]['id']
     resp = m.delete(f'/fabrics/{fabric_id}/')
     if resp.status_code in m.ok:
         sweetify.success(request, _(
             'Data Successfully Deleted'), button='OK', timer=200)
         return redirect('maas:fabrics:index')
-    sweetify.warning(request, _(resp.text), timer=5000)
+    sweetify.warning(request, 'Warning', text=_(resp.text), timer=5000)
 
     return redirect('maas:fabrics:index')

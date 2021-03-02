@@ -3,14 +3,13 @@ from hujan_ui import maas
 from hujan_ui.maas.utils import MAAS
 from .forms import VlanForm, VlanEditForm
 from django.utils.translation import ugettext_lazy as _
-
 import sweetify
+
 
 def index(request):
     context = {
         'title': 'Vlan List',
         'vlans': maas.get_vlans()
-
     }
     return render(request, 'maas/vlans/index.html', context)
 
@@ -29,10 +28,9 @@ def add(request):
         sweetify.warning(request, _(resp.text), timer=5000)
         
     context = {
-        'title': 'Add Vlan',
+        'title': _('Add Vlan'),
         'form': form
     }
-
     return render(request, 'maas/vlans/add.html', context)
 
 
@@ -54,7 +52,6 @@ def edit(request, vlan_id):
         'title': 'Edit Vlan',
         'form': form
     }
-
     return render(request, 'maas/vlans/add.html', context)
 
 
@@ -62,11 +59,10 @@ def detail(request, vlan_id):
     vlan = maas.get_vlans(vlan_id)
     if vlan:   
         context = {
-            'title': 'Detail Vlan - {}'.format(vlan['fabric']),
+            'title': _('Detail Vlan - {}'.format(vlan['fabric'])),
             'vlan': vlan
         }
         return render(request, 'maas/vlans/detail.html', context)
-
     return redirect('maas:vlans:index')
 
 
@@ -80,6 +76,3 @@ def delete(request, vlan_id):
         sweetify.success(request, _('Vlan Deleted Successful'), timer=5000)
         return redirect('maas:subnets:index')
     return redirect('maas:subnets:index')
-
-    
-
