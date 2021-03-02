@@ -12,41 +12,55 @@ from hujan_ui.maas.exceptions import MAASError
 
 @login_required
 def index(request):
-    if request.is_ajax():
-        return JsonResponse({'subnets': maas.get_subnets()})
-
+    subnets = None
+    fabrics = None
+    spaces = None
+    group_subnet = None
+    try:
+        if request.is_ajax():
+            return JsonResponse({'subnets': maas.get_subnets()})
+        subnets = maas.get_subnets()
+        fabrics = maas.get_fabrics()
+        spaces = maas.get_spaces()
+        group_subnet = maas.get_subnet_byfabric()
+    except (MAASError) as e:
+        sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', timer=5000)
     context = {
         'title': 'Subnet By Fabric',
-        'subnets': maas.get_subnets(),
-        'fabrics': maas.get_fabrics(),
-        'spaces': maas.get_spaces(),
-        'group_subnet': maas.get_subnet_byfabric(),
+        'subnets': subnets,
+        'fabrics': fabrics,
+        'spaces': spaces,
+        'group_subnet': group_subnet,
         'menus_active': 'subnets_active'
     }
+    
     return render(request, 'maas/subnets/index.html', context)
 
 
 @login_required
 def detail(request, subnet_id):
-
-    subnet = maas.get_subnets(subnet_id)
-    # unr = maas.get_subnets(subnet_id,op='unreserved_ip_ranges')
-    # stat = maas.get_subnets(subnet_id,op='statistics')
-    # TODO untuk data unreserved dan statistic masih belum sesuai antara api dan maas yang ada 
-    rir = maas.get_subnets(subnet_id, op='reserved_ip_ranges')
-
-    if request.is_ajax():
-        return JsonResponse({'subnet': subnet})
-
-    context = {
-        'title': f"Subnet - {subnet['name']}",
-        'subnet': subnet,
-        # 'unr': unr,
-        # 'stat': stat,
+    try:
+        subnet = maas.get_subnets(subnet_id)
+        # unr = maas.get_subnets(subnet_id,op='unreserved_ip_ranges')
+        # stat = maas.get_subnets(subnet_id,op='statistics')
         # TODO untuk data unreserved dan statistic masih belum sesuai antara api dan maas yang ada 
-        'rir': rir,
-        'menu_active': 'subnets',
-    }
+        rir = maas.get_subnets(subnet_id, op='reserved_ip_ranges')
+
+        if request.is_ajax():
+            return JsonResponse({'subnet': subnet})
+
+        context = {
+            'title': f"Subnet - {subnet['name']}",
+            'subnet': subnet,
+            # 'unr': unr,
+            # 'stat': stat,
+            # TODO untuk data unreserved dan statistic masih belum sesuai antara api dan maas yang ada 
+            'rir': rir,
+            'menu_active': 'subnets',
+        }
+    except (MAASError) as e:
+        sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', timer=5000)
+
     return render(request, 'maas/subnets/subnet_detail.html', context)
 
 
@@ -78,18 +92,21 @@ def edit(request, subnet_id):
         return redirect('maas:subnets:index')
     form = SubnetForm(request.POST or None, initial=subnet)
     if form.is_valid():
-        m = MAAS()
-        data = form.clean()
-        if data['vlan']:
-            vl = maas.get_vlans(int(data['vlan']))
-            data['vid'] = vl['vid']
-            data['fabric'] = vl['fabric_id']
+        try:
+            m = MAAS()
+            data = form.clean()
+            if data['vlan']:
+                vl = maas.get_vlans(int(data['vlan']))
+                data['vid'] = vl['vid']
+                data['fabric'] = vl['fabric_id']
 
-        resp = m.put(f'subnets/{subnet_id}/', data=data)
-        if resp.status_code in m.ok:
-            sweetify.success(request, _('Subnet Update Successfully'), timer=2000)
-            return redirect('maas:subnets:index')
-        sweetify.warning(request, _(resp.text), timer=5000)
+            resp = m.put(f'subnets/{subnet_id}/', data=data)
+            if resp.status_code in m.ok:
+                sweetify.success(request, _('Subnet Update Successfully'), timer=2000)
+                return redirect('maas:subnets:index')
+            sweetify.warning(request, _(resp.text), timer=5000)
+        except (MAASError) as e:
+            sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', timer=5000)
 
     context = {
         'title': 'Form Edit Subnet',
@@ -100,14 +117,17 @@ def edit(request, subnet_id):
 
 @login_required
 def delete(request, subnet_id):
-    subnets = maas.get_subnets()
-    subnet = [s for s in subnets if s['id'] == subnet_id]
-    if subnet[0] is not None:
-        m = MAAS()
-        resp = m.delete(f'subnets/{subnet_id}/')
-        if resp.status_code in m.ok:
-            sweetify.success(request, _('Subnet Deleted Successfully'), timer=2000)
-            return redirect('maas:subnets:index')
-        sweetify.warning(request, _(resp.text), timer=5000)
+    try:
+        subnets = maas.get_subnets()
+        subnet = [s for s in subnets if s['id'] == subnet_id]
+        if subnet[0] is not None:
+            m = MAAS()
+            resp = m.delete(f'subnets/{subnet_id}/')
+            if resp.status_code in m.ok:
+                sweetify.success(request, _('Subnet Deleted Successfully'), timer=2000)
+                return redirect('maas:subnets:index')
+            sweetify.warning(request, _(resp.text), timer=5000)
+    except (MAASError) as e:
+        sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', timer=5000)
 
     return redirect('maas:subnets:index')
