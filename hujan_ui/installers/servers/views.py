@@ -1,16 +1,12 @@
-import requests
-import json
 import sweetify
 
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from hujan_ui.utils.deployer import Deployer
-from hujan_ui.installers.models import Server, Installer, Deployment
+from hujan_ui.installers.models import Server, Installer
 from hujan_ui.installers.decorators import deployment_checked
 from .forms import AddServerForm
-from django.db import connection
 
 
 @login_required

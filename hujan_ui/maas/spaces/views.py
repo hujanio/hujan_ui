@@ -1,6 +1,7 @@
 import sweetify
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from hujan_ui import maas
 from hujan_ui.maas.utils import MAAS
 from . import forms
@@ -30,7 +31,7 @@ def add(request):
         sweetify.warning(request, _(resp.text), timer=5000)
         return redirect('index')
     context = {
-        'title': 'Form Space',
+        'title': _('Form Space'),
         'form': form,
     }
     return render(request, 'maas/spaces/add.html', context)
@@ -50,7 +51,7 @@ def edit(request, space_id):
         sweetify.warning(request, _(resp.text), timer=5000)
         return redirect('maas:spaces:index')
     context = {
-        'title': 'Edit Space',
+        'title': _('Edit Space'),
         'form': form
     }
     return render(request, 'maas/spaces/add.html', context)
@@ -62,7 +63,7 @@ def delete(request, space_id):
         sweetify.warning(request, _('Data Space not Found..'), timer=5000)
         return redirect('maas.spaces.index')
 
-    space_id = space[0]['id']
+    space_id = spaces[0]['id']
     m = MAAS()
     resp = m.delete(f'spaces/{space_id}/')
     if resp.status_code in m.ok:
@@ -74,9 +75,8 @@ def delete(request, space_id):
 def detail(request, space_id):
     spaces = maas.get_spaces(space_id)
     context = {
-        'title': 'Detail Space',
+        'title': _('Detail Space'),
         'space': spaces,
         'subnets': maas.get_subnets()
     }
     return render(request, 'maas/spaces/detail.html', context)
-

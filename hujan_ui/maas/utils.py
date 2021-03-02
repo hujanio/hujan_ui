@@ -1,6 +1,5 @@
-from django.conf import settings
 from hujan_ui.installers.models import ConfigMAAS
-from requests_oauthlib import OAuth1Session, OAuth1
+from requests_oauthlib import OAuth1Session
 from .exceptions import MAASError
 
 
@@ -11,12 +10,10 @@ class MAAS:
 
     def __init__(self):
         self.config = ConfigMAAS.objects.first()
-        if self.config:
-            self.maas_url = self.config.maas_url
-            self.mass_api_key = self.config.maas_api_key
-        else:
-            self.maas_url = settings.MAAS_URL
-            self.mass_api_key = settings.MAAS_API_KEY
+        if not self.config:
+            raise MAASError("Please enter MAAS API KEY on the menu 'Settings -> MAAS Config'")
+        self.maas_url = self.config.maas_url
+        self.mass_api_key = self.config.maas_api_key
 
         self.url = self.maas_url + "api/2.0/"
         self.headers = {
@@ -24,7 +21,7 @@ class MAAS:
             'accept': 'application/json'
         }
 
-    def maas_connect(self):
+    def maas_connect(self) -> OAuth1Session:
 
         if not self.maas_url:
             raise MAASError("Please enter MAAS API KEY on the menu 'Settings -> MAAS Config'")

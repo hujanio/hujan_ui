@@ -141,9 +141,7 @@ STATICFILES_DIRS = (
 STATIC_ROOT = os.path.join(SETTINGS_DIR, 'static')
 
 
-# Ubuntu MAAS
-MAAS_API_KEY = ""
-MAAS_URL = ""
+# Setting to use dummy response
 WITH_EX_RESPONSE = False
 DIR_EX_RESPONSE = "hujan_ui/maas/ex_response/"
 

@@ -20,8 +20,9 @@ def index(request):
        status_dev is None:
         return redirect('installer:servers:index')
     pd_status, d_status = check_status_deployment()
+
     context = {
-        'title': 'Configurations',
+        'title': _('Configurations'),
         'steps': Installer.get_steps,
         'menu_active': '',
         'servers': Server.objects.all(),
@@ -37,7 +38,7 @@ def index(request):
 @login_required
 def server(request):
     context = {
-        'title': 'Servers',
+        'title': _('Servers'),
         'menu_active': 'add-server'
     }
     return render(request, 'installers/server.html', context)
@@ -46,7 +47,7 @@ def server(request):
 @login_required
 def inventory(request):
     context = {
-        'title': 'Inventory',
+        'title': _('Inventory'),
         'menu_active': 'inventory'
     }
     return render(request, 'installers/inventory.html', context)
@@ -55,7 +56,7 @@ def inventory(request):
 @login_required
 def global_config(request):
     context = {
-        'title': 'Global Configuration',
+        'title': _('Global Configuration'),
         'menu_active': 'global-config'
     }
     return render(request, 'installers/global_config.html', context)
@@ -64,7 +65,7 @@ def global_config(request):
 @login_required
 def advanced_config(request):
     context = {
-        'title': 'Advanced Configuration',
+        'title': _('Advanced Configuration'),
         'menu_active': 'advanced-config'
     }
     return render(request, 'installers/advanced_config.html', context)
@@ -74,7 +75,7 @@ def advanced_config(request):
 @deployment_checked
 def deploy(request):
     context = {
-        'title': 'Deployment',
+        'title': _('Deployment'),
         'steps': Installer.get_steps,
         'menu_active': 'deployment',
         'servers': Server.objects.all(),
@@ -94,7 +95,9 @@ def do_deploy(request):
     Installer.set_step_deployment()
     deployer = Deployer()
     if not deployer.is_deploying():
-        messages.success(request, """Deployment was Successfully! RUN 'kolla-ansible post-deploy' on your controller on press <b>Post Deploy</b> Button to generate admin password to access Horizon Dashboard 'http://controllerip' If you want to destroy cluster, press <b>Destroy</b> button""")
+        messages.success(request, """Deployment was Successfully! RUN 'kolla-ansible post-deploy' on your controller 
+        on press <b>Post Deploy</b> Button to generate admin password to access Horizon Dashboard 
+        'http://controllerip' If you want to destroy cluster, press <b>Destroy</b> button""")
         deployer.deploy()
 
     context = {
@@ -150,4 +153,3 @@ def post_deploy(request):
     sweetify.success(request, _('Post Deploy Successfully'), icon='success', button='OK')
     messages.success(request, 'Your deployment process is complete')
     return redirect('installer:index')
-

@@ -1,7 +1,6 @@
 import sweetify
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render, redirect
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from hujan_ui.maas.utils import MAAS
@@ -76,7 +75,7 @@ def add(request):
         except (MAASError) as e:
             sweetify.sweetalert(request, 'Error', text=str(e), button='OK', icon='error', timer=5000)
     context = {
-        'title': 'Form Add Subnet',
+        'title': _('Form Add Subnet'),
         'form': form
     }
     return render(request, 'maas/subnets/add.html', context)
@@ -106,7 +105,7 @@ def edit(request, subnet_id):
         form = None
 
     context = {
-        'title': 'Form Edit Subnet',
+        'title': _('Form Edit Subnet'),
         'form': form
     }
     return render(request, 'maas/subnets/add.html', context)

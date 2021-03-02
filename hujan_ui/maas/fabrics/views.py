@@ -1,6 +1,5 @@
 from hujan_ui.maas.exceptions import MAASError
 import sweetify
-import json
 
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render, redirect
@@ -57,7 +56,7 @@ def add(request):
             sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', button='Ok', timer=5000)
 
     context = {
-        'title': 'Tambah Fabric',
+        'title': 'Add Fabric',
         'form': form,
     }
     return render(request, 'maas/fabrics/add.html', context)

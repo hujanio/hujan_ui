@@ -4,7 +4,6 @@ from multiselectfield import MultiSelectField
 from model_utils import Choices
 
 
-
 class Server(models.Model):
     name = models.CharField(max_length=200, unique=True)
     ip_address = models.CharField(max_length=100)
@@ -18,11 +17,11 @@ class Server(models.Model):
 class Inventory(models.Model):
     server = models.ForeignKey(Server, on_delete=models.CASCADE)
     GROUP = (
-        ('control', 'Controller'),
-        ('network', 'Network'),
-        ('compute', 'Compute'),
-        ('monitoring', 'Monitoring'),
-        ('storage', 'storage'),
+        ('control', _('Controller')),
+        ('network', _('Network')),
+        ('compute', _('Compute')),
+        ('monitoring', _('Monitoring')),
+        ('storage', _('storage')),
     )
     group = models.CharField(max_length=50, choices=GROUP)
 
@@ -40,11 +39,11 @@ class Inventory(models.Model):
 
 class GlobalConfig(models.Model):
     INSTALLATION_TYPE = (
-        ('source', 'Source'),
+        ('source', _('Source')),
     )
     installation_type = models.CharField(max_length=50, choices=INSTALLATION_TYPE, default='source')
     OPENSTACK_RELEASE = (
-        ('train', 'Train'),
+        ('train', _('Train')),
     )
     openstack_release = models.CharField(max_length=50, choices=OPENSTACK_RELEASE, default='train')
     internal_vip_address = models.CharField(max_length=30)

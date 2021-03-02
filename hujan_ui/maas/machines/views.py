@@ -1,8 +1,6 @@
-import json
 import sweetify
 
 from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -11,7 +9,6 @@ from django.template.loader import render_to_string
 from hujan_ui.maas.utils import MAAS
 from hujan_ui import maas
 from .forms import AddMachineForm, PowerTypeIPMIForm, PhysicalForm, CommissionForm, DeployForm, ConfirmForm
-# from django.template.defaultfilters import filesizeformat
 from hujan_ui.maas.exceptions import MAASError
 
 from hujan_ui.utils.core import conv_mb_to_gb
@@ -97,7 +94,6 @@ def add(request):
 
 
 def load_machine(request):
-    m = MAAS()
     machines = maas.get_machines()
     html = ''
     for m in machines:
