@@ -19,7 +19,7 @@ def index(request):
             'fabrics': maas.get_fabrics(),
             'menus_active': 'fabrics_active'
         }
-    except (MAASError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', timer=5000, button='Ok')
         context = None
     return render(request, 'maas/fabrics/index.html', context)
@@ -32,7 +32,7 @@ def detail(request, fabric_id):
             'title': 'Fabric',
             'fabric': fabrics
         }
-    except (MAASError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', button='Ok', timer=5000)
         context = None
 
@@ -52,7 +52,7 @@ def add(request):
                     'Successfully added fabric'), icon='success', button='Ok', timer=2000)
                 return redirect("maas:fabrics:index")
             sweetify.sweetalert(request, 'Warning', icon='warning', text=_(resp.text), button='Ok', timer=5000)
-        except (MAASError) as e:
+        except (MAASError, ConnectionError, TimeoutError) as e:
             sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', button='Ok', timer=5000)
 
     context = {
@@ -79,7 +79,7 @@ def edit(request, fabric_id):
             'title': 'Ubah Fabric',
             'form': form
         }
-    except (MAASError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', button='Ok', timer=5000)
         context = None
     return render(request, 'maas/fabrics/add.html', context)
@@ -99,6 +99,6 @@ def delete(request, fabric_id):
                 'Data Successfully Deleted'), button='OK', icon='success', timer=200)
             return redirect('maas:fabrics:index')
         sweetify.sweetalert(request, 'Warning', icon='warning', text=_(str(resp.text)), timer=5000)
-    except (MAASError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', button='Ok', timer=5000)
     return redirect('maas:fabrics:index')

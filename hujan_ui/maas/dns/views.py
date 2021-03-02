@@ -30,7 +30,7 @@ def index(request):
             'domains': domains,
             'menu_active': 'domains',
         }
-    except (MAASError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         sweetify.sweetalert(request, 'Warning', text=str(e), button='OK', timer=5000)
         context = None
 
@@ -47,7 +47,7 @@ def add(request):
                 sweetify.sweetalert(request, icon='success', text=_('Successfully added domain'), button='Ok', timer=2000)
                 return redirect("maas:dns:index")
             sweetify.warning(request, _('Terjadi suatu kesalahan'), button='Ok', timer=2000)
-        except (MAASError) as e:
+        except (MAASError, ConnectionError, TimeoutError) as e:
             sweetify.sweetalert(request, 'Warning', text=str(e), button='Ok', timer=5000)
 
     context = {
@@ -79,7 +79,7 @@ def edit(request, id):
             'title_submit': 'Save Domain',
             'col_size': '4'
         }
-    except (MAASError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         sweetify.sweetalert(request, 'Warning', text=str(e), button='Ok', timer=5000)
         context = None
     return render(request, 'maas/form.html', context)
@@ -94,6 +94,6 @@ def delete(request, id):
             sweetify.sweetalert(request, 'Success', icon='success', text=_('Successfully deleted domain'), button='Ok', timer=2000)
         else:
             sweetify.sweetalert(request, 'Warning', icon='warning', text=_(resp.text), button='Ok', timer=2000)
-    except (MAASError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         sweetify.sweetalert(request, 'Warning', text=str(e), button='Ok', timer=5000, icon='error')
     return redirect("maas:dns:index")

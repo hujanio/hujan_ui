@@ -26,7 +26,7 @@ def index(request):
             'group_subnet': group_subnet,
             'menus_active': 'subnets_active'
         }
-    except (MAASError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', timer=5000)
         context = None
 
@@ -48,7 +48,7 @@ def detail(request, subnet_id):
             'rir': rir,
             'menu_active': 'subnets',
         }
-    except (MAASError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', timer=5000)
 
     return render(request, 'maas/subnets/subnet_detail.html', context)
@@ -66,7 +66,7 @@ def add(request):
                 sweetify.sweetalert(request, 'Success', text=_('Subnet Added Successfully'), icon='success', timer=2000)
                 return redirect('maas:subnets:index')
             sweetify.sweetalert(request, 'Warning', text=_(resp.text), icon='warning', timer=5000)
-        except (MAASError) as e:
+        except (MAASError, ConnectionError, TimeoutError) as e:
             sweetify.sweetalert(request, 'Error', text=str(e), button='OK', icon='error', timer=5000)
     context = {
         'title': _('Form Add Subnet'),
@@ -94,7 +94,7 @@ def edit(request, subnet_id):
                 sweetify.sweetalert(request, 'Success', text=_('Subnet Update Successfully'), icon='success', timer=2000)
                 return redirect('maas:subnets:index')
             sweetify.sweetalert(request, 'Warning', text=_(resp.text), icon='warning', timer=5000)
-    except (MAASError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', timer=5000)
         form = None
 
@@ -117,7 +117,7 @@ def delete(request, subnet_id):
                 sweetify.success(request, _('Subnet Deleted Successfully'), timer=2000)
                 return redirect('maas:subnets:index')
             sweetify.warning(request, _(resp.text), timer=5000)
-    except (MAASError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', timer=5000)
 
     return redirect('maas:subnets:index')

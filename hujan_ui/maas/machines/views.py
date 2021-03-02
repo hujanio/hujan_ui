@@ -20,7 +20,7 @@ def index(request):
         if request.is_ajax():
             return JsonResponse({'machines': maas.get_machines()})
         data = maas.get_machines()
-    except (MAASError, ConnectionError, RuntimeError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         sweetify.sweetalert(request, 'Warning', text=str(e), button='Ok', timer=2000)
         data = None
 
@@ -36,13 +36,13 @@ def index(request):
 def details(request, system_id):
     try:
         machine = maas.get_machines(system_id)
-    except (MAASError, ConnectionError, RuntimeError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         sweetify.error(request, str(e), button='Ok', timer=2000)
         machine = {}
 
     try:
         events = maas.get_events()
-    except (MAASError, ConnectionError, RuntimeError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         sweetify.error(request, str(e), button='Ok', timer=2000)
         events = {}
 
@@ -80,7 +80,7 @@ def add(request):
                 return redirect("maas:machines:index")
 
         sweetify.warning(request, _(resp.text), button='Ok', timer=10000)
-    except (MAASError, ConnectionError, RuntimeError, TimeoutError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         sweetify.sweetalert(request, 'Warning', icon='error', text=str(e), button='OK', timer=10000)
         form = None
         form_ipmi = None
@@ -137,7 +137,7 @@ def edit_physical(request, system_id, id=None):
                     'status': 'error',
                     'message': _('Failed Edit Interface')
                 })
-    except (MAASError, ConnectionError, RuntimeError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         form = None
         return JsonResponse({
             'status': 'error',
@@ -166,7 +166,7 @@ def mark_disconnect(request, system_id, id):
                 'urlhref': reverse('maas:machines:index')
             })
         return JsonResponse({'status': 'error', 'message': _(resp.text)})
-    except (MAASError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         return JsonResponse({
             'status': 'error',
             'message': _(str(e))
@@ -183,7 +183,7 @@ def machine_commission(request, system_id=None):
             resp = m.post(f'machines/{system_id}/?op=commission', data=data)
             if resp.status_code in m.ok:
                 return JsonResponse({'status': 'success', 'message': _('Commission Succesfully')})
-        except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:
+        except (MAASError, ConnectionError, TimeoutError) as e:
             return JsonResponse({'status': 'error', 'message': str(e)})
 
     context = {
@@ -202,7 +202,7 @@ def delete_machine(request, system_id):
         resp = m.post(f'machines/{system_id}/', {'system_id': system_id})
         if resp.status_code in m.ok:
             return JsonResponse({'status': 'success', 'message': _('Machine Delete Successfully')})
-    except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         return JsonResponse({'status': 'error', 'message': str(e)})
 
 
@@ -215,7 +215,7 @@ def deploy_machine(request, system_id):
             resp = m.post(f'machines/{system_id}/?op=deploy', data)
             if resp.status_code in m.ok:
                 return JsonResponse({'status': 'success', 'message': _('Machine Deploy Successfully')})
-        except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:
+        except (MAASError, ConnectionError, TimeoutError) as e:
             return JsonResponse({'status': 'error', 'message': str(e)})
     context = {
         'form': form,
@@ -240,7 +240,7 @@ def onoff_machine(request, system_id):
             if resp.status_code in m.ok:
                 return JsonResponse({'status': 'success', 'message': _('Machine Change Power Successfully')})
 
-        except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:
+        except (MAASError, ConnectionError, TimeoutError) as e:
             return JsonResponse({'status': 'error', 'message': str(e)})
     context = {
         'form': form,
@@ -259,7 +259,7 @@ def delete_machine(request, system_id):
             resp = m.delete(f'machines/{system_id}/', data)
             if resp.status_code in m.ok:
                 return JsonResponse({'status': 'success', 'message': _('Delete Machine Successfully')})
-        except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:
+        except (MAASError, ConnectionError, TimeoutError) as e:
             return JsonResponse({'status': 'error', 'message': str(e)})
 
     context = {
