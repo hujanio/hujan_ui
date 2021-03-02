@@ -64,8 +64,8 @@ def add(request):
 
 def edit(request, fabric_id):
     try:
-        fabs = maas.get_fabrics(fabric_id)
-        form = FabricForm(request.POST or None, initial=fabs)
+        fabrics = maas.get_fabrics(fabric_id)
+        form = FabricForm(request.POST or None, initial=fabrics)
         if form.is_valid():
             m = MAAS()
             data = form.clean()
@@ -87,12 +87,12 @@ def edit(request, fabric_id):
 
 def delete(request, fabric_id):
     try:
-        fabs = maas.get_fabrics(fabric_id)
-        if not fabs:
+        fabrics = maas.get_fabrics(fabric_id)
+        if not fabrics:
             sweetify.info(request, _('Data Fabric not Found...'), timer=5000)
             return redirect('maas:fabrics:index')
         m = MAAS()
-        fabric_id = fabs[0]['id']
+        fabric_id = fabrics[0]['id']
         resp = m.delete(f'/fabrics/{fabric_id}/')
         if resp.status_code in m.ok:
             sweetify.sweetalert(request, 'Success', text=_(
