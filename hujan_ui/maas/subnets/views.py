@@ -11,34 +11,46 @@ from hujan_ui.maas.exceptions import MAASError
 
 @login_required
 def index(request):
-    if request.is_ajax():
-        return JsonResponse({'subnets': maas.get_subnets()})
+    try:
+        if request.is_ajax():
+            return JsonResponse({'subnets': maas.get_subnets()})
+        subnets = maas.get_subnets()
+        fabrics = maas.get_fabrics()
+        spaces = maas.get_spaces()
+        group_subnet = maas.get_subnet_byfabric()
+        context = {
+            'title': 'Subnet By Fabric',
+            'subnets': subnets,
+            'fabrics': fabrics,
+            'spaces': spaces,
+            'group_subnet': group_subnet,
+            'menus_active': 'subnets_active'
+        }
+    except (MAASError, ConnectionError, TimeoutError) as e:
+        sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', timer=5000)
+        context = None
 
-    context = {
-        'title': _('Subnet By Fabric'),
-        'subnets': maas.get_subnets(),
-        'fabrics': maas.get_fabrics(),
-        'spaces': maas.get_spaces(),
-        'group_subnet': maas.get_subnet_byfabric(),
-        'menus_active': 'subnets_active'
-    }
     return render(request, 'maas/subnets/index.html', context)
 
 
 @login_required
 def detail(request, subnet_id):
-    subnet = maas.get_subnets(subnet_id)
-    rir = maas.get_subnets(subnet_id, op='reserved_ip_ranges')
+    try:
+        subnet = maas.get_subnets(subnet_id)
+        rir = maas.get_subnets(subnet_id, op='reserved_ip_ranges')
 
-    if request.is_ajax():
-        return JsonResponse({'subnet': subnet})
+        if request.is_ajax():
+            return JsonResponse({'subnet': subnet})
 
-    context = {
-        'title': _(f"Subnet - {subnet['name']}"),
-        'subnet': subnet,
-        'rir': rir,
-        'menu_active': 'subnets',
-    }
+        context = {
+            'title': f"Subnet - {subnet['name']}",
+            'subnet': subnet,
+            'rir': rir,
+            'menu_active': 'subnets',
+        }
+    except (MAASError, ConnectionError, TimeoutError) as e:
+        sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', timer=5000)
+
     return render(request, 'maas/subnets/subnet_detail.html', context)
 
 
@@ -51,11 +63,11 @@ def add(request):
             data = form.clean()
             resp = m.post('subnets/', data=data)
             if resp.status_code in m.ok:
-                sweetify.success(request, _('Subnet Added Successfully'), icon='success', timer=2000)
+                sweetify.sweetalert(request, 'Success', text=_('Subnet Added Successfully'), icon='success', timer=2000)
                 return redirect('maas:subnets:index')
-            sweetify.warning(request, _(resp.text), timer=5000)
-        except MAASError as e:
-            sweetify.error(request, str(e), button='OK', icon='error', timer=5000)
+            sweetify.sweetalert(request, 'Warning', text=_(resp.text), icon='warning', timer=5000)
+        except (MAASError, ConnectionError, TimeoutError) as e:
+            sweetify.sweetalert(request, 'Error', text=str(e), button='OK', icon='error', timer=5000)
     context = {
         'title': _('Form Add Subnet'),
         'form': form
@@ -65,23 +77,26 @@ def add(request):
 
 @login_required
 def edit(request, subnet_id):
-    subnet = maas.get_subnets(subnet_id)
-    if not subnet:
-        return redirect('maas:subnets:index')
-    form = SubnetForm(request.POST or None, initial=subnet)
-    if form.is_valid():
-        m = MAAS()
-        data = form.clean()
-        if data['vlan']:
-            vl = maas.get_vlans(int(data['vlan']))
-            data['vid'] = vl['vid']
-            data['fabric'] = vl['fabric_id']
-
-        resp = m.put(f'subnets/{subnet_id}/', data=data)
-        if resp.status_code in m.ok:
-            sweetify.success(request, _('Subnet Update Successfully'), timer=2000)
+    try:
+        subnet = maas.get_subnets(subnet_id)
+        if not subnet:
             return redirect('maas:subnets:index')
-        sweetify.warning(request, _(resp.text), timer=5000)
+        form = SubnetForm(request.POST or None, initial=subnet)
+        if form.is_valid():
+            m = MAAS()
+            data = form.clean()
+            if data['vlan']:
+                vl = maas.get_vlans(int(data['vlan']))
+                data['vid'] = vl['vid']
+                data['fabric'] = vl['fabric_id']
+            resp = m.put(f'subnets/{subnet_id}/', data=data)
+            if resp.status_code in m.ok:
+                sweetify.sweetalert(request, 'Success', text=_('Subnet Update Successfully'), icon='success', timer=2000)
+                return redirect('maas:subnets:index')
+            sweetify.sweetalert(request, 'Warning', text=_(resp.text), icon='warning', timer=5000)
+    except (MAASError, ConnectionError, TimeoutError) as e:
+        sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', timer=5000)
+        form = None
 
     context = {
         'title': _('Form Edit Subnet'),
@@ -92,14 +107,17 @@ def edit(request, subnet_id):
 
 @login_required
 def delete(request, subnet_id):
-    subnets = maas.get_subnets()
-    subnet = [s for s in subnets if s['id'] == subnet_id]
-    if subnet[0] is not None:
-        m = MAAS()
-        resp = m.delete(f'subnets/{subnet_id}/')
-        if resp.status_code in m.ok:
-            sweetify.success(request, _('Subnet Deleted Successfully'), timer=2000)
-            return redirect('maas:subnets:index')
-        sweetify.warning(request, _(resp.text), timer=5000)
+    try:
+        subnets = maas.get_subnets()
+        subnet = [s for s in subnets if s['id'] == subnet_id]
+        if subnet[0] is not None:
+            m = MAAS()
+            resp = m.delete(f'subnets/{subnet_id}/')
+            if resp.status_code in m.ok:
+                sweetify.success(request, _('Subnet Deleted Successfully'), timer=2000)
+                return redirect('maas:subnets:index')
+            sweetify.warning(request, _(resp.text), timer=5000)
+    except (MAASError, ConnectionError, TimeoutError) as e:
+        sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', timer=5000)
 
     return redirect('maas:subnets:index')

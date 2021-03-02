@@ -16,13 +16,12 @@ from hujan_ui.utils.core import conv_mb_to_gb
 
 @login_required
 def index(request):
-    if request.is_ajax():
-        return JsonResponse({'machines': maas.get_machines()})
-
     try:
+        if request.is_ajax():
+            return JsonResponse({'machines': maas.get_machines()})
         data = maas.get_machines()
-    except (MAASError, ConnectionError, RuntimeError) as e:
-        sweetify.error(request, str(e), button='Ok', timer=2000)
+    except (MAASError, ConnectionError, TimeoutError) as e:
+        sweetify.sweetalert(request, 'Warning', text=str(e), button='Ok', timer=2000)
         data = None
 
     context = {
@@ -37,13 +36,13 @@ def index(request):
 def details(request, system_id):
     try:
         machine = maas.get_machines(system_id)
-    except (MAASError, ConnectionError, RuntimeError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         sweetify.error(request, str(e), button='Ok', timer=2000)
         machine = {}
 
     try:
         events = maas.get_events()
-    except (MAASError, ConnectionError, RuntimeError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         sweetify.error(request, str(e), button='Ok', timer=2000)
         events = {}
 
@@ -61,18 +60,17 @@ def details(request, system_id):
 
 @login_required
 def add(request):
-    form = AddMachineForm(request.POST or None)
-    form_ipmi = PowerTypeIPMIForm(request.POST or None)
+    try:
+        form = AddMachineForm(request.POST or None)
+        form_ipmi = PowerTypeIPMIForm(request.POST or None)
+        if form.is_valid() and form_ipmi.is_valid():
+            data = form.clean()
+            ipmi_data = form_ipmi.clean()
+            data.update({
+                'commission': False,
+                'power_parameters': ipmi_data
+            })
 
-    if form.is_valid() and form_ipmi.is_valid():
-        data = form.clean()
-        ipmi_data = form_ipmi.clean()
-        data.update({
-            'commission': False,
-            'power_parameters': ipmi_data
-        })
-
-        try:
             maas = MAAS()
             resp = maas.post("machines/", data=data)
 
@@ -81,9 +79,11 @@ def add(request):
                     'Successfully added domain'), button='Ok', timer=2000)
                 return redirect("maas:machines:index")
 
-            sweetify.warning(request, _(resp.text), button='Ok', timer=10000)
-        except (MAASError, ConnectionError, RuntimeError, TimeoutError) as e:
-            sweetify.error(request, str(e), button='OK', timer=10000)
+        sweetify.warning(request, _(resp.text), button='Ok', timer=10000)
+    except (MAASError, ConnectionError, TimeoutError) as e:
+        sweetify.sweetalert(request, 'Warning', icon='error', text=str(e), button='OK', timer=10000)
+        form = None
+        form_ipmi = None
 
     context = {
         'title': 'Add Machine',
@@ -115,15 +115,15 @@ def load_machine(request):
 
 
 def edit_physical(request, system_id, id=None):
-    physical = maas.get_physicals(system_id, id)
-    form = PhysicalForm(data=request.POST or None, initial=physical)
-    if form.is_valid():
-        data = form.clean()
-        data.update({
-            'system_id': system_id,
-            'id': id
-        })
-        try:
+    try:
+        physical = maas.get_physicals(system_id, id)
+        form = PhysicalForm(data=request.POST or None, initial=physical)
+        if form.is_valid():
+            data = form.clean()
+            data.update({
+                'system_id': system_id,
+                'id': id
+            })
             m = MAAS()
             resp = m.put(f'nodes/{system_id}/interfaces/{id}/', data=data)
             if resp.status_code in m.ok:
@@ -137,11 +137,12 @@ def edit_physical(request, system_id, id=None):
                     'status': 'error',
                     'message': _('Failed Edit Interface')
                 })
-        except (MAASError, ConnectionError, RuntimeError) as identifier:
-            return JsonResponse({
-                'status': 'error',
-                'message': _(str(e))
-            })
+    except (MAASError, ConnectionError, TimeoutError) as e:
+        form = None
+        return JsonResponse({
+            'status': 'error',
+            'message': _(str(e))
+        })
 
     context = {
         'form': form,
@@ -154,16 +155,22 @@ def edit_physical(request, system_id, id=None):
 
 
 def mark_disconnect(request, system_id, id):
-    m = MAAS()
-    resp = m.post(f'nodes/{system_id}/interfaces/{id}/?op=disconnect',
-                  data={'system_id': system_id, 'id': id})
-    if resp.status_code in m.ok:
+    try:
+        m = MAAS()
+        resp = m.post(f'nodes/{system_id}/interfaces/{id}/?op=disconnect',
+                    data={'system_id': system_id, 'id': id})
+        if resp.status_code in m.ok:
+            return JsonResponse({
+                'status': 'success',
+                'message': _('Interfaces Disconnected Successfully'),
+                'urlhref': reverse('maas:machines:index')
+            })
+        return JsonResponse({'status': 'error', 'message': _(resp.text)})
+    except (MAASError, ConnectionError, TimeoutError) as e:
         return JsonResponse({
-            'status': 'success',
-            'message': _('Interfaces Disconnected Successfully'),
-            'urlhref': reverse('maas:machines:index')
+            'status': 'error',
+            'message': _(str(e))
         })
-    return JsonResponse({'status': 'error', 'message': _(resp.text)})
 
 
 def machine_commission(request, system_id=None):
@@ -176,7 +183,7 @@ def machine_commission(request, system_id=None):
             resp = m.post(f'machines/{system_id}/?op=commission', data=data)
             if resp.status_code in m.ok:
                 return JsonResponse({'status': 'success', 'message': _('Commission Succesfully')})
-        except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:
+        except (MAASError, ConnectionError, TimeoutError) as e:
             return JsonResponse({'status': 'error', 'message': str(e)})
 
     context = {
@@ -195,7 +202,7 @@ def delete_machine(request, system_id):
         resp = m.post(f'machines/{system_id}/', {'system_id': system_id})
         if resp.status_code in m.ok:
             return JsonResponse({'status': 'success', 'message': _('Machine Delete Successfully')})
-    except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:
+    except (MAASError, ConnectionError, TimeoutError) as e:
         return JsonResponse({'status': 'error', 'message': str(e)})
 
 
@@ -208,7 +215,7 @@ def deploy_machine(request, system_id):
             resp = m.post(f'machines/{system_id}/?op=deploy', data)
             if resp.status_code in m.ok:
                 return JsonResponse({'status': 'success', 'message': _('Machine Deploy Successfully')})
-        except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:
+        except (MAASError, ConnectionError, TimeoutError) as e:
             return JsonResponse({'status': 'error', 'message': str(e)})
     context = {
         'form': form,
@@ -233,7 +240,7 @@ def onoff_machine(request, system_id):
             if resp.status_code in m.ok:
                 return JsonResponse({'status': 'success', 'message': _('Machine Change Power Successfully')})
 
-        except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:
+        except (MAASError, ConnectionError, TimeoutError) as e:
             return JsonResponse({'status': 'error', 'message': str(e)})
     context = {
         'form': form,
@@ -247,13 +254,12 @@ def delete_machine(request, system_id):
     form = ConfirmForm(request.POST or None, initial={'system_id': system_id})
     if form.is_valid():
         data = form.clean()
-
-        m = MAAS()
         try:
+            m = MAAS()
             resp = m.delete(f'machines/{system_id}/', data)
             if resp.status_code in m.ok:
                 return JsonResponse({'status': 'success', 'message': _('Delete Machine Successfully')})
-        except (MAASError, ConnectionError, TimeoutError, RuntimeError) as e:
+        except (MAASError, ConnectionError, TimeoutError) as e:
             return JsonResponse({'status': 'error', 'message': str(e)})
 
     context = {
@@ -263,4 +269,3 @@ def delete_machine(request, system_id):
     }
     html = render_to_string('partials/form_core.html', context, request)
     return JsonResponse({'html': html}, safe=False)
-
