@@ -1,7 +1,5 @@
 from functools import wraps
-
 from django.shortcuts import redirect
-
 from hujan_ui.installers.models import Deployment
 
 

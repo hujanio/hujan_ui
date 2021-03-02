@@ -76,4 +76,3 @@ def reset(request):
     Inventory.objects.all().delete()
     sweetify.success(request, _('Successflully Reset invetory'), icon='success', button='OK')
     return redirect("installer:inventories:index")
-    

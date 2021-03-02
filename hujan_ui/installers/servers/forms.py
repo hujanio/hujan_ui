@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 
 from hujan_ui import maas
 from hujan_ui.installers.models import Server
@@ -9,14 +10,14 @@ class AddServerForm(forms.ModelForm):
 
     class Meta:
         model = Server
-        fields = ['machine','ip_address', 'description', 'system_id', 'name']
+        fields = ['machine', 'ip_address', 'description', 'system_id', 'name']
         widgets = {
             'ip_address': forms.Select(),
             'system_id': forms.HiddenInput(),
             'name': forms.HiddenInput()
         }
         help_texts = {
-            'description': 'Short description from this server',
+            'description': _('Short description from this server'),
         }
 
     def __init__(self, *args, **kwargs):
