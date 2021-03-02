@@ -18,7 +18,7 @@ class Inventory(models.Model):
     server = models.ForeignKey(Server, on_delete=models.CASCADE)
     GROUP = (
         ('control', _('Controller')),
-        ('network', _('Network'),
+        ('network', _('Network')),
         ('compute', _('Compute')),
         ('monitoring', _('Monitoring')),
         ('storage', _('storage')),
