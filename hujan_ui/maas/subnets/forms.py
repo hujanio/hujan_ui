@@ -13,7 +13,7 @@ class SubnetAddForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['vlan'].choices = self.get_choice_vlan()
-        # TODO di non aktifkan sementara karena field space sedang tidak di gunakan
+        # TODO: temporary comment because field space not used
         # self.fields['space'].choices = self.get_choice_space()
         
     def get_choice_vlan(self):
@@ -35,14 +35,14 @@ class SubnetForm(forms.Form):
     vlan = forms.ChoiceField(required=False)
     fabric = forms.ChoiceField(required=False, widget=forms.HiddenInput)
     vid = forms.ChoiceField(required=False, widget=forms.HiddenInput)
-    # TODO: akan diaktifkan nanti, atau bisa jadi di hapus dikarenakan data space nya tidak valid
+    # TODO: commented temporarily or will be deleted because it is not used
     # space = forms.CharField(required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
 
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['vlan'].choices = self.get_choice_vlan()
-        # TODO di non aktifkan sementara karena field space sedang tidak di gunakan
+        # TODO: temporary comment because field space not used
         # self.fields['space'].choices = self.get_choice_space(
 
     def get_choice_vlan(self):
@@ -56,6 +56,3 @@ class SubnetForm(forms.Form):
         b = [(i['id'], i['name']) for i in resp]
         b.insert(0, (None,'-------')) 
         return b
-
-            
-        

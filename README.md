@@ -20,12 +20,6 @@ Create your own settings and modify as your preference
 $ cp hujan_ui/local_settings.py.sample hujan_ui/local_settings.py
 ```
 
-Configure MAAS in `local_settings.py` with:
-```
-MAAS_API_KEY = "NdyuqXh7vpuzQTdYJy:Vybvn6BrBYwfQZTG6v:trFF6uPk4vcwqAUPXq8D2n3KuSQvazCm"
-MAAS_URL = "http://137.59.125.83:5240/MAAS/"
-``` 
-
 Migrate database
 
 ```
@@ -57,6 +51,12 @@ python manage.py runserver
 
 Then open your browser http://localhost:8000 and voila your web apps is already running !
 
+Run app with specific port
+
+```
+$ python manage.py runserver 5000
+```
+Then open your browser http://localhost:5000.
 
 ## Server Installation And Configuration
 
@@ -94,12 +94,6 @@ Then create a configuration file, just copy from sample file and modify as your 
 $ cp hujan_ui/local_settings.py.sample hujan_ui/local_settings.py
 ```
 
-Configure MAAS in `local_settings.py` with:
-```
-MAAS_API_KEY = "NdyuqXh7vpuzQTdYJy:Vybvn6BrBYwfQZTG6v:trFF6uPk4vcwqAUPXq8D2n3KuSQvazCm"
-MAAS_URL = "http://137.59.125.83:5240/MAAS/"
-``` 
-
 Then run the database migration
 
 ```
@@ -127,15 +121,4 @@ Create logs directory
 
 ```
 $ mkdir logs
-```
-
-## Sysadmin daily operation
-
-- Deploy the latest update
-
-```
-$ source env/bin/activate
-$ git pull origin master
-$ python manage.py migrate
-$ python manage.py collectstatic
 ```

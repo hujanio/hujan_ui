@@ -35,7 +35,7 @@ class AddMachineForm(forms.Form):
         # ("wedge", "Facebook's Wedge"),
         # ("rsd", "Rack Scale Design"),
         # ('vmware', 'VMware'),
-        # TODO : dimatikan sementara karena machine baru support tipe IPMI saja
+        # TODO : a temporary comment because the machine only supports IPMI types
     ]
     power_type = forms.ChoiceField(choices=POWER_TYPE, initial=POWER_TYPE[0][0])
 
