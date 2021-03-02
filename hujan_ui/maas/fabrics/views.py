@@ -11,27 +11,32 @@ from .forms import FabricForm
 
 
 def index(request):
-    if request.is_ajax():
-        return JsonResponse({'fabrics': maas.get_fabrics()})
+    try:
+        if request.is_ajax():
+            return JsonResponse({'fabrics': maas.get_fabrics()})
 
-    context = {
-        'title': 'Fabrics',
-        'fabrics': maas.get_fabrics(),
-        'menus_active': 'fabrics_active'
-    }
+        context = {
+            'title': 'Fabrics',
+            'fabrics': maas.get_fabrics(),
+            'menus_active': 'fabrics_active'
+        }
+    except (MAASError) as e:
+        sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', timer=5000, button='Ok')
+        context = None
     return render(request, 'maas/fabrics/index.html', context)
 
 
 def detail(request, fabric_id):
     try:
-
         fabrics = maas.get_fabrics(fabric_id)
+        context = {
+            'title': 'Fabric',
+            'fabric': fabrics
+        }
     except (MAASError) as e:
         sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', button='Ok', timer=5000)
-    context = {
-        'title': 'Fabric',
-        'fabric': fabrics
-    }
+        context = None
+    
     return render(request, 'maas/fabrics/detail.html', context)
 
 
@@ -59,11 +64,10 @@ def add(request):
 
 
 def edit(request, fabric_id):
-    fabs = maas.get_fabrics(fabric_id)
-
-    form = FabricForm(request.POST or None, initial=fabs)
-    if form.is_valid():
-        try:
+    try:
+        fabs = maas.get_fabrics(fabric_id)
+        form = FabricForm(request.POST or None, initial=fabs)
+        if form.is_valid():
             m = MAAS()
             data = form.clean()
             data.update({'id': fabric_id})
@@ -72,32 +76,30 @@ def edit(request, fabric_id):
                 sweetify.success(request, _('Successful'), button='OK', timer=2000)
                 return redirect('maas:fabrics:index')
             sweetify.warning(request, _(resp.text), button='Ok', timer=5000)
-        except (MAASError) as e:
-            sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', button='Ok', timer=5000)
-    context = {
-        'title': 'Ubah Fabric',
-        'form': form
-    }
+        context = {
+            'title': 'Ubah Fabric',
+            'form': form
+        }
+    except (MAASError) as e:
+        sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', button='Ok', timer=5000)
+        context = None
     return render(request, 'maas/fabrics/add.html', context)
 
 
 def delete(request, fabric_id):
-    
-    fabs = maas.get_fabrics(fabric_id)
-
-    if not fabs:
-        sweetify.info(request, _('Data Fabric not Found...'), timer=5000)
-        return redirect('maas:fabrics:index')
     try:
+        fabs = maas.get_fabrics(fabric_id)
+        if not fabs:
+            sweetify.info(request, _('Data Fabric not Found...'), timer=5000)
+            return redirect('maas:fabrics:index')
         m = MAAS()
-        fabric_id = fab[0]['id']
+        fabric_id = fabs[0]['id']
         resp = m.delete(f'/fabrics/{fabric_id}/')
         if resp.status_code in m.ok:
             sweetify.success(request, _(
                 'Data Successfully Deleted'), button='OK', timer=200)
             return redirect('maas:fabrics:index')
-        sweetify.warning(request, _(resp.text), timer=5000)
+        sweetify.sweetalert(request, 'Warning', icon='warning', text=_(str(resp.text)), timer=5000)
     except (MAASError) as e:
         sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', button='Ok', timer=5000)
-
     return redirect('maas:fabrics:index')

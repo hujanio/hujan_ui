@@ -25,7 +25,7 @@ def index(request):
     try:
         data = maas.get_machines()
     except (MAASError, ConnectionError, RuntimeError) as e:
-        sweetify.error(request, str(e), button='Ok', timer=2000)
+        sweetify.sweetalert(request, 'Warning', text=str(e), button='Ok', timer=2000)
         data = None
 
     context = {
@@ -64,18 +64,17 @@ def details(request, system_id):
 
 @login_required
 def add(request):
-    form = AddMachineForm(request.POST or None)
-    form_ipmi = PowerTypeIPMIForm(request.POST or None)
+    try:
+        form = AddMachineForm(request.POST or None)
+        form_ipmi = PowerTypeIPMIForm(request.POST or None)
+        if form.is_valid() and form_ipmi.is_valid():
+            data = form.clean()
+            ipmi_data = form_ipmi.clean()
+            data.update({
+                'commission': False,
+                'power_parameters': ipmi_data
+            })
 
-    if form.is_valid() and form_ipmi.is_valid():
-        data = form.clean()
-        ipmi_data = form_ipmi.clean()
-        data.update({
-            'commission': False,
-            'power_parameters': ipmi_data
-        })
-
-        try:
             maas = MAAS()
             resp = maas.post("machines/", data=data)
 
@@ -84,9 +83,11 @@ def add(request):
                     'Successfully added domain'), button='Ok', timer=2000)
                 return redirect("maas:machines:index")
 
-            sweetify.warning(request, _(resp.text), button='Ok', timer=10000)
-        except (MAASError, ConnectionError, RuntimeError, TimeoutError) as e:
-            sweetify.error(request, str(e), button='OK', timer=10000)
+        sweetify.warning(request, _(resp.text), button='Ok', timer=10000)
+    except (MAASError, ConnectionError, RuntimeError, TimeoutError) as e:
+        sweetify.sweetalert(request, 'Warning', icon='error', text=str(e), button='OK', timer=10000)
+        form = None
+        form_ipmi = None
 
     context = {
         'title': 'Add Machine',

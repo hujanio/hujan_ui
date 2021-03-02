@@ -12,10 +12,6 @@ from hujan_ui.maas.exceptions import MAASError
 
 @login_required
 def index(request):
-    subnets = None
-    fabrics = None
-    spaces = None
-    group_subnet = None
     try:
         if request.is_ajax():
             return JsonResponse({'subnets': maas.get_subnets()})
@@ -23,17 +19,18 @@ def index(request):
         fabrics = maas.get_fabrics()
         spaces = maas.get_spaces()
         group_subnet = maas.get_subnet_byfabric()
+        context = {
+            'title': 'Subnet By Fabric',
+            'subnets': subnets,
+            'fabrics': fabrics,
+            'spaces': spaces,
+            'group_subnet': group_subnet,
+            'menus_active': 'subnets_active'
+        }
     except (MAASError) as e:
         sweetify.sweetalert(request, 'Warning', text=str(e), icon='error', timer=5000)
-    context = {
-        'title': 'Subnet By Fabric',
-        'subnets': subnets,
-        'fabrics': fabrics,
-        'spaces': spaces,
-        'group_subnet': group_subnet,
-        'menus_active': 'subnets_active'
-    }
-    
+        context = None
+
     return render(request, 'maas/subnets/index.html', context)
 
 
