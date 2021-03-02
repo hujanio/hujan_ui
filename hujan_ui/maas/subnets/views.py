@@ -28,11 +28,7 @@ def index(request):
 
 @login_required
 def detail(request, subnet_id):
-
     subnet = maas.get_subnets(subnet_id)
-    # unr = maas.get_subnets(subnet_id,op='unreserved_ip_ranges')
-    # stat = maas.get_subnets(subnet_id,op='statistics')
-    # TODO untuk data unreserved dan statistic masih belum sesuai antara api dan maas yang ada 
     rir = maas.get_subnets(subnet_id, op='reserved_ip_ranges')
 
     if request.is_ajax():
@@ -41,9 +37,6 @@ def detail(request, subnet_id):
     context = {
         'title': f"Subnet - {subnet['name']}",
         'subnet': subnet,
-        # 'unr': unr,
-        # 'stat': stat,
-        # TODO untuk data unreserved dan statistic masih belum sesuai antara api dan maas yang ada 
         'rir': rir,
         'menu_active': 'subnets',
     }
